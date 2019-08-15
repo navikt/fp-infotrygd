@@ -1,4 +1,4 @@
-package no.nav.infotrygd.kontantstotte
+package no.nav.infotrygd.svangerskapspenger
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

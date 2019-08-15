@@ -9,7 +9,7 @@ spec:
   image:  docker.pkg.github.com/navikt/infotrygd-svangerskapspenger/svangerskapspenger:1.1
   port: 8080 # Required. The port number which is exposed by the container and should receive HTTP traffic.
   liveness: # HTTP endpoint that signals 200 OK when the application is running.
-    path: /rest/internal/isAlive
+    path: /actuator/health
     initialDelay: 120
     timeout: 1
     periodSeconds: 5     # How often (in seconds) to perform the probe. Default to 10 seconds
@@ -17,7 +17,7 @@ spec:
       # nais will try failureThreshold times before giving up and restarting the Pod
     # Defaults to 3
   readiness: # HTTP endpoint that signals 200 OK when it is okay to start routing traffic to the application.
-    path: /rest/internal/isAlive
+    path: /actuator/health
     # /rest/internal/isAlive
     initialDelay: 120
     timeout: 1
@@ -43,7 +43,7 @@ spec:
       cpu: 500m
       memory: 256Mi
   ingresses: # Optional. List of ingress URLs that will route HTTP traffic to the application.
-  - "https://infotrygd-kontantstotte.nais.preprod.local/"
+  - "https://infotrygd-svangerskapspenger.nais.preprod.local/"
   logformat: accesslog # Optional. The format of the logs from the container if the logs should be handled differently than plain text or json
   logtransform: dns_loglevel # Optional. The transformation of the logs, if they should be handled differently than plain text or json
   webproxy: false # Optional. Expose web proxy configuration to the application using the HTTP_PROXY, HTTPS_PROXY and NO_PROXY environment variables.
