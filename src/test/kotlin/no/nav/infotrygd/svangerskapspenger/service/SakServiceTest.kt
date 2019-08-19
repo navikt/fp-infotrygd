@@ -3,7 +3,9 @@ package no.nav.infotrygd.svangerskapspenger.service
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
+import no.nav.infotrygd.svangerskapspenger.rest.dto.SakDto
 import no.nav.infotrygd.svangerskapspenger.rest.dto.SakId
+import no.nav.infotrygd.svangerskapspenger.rest.dto.SakResult
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +21,8 @@ import java.time.LocalDate
     SakService::class
 ])
 internal class SakServiceTest {
+    private val relevantStatus get() = "Y"
+    private val fnr get() = "123"
 
     @Autowired
     lateinit var sakService: SakService
@@ -28,21 +32,31 @@ internal class SakServiceTest {
 
     @Test
     fun underBehandling() {
-        val forventet = lagSak(
-            fnr = "123",
-            kapittelNr = "FA",
-            valg = "SV",
-            type = "S"
-        )
+        testMM(setOf("S", "R")){it.underBehandling}
+    }
 
-        Mockito.`when`(mockRepository.findSvangerskapssakerByFnrAndType("123", setOf("S", "R")))
+    @Test
+    fun klagesaker() {
+        testMM(setOf("K")){it.klagesaker}
+    }
+
+    @Test
+    fun ankesaker() {
+        testMM(setOf("A")){it.ankesaker}
+    }
+
+    fun testMM(relevanteTyper: Set<String>, relevantListe: (SakResult) -> List<SakDto>) {
+        val forventet = lagSak(type = relevanteTyper.first())
+
+        Mockito.`when`(mockRepository.findSvangerskapssakerByFnrAndType(fnr, relevanteTyper))
             .thenReturn(listOf(forventet))
 
-        sakService.findSakerByFnr("123").also {
-            assertThat(it.underBehandling).hasSize(1)
-            it.underBehandling[0].apply {
+        sakService.findSakerByFnr(fnr).also {
+            val liste = relevantListe(it)
+            assertThat(liste).hasSize(1)
+            liste[0].apply {
                 assertThat(sakId).isEqualTo(SakId(forventet.saksblokk, forventet.saksnummer.toInt()))
-                assertThat(status).isEqualTo("Y")
+                assertThat(status).isEqualTo(relevantStatus)
                 assertThat(resultat).isEqualTo(forventet.resultat)
                 assertThat(vedtatt).isEqualTo(forventet.vedtaksdato)
                 assertThat(iverksatt).isEqualTo(forventet.iverksattdato)
@@ -50,21 +64,21 @@ internal class SakServiceTest {
         }
     }
 
-    private fun lagSak(fnr: String, kapittelNr: String, valg: String, type: String): Sak {
+    private fun lagSak(type: String): Sak {
         return Sak(
             fnr = fnr,
             personKey = 123,
             saksblokk = "x",
             saksnummer = "11",
-            kapittelNr = kapittelNr,
-            valg = valg,
+            kapittelNr = "FA",
+            valg = "SV",
             type = type,
             resultat = "xx",
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
             status = listOf(
                 Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 1, status = "X"),
-                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 2, status = "Y")
+                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 2, status = relevantStatus)
             )
         )
     }

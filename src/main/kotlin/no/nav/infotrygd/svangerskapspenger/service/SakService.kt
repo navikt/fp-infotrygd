@@ -1,5 +1,6 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
+import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import no.nav.infotrygd.svangerskapspenger.rest.dto.*
 import org.springframework.stereotype.Service
@@ -11,12 +12,12 @@ class SakService(private val sakRepository: SakRepository) {
 
         return SakResult(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",
-            underBehandling = sakerUnderBehandling(fnr),
+            underBehandling = sakerByType(fnr, "S", "R"),
+            klagesaker = sakerByType(fnr, "K"),
+            ankesaker = sakerByType(fnr, "A"),
+
 
             // todo: implementer resten
-
-            klagesaker = listOf(),
-            ankesaker = listOf(),
 
             apneSakerMedLopendeUtbetaling = listOf(
                 ApenSakMedLopendeUtbetaling(iverksatt = LocalDate.now())
@@ -32,17 +33,20 @@ class SakService(private val sakRepository: SakRepository) {
         )
     }
 
-    private fun sakerUnderBehandling(fnr: String): List<SakDto> {
-        val underBehandling = sakRepository.findSvangerskapssakerByFnrAndType(fnr, setOf("S", "R"))
-            .map {
-                SakDto(
-                    sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()),
-                    status = it.status.maxBy { it.lopeNr }?.status ?: "UKJENT",
-                    resultat = it.resultat,
-                    vedtatt = it.vedtaksdato,
-                    iverksatt = it.iverksattdato
-                )
-            }
-        return underBehandling
+    private fun sakerByType(fnr: String, vararg status: String): List<SakDto> {
+        val saker = sakRepository.findSvangerskapssakerByFnrAndType(fnr, setOf(*status))
+        return toDto(saker)
+    }
+
+    private fun toDto(saker: List<Sak>): List<SakDto> {
+        return saker.map {
+            SakDto(
+                sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()),
+                status = it.status.maxBy { it.lopeNr }?.status ?: "UKJENT",
+                resultat = it.resultat,
+                vedtatt = it.vedtaksdato,
+                iverksatt = it.iverksattdato
+            )
+        }
     }
 }
