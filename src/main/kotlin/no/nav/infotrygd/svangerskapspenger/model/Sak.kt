@@ -1,5 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
+import no.nav.infotrygd.svangerskapspenger.model.converters.NavLocalDateConverter
+import java.io.Serializable
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -41,7 +43,15 @@ data class Sak(
 
     @Column(name = "S10_IVERKSATTDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavLocalDateConverter::class)
-    val iverksattdato: LocalDate
+    val iverksattdato: LocalDate,
+
+    @OneToMany // todo: er denne egentlig en-til-mange?
+    @JoinColumns(value = [
+        JoinColumn(name = "S01_PERSONKEY", referencedColumnName = "S01_PERSONKEY"),
+        JoinColumn(name = "S05_SAKSBLOKK", referencedColumnName = "S05_SAKSBLOKK"),
+        JoinColumn(name = "S10_SAKSNR", referencedColumnName = "S10_SAKSNR")
+    ])
+    val status: List<Status>
 
     // todo: mangler i schema.sql / ligger i IS10 !!!
     // @Column(name = "IS10_ARBUFOER")
@@ -50,6 +60,6 @@ data class Sak(
     // todo: mangler i schema.sql / ligger i IS10 !!!
     // @Column(name = "IS10_STOPPDATO")
     // val stoppdato: LocalDate
-)
+) : Serializable
 
 // todo: S15_STATUS

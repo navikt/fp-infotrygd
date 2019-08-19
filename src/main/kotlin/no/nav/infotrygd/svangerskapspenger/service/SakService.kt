@@ -8,26 +8,13 @@ import java.time.LocalDate
 @Service
 class SakService(private val sakRepository: SakRepository) {
     fun findSakerByFnr(fnr: String): SakResult {
-        val eksempelsak = SakDto(
-            sakId = SakId(blokk = "X", nr = 42),
-            status = "XY",
-            resultat = "XY",
-            vedtatt = LocalDate.now(),
-            iverksatt = LocalDate.now()
-        )
-
-        val underBehandling = sakRepository.findSvangerskapssakerByFnrAndType(fnr, setOf("S", "R"))
-            .map { SakDto(
-                sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()), // todo: trygt?
-                status = "TODO: IMPLEMENT",
-                resultat = it.resultat,
-                vedtatt = it.vedtaksdato,
-                iverksatt = it.iverksattdato
-            ) }
 
         return SakResult(
-            info = "Ingen klagesaker. Ingen ankesaker.",
-            underBehandling = underBehandling,
+            info = null, //"Ingen klagesaker. Ingen ankesaker.",
+            underBehandling = sakerUnderBehandling(fnr),
+
+            // todo: implementer resten
+
             klagesaker = listOf(),
             ankesaker = listOf(),
 
@@ -43,5 +30,19 @@ class SakService(private val sakRepository: SakRepository) {
                 )
             )
         )
+    }
+
+    private fun sakerUnderBehandling(fnr: String): List<SakDto> {
+        val underBehandling = sakRepository.findSvangerskapssakerByFnrAndType(fnr, setOf("S", "R"))
+            .map {
+                SakDto(
+                    sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()),
+                    status = it.status.maxBy { it.lopeNr }?.status ?: "UKJENT",
+                    resultat = it.resultat,
+                    vedtatt = it.vedtaksdato,
+                    iverksatt = it.iverksattdato
+                )
+            }
+        return underBehandling
     }
 }

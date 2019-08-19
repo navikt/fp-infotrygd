@@ -1,6 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.repository
 
 import no.nav.infotrygd.svangerskapspenger.model.Sak
+import no.nav.infotrygd.svangerskapspenger.model.Status
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,6 +23,9 @@ import java.time.LocalDate
 class SakRepositoryTest {
     @Autowired
     lateinit var repository: SakRepository
+
+    @Autowired
+    lateinit var statusRepository: StatusRepository
 
     @Test
     fun findSvangerskapssakerByFnrAndType() {
@@ -51,6 +55,15 @@ class SakRepositoryTest {
     }
 
     private fun lagSak(fnr: String, kapittelNr: String, valg: String, type: String) {
+        val status = Status(
+            personKey = 123,
+            saksblokk = "x",
+            saksnummer = "xx",
+            status = "A",
+            lopeNr = 1
+        )
+        statusRepository.save(status)
+
         val sak = Sak(
             fnr = fnr,
             personKey = 123,
@@ -61,7 +74,10 @@ class SakRepositoryTest {
             type = type,
             resultat = "xx",
             vedtaksdato = LocalDate.now(),
-            iverksattdato = LocalDate.now()
+            iverksattdato = LocalDate.now(),
+            status = listOf(
+                status
+            )
         )
         repository.save(sak)
     }

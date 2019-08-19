@@ -86,7 +86,7 @@ Create table INFOTRYGD_Q0.SA_STATUS_15 (
     ENDRET_I_KILDE                 TIMESTAMP(6)        DEFAULT current_timestamp  , -- NOT NULL,
     KILDE_IS                       VARCHAR2(12)        DEFAULT ' '  , -- NOT NULL,
     REGION                         CHAR(1)             DEFAULT ' '  , -- NOT NULL,
-    ID_STATUS                      NUMBER              DEFAULT NOT NULL
+    ID_STATUS                      IDENTITY              DEFAULT NOT NULL -- endret fra NUMBER
 );
 
 --------------------------------------------------

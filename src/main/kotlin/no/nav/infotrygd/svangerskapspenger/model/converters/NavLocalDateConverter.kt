@@ -1,4 +1,4 @@
-package no.nav.infotrygd.svangerskapspenger.model
+package no.nav.infotrygd.svangerskapspenger.model.converters
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

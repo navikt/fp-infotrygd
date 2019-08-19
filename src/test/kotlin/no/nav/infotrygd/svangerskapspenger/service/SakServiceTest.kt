@@ -1,6 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
 import no.nav.infotrygd.svangerskapspenger.model.Sak
+import no.nav.infotrygd.svangerskapspenger.model.Status
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import no.nav.infotrygd.svangerskapspenger.rest.dto.SakId
 import org.assertj.core.api.Assertions.assertThat
@@ -41,7 +42,7 @@ internal class SakServiceTest {
             assertThat(it.underBehandling).hasSize(1)
             it.underBehandling[0].apply {
                 assertThat(sakId).isEqualTo(SakId(forventet.saksblokk, forventet.saksnummer.toInt()))
-//                assertThat(status).isEqualTo() // S15_STATUS
+                assertThat(status).isEqualTo("Y")
                 assertThat(resultat).isEqualTo(forventet.resultat)
                 assertThat(vedtatt).isEqualTo(forventet.vedtaksdato)
                 assertThat(iverksatt).isEqualTo(forventet.iverksattdato)
@@ -60,7 +61,11 @@ internal class SakServiceTest {
             type = type,
             resultat = "xx",
             vedtaksdato = LocalDate.now(),
-            iverksattdato = LocalDate.now()
+            iverksattdato = LocalDate.now(),
+            status = listOf(
+                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 1, status = "X"),
+                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 2, status = "Y")
+            )
         )
     }
 }

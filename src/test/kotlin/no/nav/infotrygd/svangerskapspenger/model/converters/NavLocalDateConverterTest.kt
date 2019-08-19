@@ -1,5 +1,6 @@
-package no.nav.infotrygd.svangerskapspenger.model
+package no.nav.infotrygd.svangerskapspenger.model.converters
 
+import no.nav.infotrygd.svangerskapspenger.model.converters.NavLocalDateConverter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.time.LocalDate
