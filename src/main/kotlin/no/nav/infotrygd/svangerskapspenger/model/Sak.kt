@@ -45,21 +45,11 @@ data class Sak(
     @Convert(converter = NavLocalDateConverter::class)
     val iverksattdato: LocalDate,
 
-    @OneToMany // todo: er denne egentlig en-til-mange?
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumns(value = [
         JoinColumn(name = "S01_PERSONKEY", referencedColumnName = "S01_PERSONKEY"),
         JoinColumn(name = "S05_SAKSBLOKK", referencedColumnName = "S05_SAKSBLOKK"),
         JoinColumn(name = "S10_SAKSNR", referencedColumnName = "S10_SAKSNR")
     ])
     val status: List<Status>
-
-    // todo: mangler i schema.sql / ligger i IS10 !!!
-    // @Column(name = "IS10_ARBUFOER")
-    //  val arbeidsufoer: LocalDate,
-
-    // todo: mangler i schema.sql / ligger i IS10 !!!
-    // @Column(name = "IS10_STOPPDATO")
-    // val stoppdato: LocalDate
 ) : Serializable
-
-// todo: S15_STATUS

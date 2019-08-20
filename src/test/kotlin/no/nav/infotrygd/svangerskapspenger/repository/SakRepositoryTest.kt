@@ -45,8 +45,11 @@ class SakRepositoryTest {
             valg = "SV",
             type = "S")
 
+
         repository.findSvangerskapssakerByFnrAndType("123", setOf("S")).also {
             assertThat(it).hasSize(1)
+            assertThat(it[0].status).hasSize(1)
+            assertThat(it[0].status[0].status).isEqualTo("A")
         }
 
         repository.findSvangerskapssakerByFnrAndType("987", setOf("S")).also {

@@ -1,11 +1,11 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
+import no.nav.infotrygd.svangerskapspenger.model.Periode
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
+import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
-import no.nav.infotrygd.svangerskapspenger.rest.dto.SakDto
-import no.nav.infotrygd.svangerskapspenger.rest.dto.SakId
-import no.nav.infotrygd.svangerskapspenger.rest.dto.SakResult
+import no.nav.infotrygd.svangerskapspenger.rest.dto.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,34 +21,85 @@ import java.time.LocalDate
     SakService::class
 ])
 internal class SakServiceTest {
-    private val relevantStatus get() = "Y"
-    private val fnr get() = "123"
+    private val relevantStatus  = "Y"
+    private val fnr = "123"
 
     @Autowired
     lateinit var sakService: SakService
 
     @MockBean
-    lateinit var mockRepository: SakRepository
+    lateinit var mockSakRepository: SakRepository
+
+    @MockBean
+    lateinit var mockPeriodeRepository: PeriodeRepository
 
     @Test
     fun underBehandling() {
-        testMM(setOf("S", "R")){it.underBehandling}
+        testSak(setOf("S", "R")){it.underBehandling}
     }
 
     @Test
     fun klagesaker() {
-        testMM(setOf("K")){it.klagesaker}
+        testSak(setOf("K")){it.klagesaker}
     }
 
     @Test
     fun ankesaker() {
-        testMM(setOf("A")){it.ankesaker}
+        testSak(setOf("A")){it.ankesaker}
     }
 
-    fun testMM(relevanteTyper: Set<String>, relevantListe: (SakResult) -> List<SakDto>) {
+    @Test
+    fun apneSakerMedLopendeUtbetaling() {
+        val iverksatt = LocalDate.now()
+        val periode = Periode(
+            fnr = fnr,
+            stoenadstype = "SV",
+            frisk = " ",
+            arbufoer = iverksatt,
+            stoppdato = null
+        )
+
+        Mockito.`when`(mockPeriodeRepository.findOpneSakerMedLopendeUtbetaling(fnr))
+            .thenReturn(listOf(periode))
+
+        val forventet = listOf(ApenSakMedLopendeUtbetaling(iverksatt = iverksatt))
+        val result = sakService.findSakerByFnr(fnr)
+        assertThat(result.apneSakerMedLopendeUtbetaling).isEqualTo(forventet)
+    }
+
+    @Test
+    fun avsluttedeSaker() {
+        val iverksatt = LocalDate.now().minusMonths(1)
+        val stoppdato = LocalDate.now().minusWeeks(1)
+
+        val periode = Periode(
+            fnr = fnr,
+            stoenadstype = "SV",
+            frisk = "F",
+            arbufoer = iverksatt,
+            stoppdato = stoppdato
+        )
+
+        val fom = LocalDate.now().minusYears(1)
+
+        Mockito.`when`(mockPeriodeRepository.findAvsluttedeSakerByFnr(fnr, fom))
+            .thenReturn(listOf(periode))
+
+        val forventet = listOf(AvsluttetSak(
+            iverksatt = iverksatt,
+            stoppdato = stoppdato
+        ))
+
+        val result = sakService.findSakerByFnr(fnr)
+
+        assertThat(result.avsluttedeSaker.fraOgMed).isEqualTo(fom)
+        assertThat(result.avsluttedeSaker.saker).isEqualTo(forventet)
+    }
+
+    fun testSak(relevanteTyper: Set<String>, relevantListe: (SakResult) -> List<SakDto>) {
         val forventet = lagSak(type = relevanteTyper.first())
 
-        Mockito.`when`(mockRepository.findSvangerskapssakerByFnrAndType(fnr, relevanteTyper))
+        Mockito.`when`(mockSakRepository.findSvangerskapssakerByFnrAndType(fnr, relevanteTyper))
             .thenReturn(listOf(forventet))
 
         sakService.findSakerByFnr(fnr).also {
