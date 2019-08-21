@@ -3,4 +3,4 @@ package no.nav.infotrygd.svangerskapspenger.model.converters
 import javax.persistence.Converter
 
 @Converter
-class NavLocalDateConverter : AbstractNavLocalDateConverter("yyyyMMdd")
+class NavReversedLocalDateConverter : AbstractNavLocalDateConverter("ddMMyyyy")

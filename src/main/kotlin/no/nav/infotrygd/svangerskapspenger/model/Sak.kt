@@ -1,6 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
 import no.nav.infotrygd.svangerskapspenger.model.converters.NavLocalDateConverter
+import no.nav.infotrygd.svangerskapspenger.model.converters.NavReversedLocalDateConverter
 import java.io.Serializable
 import java.time.LocalDate
 import javax.persistence.*
@@ -37,12 +38,14 @@ data class Sak(
     @Column(name = "S10_RESULTAT", columnDefinition = "CHAR")
     val resultat: String,
 
+    /** INFO: NavReversedLocalDateConverter lar seg ikke sortere i databasen! */
     @Column(name = "S10_VEDTAKSDATO", columnDefinition = "DECIMAL")
-    @Convert(converter = NavLocalDateConverter::class)
+    @Convert(converter = NavReversedLocalDateConverter::class)
     val vedtaksdato: LocalDate,
 
+    /** INFO: NavReversedLocalDateConverter lar seg ikke sortere i databasen! */
     @Column(name = "S10_IVERKSATTDATO", columnDefinition = "DECIMAL")
-    @Convert(converter = NavLocalDateConverter::class)
+    @Convert(converter = NavReversedLocalDateConverter::class)
     val iverksattdato: LocalDate,
 
     @OneToMany(fetch = FetchType.EAGER)

@@ -13,8 +13,6 @@ class SakService(
     private val periodeRepository: PeriodeRepository
 ) {
     fun findSakerByFnr(fnr: String): SakResult {
-
-        val fraOgMed = LocalDate.now().minusYears(1)
         return SakResult(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",
             underBehandling = sakerByType(fnr, "S", "R"),
