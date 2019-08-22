@@ -6,19 +6,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 
 @RunWith(SpringRunner::class)
 @DataJpaTest
-@TestPropertySource(properties = [
-    "spring.jpa.hibernate.ddl-auto=validate",
-    "spring.datasource.initialization-mode=always",
-    "spring.datasource.platform=h2",
-    "spring.datasource.url=jdbc:h2:mem:testdb:MODE=Oracle",
-    "spring.jpa.properties.hibernate.default_schema=INFOTRYGD_Q0"
-])
+@ActiveProfiles("test")
 class PeriodeRepositoryTest {
 
     @Autowired

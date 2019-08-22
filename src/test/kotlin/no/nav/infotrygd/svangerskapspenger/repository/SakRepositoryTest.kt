@@ -7,25 +7,21 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 
 @RunWith(SpringRunner::class)
 @DataJpaTest
-@TestPropertySource(properties = [
-    "spring.jpa.hibernate.ddl-auto=validate",
-    "spring.datasource.initialization-mode=always",
-    "spring.datasource.platform=h2",
-    "spring.datasource.url=jdbc:h2:mem:testdb:MODE=Oracle",
-    "spring.jpa.properties.hibernate.default_schema=INFOTRYGD_Q0"
-])
+@ActiveProfiles("test")
 class SakRepositoryTest {
     @Autowired
     lateinit var repository: SakRepository
 
     @Autowired
     lateinit var statusRepository: StatusRepository
+
+    var sakNr = 1
 
     @Test
     fun findSvangerskapssakerByFnrAndType() {
@@ -58,10 +54,12 @@ class SakRepositoryTest {
     }
 
     private fun lagSak(fnr: String, kapittelNr: String, valg: String, type: String) {
+        val snr = sakNr++.toString()
+
         val status = Status(
             personKey = 123,
             saksblokk = "x",
-            saksnummer = "xx",
+            saksnummer = snr,
             status = "A",
             lopeNr = 1
         )
@@ -71,7 +69,7 @@ class SakRepositoryTest {
             fnr = fnr,
             personKey = 123,
             saksblokk = "x",
-            saksnummer = "xx",
+            saksnummer = snr,
             kapittelNr = kapittelNr,
             valg = valg,
             type = type,
