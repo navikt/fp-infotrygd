@@ -11,12 +11,15 @@ spring:
     # For Oracle: database-platform: org.hibernate.dialect.Oracle10gDialect
     database-platform: ${APP_JPA_PLATFORM}
     hibernate:
-      ddl-auto: "none"
+      ddl-auto: ${APP_DDL_AUTO:validate}
     properties:
       hibernate:
         default_schema: ${APP_DEFAULT_SCHEMA}
 
 management:
+  endpoint:
+    health:
+      show-details: ALWAYS
   endpoints:
     web:
       exposure:
