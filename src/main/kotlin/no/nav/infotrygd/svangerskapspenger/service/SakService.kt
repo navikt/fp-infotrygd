@@ -52,7 +52,7 @@ class SakService(
         return saker.map {
             SakDto(
                 sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()),
-                status = it.status.maxBy { it.lopeNr }?.status ?: "UKJENT",
+                status = it.status.minBy { it.lopeNr }?.status ?: "UKJENT",
                 resultat = it.resultat,
                 vedtatt = it.vedtaksdato,
                 iverksatt = it.iverksattdato

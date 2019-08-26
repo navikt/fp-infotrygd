@@ -128,8 +128,8 @@ internal class SakServiceTest {
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
             status = listOf(
-                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 1, status = "X"),
-                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 2, status = relevantStatus)
+                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 98, status = relevantStatus),
+                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = "X")
             )
         )
     }
