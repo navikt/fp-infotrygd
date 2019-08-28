@@ -2,6 +2,7 @@ package no.nav.infotrygd.svangerskapspenger.repository
 
 import no.nav.infotrygd.svangerskapspenger.model.Periode
 import no.nav.infotrygd.svangerskapspenger.nextId
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +31,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, utgatt, ikkeFrisk, ikkeSv))
 
-        val result = repository.findAvsluttedeSakerByFnr("123", LocalDate.now().minusYears(1))
+        val result = repository.findAvsluttedeSakerByFnr(FodselNr("10000000001"), LocalDate.now().minusYears(1))
         assertThat(result).isEqualTo(listOf(relevant))
     }
 
@@ -43,7 +44,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, ikkeSv))
 
-        val result = repository.findOpneSakerMedLopendeUtbetaling("123")
+        val result = repository.findOpneSakerMedLopendeUtbetaling(FodselNr("10000000001"))
         assertThat(result).isEqualTo(listOf(relevant))
     }
 
@@ -54,7 +55,7 @@ class PeriodeRepositoryTest {
     ): Periode {
         return Periode(
             id = nextId(),
-            fnr = "123",
+            fnr = FodselNr("10000000001"),
             stoenadstype = stoenadstype,
             frisk = frisk,
             arbufoer = arbufoer,

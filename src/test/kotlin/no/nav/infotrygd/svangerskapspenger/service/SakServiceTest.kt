@@ -7,6 +7,7 @@ import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import no.nav.infotrygd.svangerskapspenger.rest.dto.*
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,7 +22,7 @@ import java.time.LocalDate
 @ActiveProfiles("test")
 internal class SakServiceTest {
     private val relevantStatus  = "Y"
-    private val fnr = "123"
+    private val fnr = FodselNr("10000000001")
 
     @Autowired
     lateinit var sakRepository: SakRepository

@@ -1,6 +1,8 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
 import no.nav.infotrygd.svangerskapspenger.model.converters.NavReversedLocalDateConverter
+import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFodselNrConverter
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import java.io.Serializable
@@ -15,7 +17,8 @@ data class Sak(
     var id: Long,
 
     @Column(name = "F_NR", columnDefinition = "CHAR")
-    val fnr: String,
+    @Convert(converter = ReversedFodselNrConverter::class)
+    val fnr: FodselNr,
 
     @Column(name = "S01_PERSONKEY", columnDefinition = "DECIMAL")
     val personKey: Long,
@@ -41,12 +44,12 @@ data class Sak(
     /** INFO: NavReversedLocalDateConverter lar seg ikke sortere i databasen! */
     @Column(name = "S10_VEDTAKSDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavReversedLocalDateConverter::class)
-    val vedtaksdato: LocalDate,
+    val vedtaksdato: LocalDate?,
 
     /** INFO: NavReversedLocalDateConverter lar seg ikke sortere i databasen! */
     @Column(name = "S10_IVERKSATTDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavReversedLocalDateConverter::class)
-    val iverksattdato: LocalDate,
+    val iverksattdato: LocalDate?,
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumns(value = [

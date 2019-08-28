@@ -23,7 +23,7 @@ class SakTest {
     fun hentSaker() {
         val sak = svangerskapspengerClient(port)
             .get()
-            .uri("/saker?fnr=123")
+            .uri("/saker?fnr=10000000001")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .bodyToMono(SakResult::class.java)

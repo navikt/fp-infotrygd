@@ -4,6 +4,7 @@ import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import no.nav.infotrygd.svangerskapspenger.rest.dto.*
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -12,29 +13,36 @@ class SakService(
     private val sakRepository: SakRepository,
     private val periodeRepository: PeriodeRepository
 ) {
-    fun findSakerByFnr(fnr: String): SakResult {
+    fun count(): CountDto {
+        return CountDto(
+            periodeTabell =  periodeRepository.count(),
+            sakTabell = sakRepository.count()
+        )
+    }
+
+    fun findSakerByFnr(fnr: FodselNr): SakResult {
         return SakResult(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",
-            underBehandling = sakerByType(fnr, "S", "R"),
-            klagesaker = sakerByType(fnr, "K"),
-            ankesaker = sakerByType(fnr, "A"),
+            underBehandling = sakerByType(fnr, "S ", "R "),
+            klagesaker = sakerByType(fnr, "K "),
+            ankesaker = sakerByType(fnr, "A "),
             apneSakerMedLopendeUtbetaling = apneSakerMedLopendeUtbetaling(fnr),
             avsluttedeSaker = avsluttedeSaker(fnr)
         )
     }
 
-    private fun sakerByType(fnr: String, vararg status: String): List<SakDto> {
+    private fun sakerByType(fnr: FodselNr, vararg status: String): List<SakDto> {
         val saker = sakRepository.findSvangerskapssakerByFnrAndType(fnr, setOf(*status))
         return toDto(saker)
     }
 
-    private fun apneSakerMedLopendeUtbetaling(fnr: String): List<ApenSakMedLopendeUtbetaling> {
+    private fun apneSakerMedLopendeUtbetaling(fnr: FodselNr): List<ApenSakMedLopendeUtbetaling> {
         return periodeRepository.findOpneSakerMedLopendeUtbetaling(fnr).map {
             ApenSakMedLopendeUtbetaling(iverksatt = it.arbufoer)
         }
     }
 
-    private fun avsluttedeSaker(fnr: String): AvsluttedeSaker {
+    private fun avsluttedeSaker(fnr: FodselNr): AvsluttedeSaker {
         val fom = LocalDate.now().minusYears(1)
 
         return AvsluttedeSaker(

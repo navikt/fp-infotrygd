@@ -3,6 +3,7 @@ package no.nav.infotrygd.svangerskapspenger.repository
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
 import no.nav.infotrygd.svangerskapspenger.nextId
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,29 +28,29 @@ class SakRepositoryTest {
     @Test
     fun findSvangerskapssakerByFnrAndType() {
         lagSak(
-            fnr = "123",
+            fnr = "10000000001",
             kapittelNr = "xx",
             valg = "xx",
             type = "xx")
 
-        repository.findSvangerskapssakerByFnrAndType("123", setOf("xx")).also {
+        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000001"), setOf("xx")).also {
             assertThat(it.isEmpty())
         }
 
         lagSak(
-            fnr = "123",
+            fnr = "10000000001",
             kapittelNr = "FA",
             valg = "SV",
             type = "S")
 
 
-        repository.findSvangerskapssakerByFnrAndType("123", setOf("S")).also {
+        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000001"), setOf("S")).also {
             assertThat(it).hasSize(1)
             assertThat(it[0].status).hasSize(1)
             assertThat(it[0].status[0].status).isEqualTo("A")
         }
 
-        repository.findSvangerskapssakerByFnrAndType("987", setOf("S")).also {
+        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000002"), setOf("S")).also {
             assertThat(it).isEmpty()
         }
     }
@@ -69,7 +70,7 @@ class SakRepositoryTest {
 
         val sak = Sak(
             id = nextId(),
-            fnr = fnr,
+            fnr = FodselNr(fnr),
             personKey = 123,
             saksblokk = "x",
             saksnummer = snr,
