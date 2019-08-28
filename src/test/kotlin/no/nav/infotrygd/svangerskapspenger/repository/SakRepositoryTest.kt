@@ -2,6 +2,7 @@ package no.nav.infotrygd.svangerskapspenger.repository
 
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
+import no.nav.infotrygd.svangerskapspenger.nextId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -57,6 +58,7 @@ class SakRepositoryTest {
         val snr = sakNr++.toString()
 
         val status = Status(
+            id = nextId(),
             personKey = 123,
             saksblokk = "x",
             saksnummer = snr,
@@ -66,6 +68,7 @@ class SakRepositoryTest {
         statusRepository.save(status)
 
         val sak = Sak(
+            id = nextId(),
             fnr = fnr,
             personKey = 123,
             saksblokk = "x",

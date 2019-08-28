@@ -3,35 +3,34 @@ package no.nav.infotrygd.svangerskapspenger.service
 import no.nav.infotrygd.svangerskapspenger.model.Periode
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
+import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import no.nav.infotrygd.svangerskapspenger.rest.dto.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [
-    SakService::class
-])
+@DataJpaTest
+@ActiveProfiles("test")
 internal class SakServiceTest {
     private val relevantStatus  = "Y"
     private val fnr = "123"
 
     @Autowired
-    lateinit var sakService: SakService
+    lateinit var sakRepository: SakRepository
 
-    @MockBean
-    lateinit var mockSakRepository: SakRepository
+    @Autowired
+    lateinit var periodeRepository: PeriodeRepository
 
-    @MockBean
-    lateinit var mockPeriodeRepository: PeriodeRepository
+    val sakService: SakService
+        get() = SakService(sakRepository, periodeRepository)
 
     @Test
     fun underBehandling() {
@@ -52,6 +51,7 @@ internal class SakServiceTest {
     fun apneSakerMedLopendeUtbetaling() {
         val iverksatt = LocalDate.now()
         val periode = Periode(
+            id = nextId(),
             fnr = fnr,
             stoenadstype = "SV",
             frisk = " ",
@@ -59,8 +59,7 @@ internal class SakServiceTest {
             stoppdato = null
         )
 
-        Mockito.`when`(mockPeriodeRepository.findOpneSakerMedLopendeUtbetaling(fnr))
-            .thenReturn(listOf(periode))
+        periodeRepository.save(periode)
 
         val forventet = listOf(ApenSakMedLopendeUtbetaling(iverksatt = iverksatt))
         val result = sakService.findSakerByFnr(fnr)
@@ -73,6 +72,7 @@ internal class SakServiceTest {
         val stoppdato = LocalDate.now().minusWeeks(1)
 
         val periode = Periode(
+            id = nextId(),
             fnr = fnr,
             stoenadstype = "SV",
             frisk = "F",
@@ -82,8 +82,7 @@ internal class SakServiceTest {
 
         val fom = LocalDate.now().minusYears(1)
 
-        Mockito.`when`(mockPeriodeRepository.findAvsluttedeSakerByFnr(fnr, fom))
-            .thenReturn(listOf(periode))
+        periodeRepository.save(periode)
 
         val forventet = listOf(AvsluttetSak(
             iverksatt = iverksatt,
@@ -99,8 +98,7 @@ internal class SakServiceTest {
     fun testSak(relevanteTyper: Set<String>, relevantListe: (SakResult) -> List<SakDto>) {
         val forventet = lagSak(type = relevanteTyper.first())
 
-        Mockito.`when`(mockSakRepository.findSvangerskapssakerByFnrAndType(fnr, relevanteTyper))
-            .thenReturn(listOf(forventet))
+        sakRepository.save(forventet)
 
         sakService.findSakerByFnr(fnr).also {
             val liste = relevantListe(it)
@@ -117,6 +115,7 @@ internal class SakServiceTest {
 
     private fun lagSak(type: String): Sak {
         return Sak(
+            id = nextId(),
             fnr = fnr,
             personKey = 123,
             saksblokk = "x",
@@ -128,8 +127,8 @@ internal class SakServiceTest {
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
             status = listOf(
-                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 98, status = relevantStatus),
-                Status(personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = "X")
+                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 98, status = relevantStatus),
+                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = "X")
             )
         )
     }

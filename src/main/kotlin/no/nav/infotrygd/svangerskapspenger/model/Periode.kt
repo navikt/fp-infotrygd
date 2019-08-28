@@ -8,9 +8,8 @@ import javax.persistence.*
 @Table(name = "IS_PERIODE_10")
 data class Periode(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_PERI10", nullable = false)
-    val id: Long? = null,
+    @Column(name = "ID_PERI10", nullable = false, columnDefinition = "DECIMAL")
+    val id: Long,
 
     @Column(name = "F_NR", columnDefinition = "CHAR")
     val fnr: String,

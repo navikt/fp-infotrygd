@@ -7,9 +7,8 @@ import javax.persistence.*
 @Table(name = "SA_STATUS_15")
 data class Status(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_STATUS", nullable = false)
-    val id: Long? = null,
+    @Column(name = "ID_STATUS", nullable = false, columnDefinition = "DECIMAL")
+    val id: Long,
 
     @Column(name = "S01_PERSONKEY", columnDefinition = "DECIMAL")
     val personKey: Long,

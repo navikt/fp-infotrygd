@@ -1,6 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.repository
 
 import no.nav.infotrygd.svangerskapspenger.model.Periode
+import no.nav.infotrygd.svangerskapspenger.nextId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,6 +53,7 @@ class PeriodeRepositoryTest {
         arbufoer: LocalDate = LocalDate.now()
     ): Periode {
         return Periode(
+            id = nextId(),
             fnr = "123",
             stoenadstype = stoenadstype,
             frisk = frisk,

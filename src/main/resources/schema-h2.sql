@@ -1,5 +1,25 @@
 CREATE SCHEMA IF NOT EXISTS INFOTRYGD_Q0;
 
+CREATE TABLE ALL_SEQUENCES (
+    SEQUENCE_OWNER VARCHAR2(30) NOT NULL  ,
+    SEQUENCE_NAME VARCHAR2(30)  NOT NULL  ,
+    MIN_VALUE               NUMBER       ,
+    MAX_VALUE               NUMBER       ,
+    INCREMENT_BY NUMBER  NOT NULL        ,
+    CYCLE_FLAG              VARCHAR2(1)  ,
+    ORDER_FLAG              VARCHAR2(1)  ,
+    CACHE_SIZE   NUMBER  NOT NULL        ,
+    LAST_NUMBER  NUMBER  NOT NULL
+);
+
+CREATE TABLE ALL_SYNONYMS (
+    OWNER              VARCHAR2(30),
+    SYNONYM_NAME       VARCHAR2(30),
+    TABLE_OWNER        VARCHAR2(30),
+    TABLE_NAME         VARCHAR2(30),
+    DB_LINK            VARCHAR2(128)
+);
+
 --------------------------------------------------
 -- Create Table INFOTRYGD_Q0.SA_SAK_10
 --------------------------------------------------
@@ -55,7 +75,7 @@ Create table INFOTRYGD_Q0.SA_SAK_10 (
     ENDRET_I_KILDE                 TIMESTAMP(6)        DEFAULT current_timestamp  , -- NOT NULL,
     KILDE_IS                       VARCHAR2(12)        DEFAULT ' '  , -- NOT NULL,
     REGION                         CHAR(1)             DEFAULT ' '  , -- NOT NULL,
-    ID_SAK                         IDENTITY              DEFAULT NOT NULL -- endret fra NUMBER
+    ID_SAK                         NUMBER              DEFAULT NOT NULL -- endret fra NUMBER
 );
 
 --------------------------------------------------
@@ -86,7 +106,7 @@ Create table INFOTRYGD_Q0.SA_STATUS_15 (
     ENDRET_I_KILDE                 TIMESTAMP(6)        DEFAULT current_timestamp  , -- NOT NULL,
     KILDE_IS                       VARCHAR2(12)        DEFAULT ' '  , -- NOT NULL,
     REGION                         CHAR(1)             DEFAULT ' '  , -- NOT NULL,
-    ID_STATUS                      IDENTITY              DEFAULT NOT NULL -- endret fra NUMBER
+    ID_STATUS                      NUMBER              DEFAULT NOT NULL -- endret fra NUMBER
 );
 
 --------------------------------------------------
@@ -94,7 +114,7 @@ Create table INFOTRYGD_Q0.SA_STATUS_15 (
 --------------------------------------------------
 Create table INFOTRYGD_Q0.IS_PERIODE_10 (
     IS01_PERSONKEY                 NUMBER(15)          DEFAULT 0  NOT NULL,
-    IS10_ARBUFOER_SEQ              NUMBER(8)           , -- NOT NULL,
+    IS10_ARBUFOER_SEQ              NUMBER(8,0)           , -- NOT NULL,
     IS10_ARBUFOER                  NUMBER(8)           , -- NOT NULL,
     IS10_ARBKAT                    CHAR(2)             , -- NOT NULL,
     IS10_STAT                      CHAR(1)             , -- NOT NULL,
@@ -242,4 +262,4 @@ Create table INFOTRYGD_Q0.IS_PERIODE_10 (
     ENDRET_I_KILDE                 TIMESTAMP(6)        DEFAULT localtimestamp  , -- NOT NULL,
     KILDE_IS                       VARCHAR2(12)        DEFAULT ' '  , -- NOT NULL,
     REGION                         CHAR(1)             DEFAULT ' '  , -- NOT NULL,
-    ID_PERI10                      IDENTITY              DEFAULT NOT NULL) -- endret fra NUMBER
+    ID_PERI10                      NUMBER              DEFAULT NOT NULL) -- endret fra NUMBER
