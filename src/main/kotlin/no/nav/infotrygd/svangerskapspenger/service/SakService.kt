@@ -61,7 +61,7 @@ class SakService(
             SakDto(
                 sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()),
                 status = it.status.minBy { it.lopeNr }?.status ?: "UKJENT",
-                resultat = it.resultat.strip(),
+                resultat = it.resultat.trim(),
                 vedtatt = it.vedtaksdato,
                 iverksatt = it.iverksattdato
             )
