@@ -1,6 +1,8 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
 import no.nav.infotrygd.svangerskapspenger.model.converters.NavLocalDateConverter
+import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFodselNrConverter
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -8,18 +10,18 @@ import javax.persistence.*
 @Table(name = "IS_PERIODE_10")
 data class Periode(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_PERI10", nullable = false)
-    val id: Long? = null,
+    @Column(name = "ID_PERI10", nullable = false, columnDefinition = "DECIMAL")
+    val id: Long,
 
     @Column(name = "F_NR", columnDefinition = "CHAR")
-    val fnr: String,
+    @Convert(converter = ReversedFodselNrConverter::class)
+    val fnr: FodselNr,
 
     @Column(name = "IS10_STOENADS_TYPE", columnDefinition = "CHAR")
     val stoenadstype: String?,
 
     @Column(name = "IS10_FRISK", columnDefinition = "CHAR")
-    val frisk: String?, // todo: er '' mappet til null?
+    val frisk: String?,
 
     @Column(name = "IS10_ARBUFOER", columnDefinition = "DECIMAL")
     @Convert(converter = NavLocalDateConverter::class)

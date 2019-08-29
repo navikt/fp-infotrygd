@@ -2,24 +2,20 @@ package no.nav.infotrygd.svangerskapspenger.repository
 
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
+import no.nav.infotrygd.svangerskapspenger.nextId
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 
 @RunWith(SpringRunner::class)
 @DataJpaTest
-@TestPropertySource(properties = [
-    "spring.jpa.hibernate.ddl-auto=validate",
-    "spring.datasource.initialization-mode=always",
-    "spring.datasource.platform=h2",
-    "spring.datasource.url=jdbc:h2:mem:testdb:MODE=Oracle",
-    "spring.jpa.properties.hibernate.default_schema=INFOTRYGD_Q0"
-])
+@ActiveProfiles("test")
 class SakRepositoryTest {
     @Autowired
     lateinit var repository: SakRepository
@@ -27,51 +23,57 @@ class SakRepositoryTest {
     @Autowired
     lateinit var statusRepository: StatusRepository
 
+    var sakNr = 1
+
     @Test
     fun findSvangerskapssakerByFnrAndType() {
         lagSak(
-            fnr = "123",
+            fnr = "10000000001",
             kapittelNr = "xx",
             valg = "xx",
             type = "xx")
 
-        repository.findSvangerskapssakerByFnrAndType("123", setOf("xx")).also {
+        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000001"), setOf("xx")).also {
             assertThat(it.isEmpty())
         }
 
         lagSak(
-            fnr = "123",
+            fnr = "10000000001",
             kapittelNr = "FA",
             valg = "SV",
             type = "S")
 
 
-        repository.findSvangerskapssakerByFnrAndType("123", setOf("S")).also {
+        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000001"), setOf("S")).also {
             assertThat(it).hasSize(1)
             assertThat(it[0].status).hasSize(1)
             assertThat(it[0].status[0].status).isEqualTo("A")
         }
 
-        repository.findSvangerskapssakerByFnrAndType("987", setOf("S")).also {
+        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000002"), setOf("S")).also {
             assertThat(it).isEmpty()
         }
     }
 
     private fun lagSak(fnr: String, kapittelNr: String, valg: String, type: String) {
+        val snr = sakNr++.toString()
+
         val status = Status(
+            id = nextId(),
             personKey = 123,
             saksblokk = "x",
-            saksnummer = "xx",
+            saksnummer = snr,
             status = "A",
             lopeNr = 1
         )
         statusRepository.save(status)
 
         val sak = Sak(
-            fnr = fnr,
+            id = nextId(),
+            fnr = FodselNr(fnr),
             personKey = 123,
             saksblokk = "x",
-            saksnummer = "xx",
+            saksnummer = snr,
             kapittelNr = kapittelNr,
             valg = valg,
             type = type,

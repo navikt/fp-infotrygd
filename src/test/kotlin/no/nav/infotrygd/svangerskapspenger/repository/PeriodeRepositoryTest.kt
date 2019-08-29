@@ -1,24 +1,20 @@
 package no.nav.infotrygd.svangerskapspenger.repository
 
 import no.nav.infotrygd.svangerskapspenger.model.Periode
+import no.nav.infotrygd.svangerskapspenger.nextId
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 
 @RunWith(SpringRunner::class)
 @DataJpaTest
-@TestPropertySource(properties = [
-    "spring.jpa.hibernate.ddl-auto=validate",
-    "spring.datasource.initialization-mode=always",
-    "spring.datasource.platform=h2",
-    "spring.datasource.url=jdbc:h2:mem:testdb:MODE=Oracle",
-    "spring.jpa.properties.hibernate.default_schema=INFOTRYGD_Q0"
-])
+@ActiveProfiles("test")
 class PeriodeRepositoryTest {
 
     @Autowired
@@ -35,7 +31,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, utgatt, ikkeFrisk, ikkeSv))
 
-        val result = repository.findAvsluttedeSakerByFnr("123", LocalDate.now().minusYears(1))
+        val result = repository.findAvsluttedeSakerByFnr(FodselNr("10000000001"), LocalDate.now().minusYears(1))
         assertThat(result).isEqualTo(listOf(relevant))
     }
 
@@ -48,7 +44,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, ikkeSv))
 
-        val result = repository.findOpneSakerMedLopendeUtbetaling("123")
+        val result = repository.findOpneSakerMedLopendeUtbetaling(FodselNr("10000000001"))
         assertThat(result).isEqualTo(listOf(relevant))
     }
 
@@ -58,7 +54,8 @@ class PeriodeRepositoryTest {
         arbufoer: LocalDate = LocalDate.now()
     ): Periode {
         return Periode(
-            fnr = "123",
+            id = nextId(),
+            fnr = FodselNr("10000000001"),
             stoenadstype = stoenadstype,
             frisk = frisk,
             arbufoer = arbufoer,

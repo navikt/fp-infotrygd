@@ -59,13 +59,13 @@ data class SakDto(
         Vedtaksdato.
         Kolonne: S10_VEDTAKSDATO
     """)
-    val vedtatt: LocalDate,     // S10_VEDTAKSDATO
+    val vedtatt: LocalDate?,     // S10_VEDTAKSDATO
 
     @ApiModelProperty(notes = """
         Iverksettelsesdato.
         Kolonne: S10_IVERKSATTDATO
     """)
-    val iverksatt: LocalDate    // S10_IVERKSATTDATO
+    val iverksatt: LocalDate?    // S10_IVERKSATTDATO
 )
 
 data class SakId(

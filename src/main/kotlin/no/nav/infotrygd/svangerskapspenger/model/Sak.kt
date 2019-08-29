@@ -1,7 +1,10 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
-import no.nav.infotrygd.svangerskapspenger.model.converters.NavLocalDateConverter
 import no.nav.infotrygd.svangerskapspenger.model.converters.NavReversedLocalDateConverter
+import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFodselNrConverter
+import no.nav.infotrygd.svangerskapspenger.values.FodselNr
+import org.hibernate.annotations.Cascade
+import org.hibernate.annotations.CascadeType
 import java.io.Serializable
 import java.time.LocalDate
 import javax.persistence.*
@@ -11,11 +14,11 @@ import javax.persistence.*
 data class Sak(
     @Id
     @Column(name = "ID_SAK", columnDefinition = "DECIMAL", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Long,
 
     @Column(name = "F_NR", columnDefinition = "CHAR")
-    val fnr: String,
+    @Convert(converter = ReversedFodselNrConverter::class)
+    val fnr: FodselNr,
 
     @Column(name = "S01_PERSONKEY", columnDefinition = "DECIMAL")
     val personKey: Long,
@@ -41,12 +44,12 @@ data class Sak(
     /** INFO: NavReversedLocalDateConverter lar seg ikke sortere i databasen! */
     @Column(name = "S10_VEDTAKSDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavReversedLocalDateConverter::class)
-    val vedtaksdato: LocalDate,
+    val vedtaksdato: LocalDate?,
 
     /** INFO: NavReversedLocalDateConverter lar seg ikke sortere i databasen! */
     @Column(name = "S10_IVERKSATTDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavReversedLocalDateConverter::class)
-    val iverksattdato: LocalDate,
+    val iverksattdato: LocalDate?,
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumns(value = [
@@ -54,5 +57,6 @@ data class Sak(
         JoinColumn(name = "S05_SAKSBLOKK", referencedColumnName = "S05_SAKSBLOKK"),
         JoinColumn(name = "S10_SAKSNR", referencedColumnName = "S10_SAKSNR")
     ])
+    @Cascade(value = [CascadeType.ALL])
     val status: List<Status>
 ) : Serializable
