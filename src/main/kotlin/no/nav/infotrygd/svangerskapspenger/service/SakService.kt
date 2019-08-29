@@ -31,8 +31,8 @@ class SakService(
         )
     }
 
-    private fun sakerByType(fnr: FodselNr, vararg status: String): List<SakDto> {
-        val saker = sakRepository.findSvangerskapssakerByFnrAndType(fnr, setOf(*status))
+    private fun sakerByType(fnr: FodselNr, vararg type: String): List<SakDto> {
+        val saker = sakRepository.findSvangerskapssakerByFnrAndType(fnr, setOf(*type))
         return toDto(saker)
     }
 
@@ -61,7 +61,7 @@ class SakService(
             SakDto(
                 sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()),
                 status = it.status.minBy { it.lopeNr }?.status ?: "UKJENT",
-                resultat = it.resultat,
+                resultat = it.resultat.strip(),
                 vedtatt = it.vedtaksdato,
                 iverksatt = it.iverksattdato
             )
