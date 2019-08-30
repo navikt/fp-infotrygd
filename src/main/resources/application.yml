@@ -30,6 +30,6 @@ http.proxy.parametername: notused
 
 no.nav.security.oidc.issuer:
   azure:
-    discoveryurl: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/.well-known/openid-configuration
-    accepted_audience: https://trygdeetaten.no/infotrygdsykepenger
-    proxyurl:
+    discoveryurl: ${APP_DISCOVERY_URL}
+    accepted_audience: ${APP_AUD}
+    proxyurl: ${APP_PROXY_URL}

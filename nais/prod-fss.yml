@@ -6,7 +6,7 @@ metadata:
   labels:
     team: infotrygd
 spec:
-  image:  docker.pkg.github.com/navikt/infotrygd-svangerskapspenger/svangerskapspenger:1.1
+  image:  {{version}}
   port: 8080 # Required. The port number which is exposed by the container and should receive HTTP traffic.
   liveness: # HTTP endpoint that signals 200 OK when the application is running.
     path: /actuator/health
@@ -43,12 +43,10 @@ spec:
       cpu: 500m
       memory: 256Mi
   ingresses: # Optional. List of ingress URLs that will route HTTP traffic to the application.
-  - "https://infotrygd-svangerskapspenger.nais.preprod.local/"
+  - "https://infotrygd-svangerskapspenger.nais.adeo.no/"
   logformat: accesslog # Optional. The format of the logs from the container if the logs should be handled differently than plain text or json
   logtransform: dns_loglevel # Optional. The transformation of the logs, if they should be handled differently than plain text or json
   webproxy: false # Optional. Expose web proxy configuration to the application using the HTTP_PROXY, HTTPS_PROXY and NO_PROXY environment variables.
   vault:
     enabled: true # Optional. If set to true fetch secrets from Secret Service and inject into the pods. todo link to doc.
-  configMaps:
-  # files: null # Optional. Specify config maps that will have their data mounted into the container as files.
-  #    - example_files_configmap
+
