@@ -38,13 +38,13 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven {
-        setUrl( "https://www.oracle.com/content/secure/maven/content")
-        credentials {
-            username = oracleusername
-            password = oraclepassword
-        }
-    }
+	maven {
+		setUrl( "https://maven.pkg.github.com/navikt/infotrygd-oracle")
+		credentials {
+			username = System.getenv('GITUSER')
+			password = System.getenv('GITTOKEN')
+		}
+	}
 }
 
 allOpen {
@@ -72,7 +72,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("org.postgresql:postgresql")
-    implementation("com.oracle.jdbc:ojdbc7:12.1.0.2")
+    implementation("com.oracle:ojdbc8:12.2.0.1")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     compile("com.h2database:h2")
