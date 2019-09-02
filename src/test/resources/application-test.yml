@@ -14,3 +14,10 @@ spring:
     initialization-mode: always
     platform: h2
     continue-on-error: true
+
+no.nav.security.oidc.issuer:
+  azure:
+    discoveryurl: http://metadata
+    accepted_audience: aud-localhost
+    proxyurl: ~
+    cookiename: localhost-idtoken
