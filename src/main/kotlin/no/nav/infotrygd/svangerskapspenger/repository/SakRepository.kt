@@ -15,4 +15,11 @@ interface SakRepository : JpaRepository<Sak, Long> {
               AND s.valg = 'SV' 
               AND s.type IN :typer""")
     fun findSvangerskapssakerByFnrAndType(fnr: FodselNr, typer: Set<String>): List<Sak>
+
+    @Query("""
+        SELECT COUNT(s) FROM Sak s
+            WHERE s.kapittelNr = 'FA'
+              AND s.valg = 'SV'
+              AND s.type IN :typer""")
+    fun countSvangerskapssakerByType(typer: Set<String>): Long
 }

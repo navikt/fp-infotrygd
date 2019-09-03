@@ -1,5 +1,6 @@
 package no.nav.infotrygd.svangerskapspenger.rest.controller
 
+import io.micrometer.core.annotation.Timed
 import no.nav.infotrygd.svangerskapspenger.rest.dto.CountDto
 import no.nav.infotrygd.svangerskapspenger.rest.dto.SakResult
 import no.nav.infotrygd.svangerskapspenger.service.SakService
@@ -18,6 +19,7 @@ class SakController(private val sakService: SakService) {
 
     @Protected
     @GetMapping("saker")
+    @Timed(value = "time_sak_controller", percentiles = [0.5, 0.95])
     fun underBehandling(@RequestParam(required = true) fnr: String): SakResult {
         return sakService.findSakerByFnr(FodselNr(fnr))
     }

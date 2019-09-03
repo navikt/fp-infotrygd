@@ -4,6 +4,7 @@ import no.nav.infotrygd.svangerskapspenger.model.Periode
 import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +20,11 @@ class PeriodeRepositoryTest {
 
     @Autowired
     lateinit var repository: PeriodeRepository
+
+    @Before
+    fun setUp() {
+        repository.deleteAll()
+    }
 
     @Test
     fun findAvsluttedeSakerByFnr() {
@@ -36,6 +42,13 @@ class PeriodeRepositoryTest {
     }
 
     @Test
+    fun countAvsluttedeSaker() {
+        val relevant = periode("SV", "F")
+        repository.save(relevant)
+        assertThat(repository.countAvsluttedeSaker(LocalDate.now().minusYears(1))).isEqualTo(1)
+    }
+
+    @Test
     fun findOpneSakerMedLopendeUtbetaling() {
         val relevant = periode("SV", " ")
 
@@ -46,6 +59,14 @@ class PeriodeRepositoryTest {
 
         val result = repository.findOpneSakerMedLopendeUtbetaling(FodselNr("10000000001"))
         assertThat(result).isEqualTo(listOf(relevant))
+    }
+
+    @Test
+    fun countOpneSakerMedLopendeUtbetaling() {
+        val relevant = periode("SV", " ")
+        repository.save(relevant)
+
+        assertThat(repository.countOpneSakerMedLopendeUtbetaling()).isEqualTo(1)
     }
 
     private fun periode(

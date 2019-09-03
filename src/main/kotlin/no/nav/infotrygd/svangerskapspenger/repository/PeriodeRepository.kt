@@ -20,10 +20,25 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
     fun findAvsluttedeSakerByFnr(fnr: FodselNr, fom: LocalDate): List<Periode>
 
     @Query("""
+        SELECT COUNT(p) FROM Periode p
+         WHERE p.stoenadstype = 'SV'
+           AND p.frisk = 'F'
+           AND p.arbufoer >= :fom
+    """)
+    fun countAvsluttedeSaker(fom: LocalDate): Long
+
+    @Query("""
         SELECT p FROM Periode p
          WHERE p.fnr = :fnr
            AND p.stoenadstype = 'SV'
            AND p.frisk = ' '
     """)
     fun findOpneSakerMedLopendeUtbetaling(fnr: FodselNr): List<Periode>
+
+    @Query("""
+        SELECT COUNT(p) FROM Periode p
+         WHERE p.stoenadstype = 'SV'
+           AND p.frisk = ' '
+    """)
+    fun countOpneSakerMedLopendeUtbetaling(): Long
 }

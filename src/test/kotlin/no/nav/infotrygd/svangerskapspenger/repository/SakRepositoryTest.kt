@@ -5,6 +5,7 @@ import no.nav.infotrygd.svangerskapspenger.model.Status
 import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +25,11 @@ class SakRepositoryTest {
     lateinit var statusRepository: StatusRepository
 
     var sakNr = 1
+
+    @Before
+    fun setUp() {
+        repository.deleteAll()
+    }
 
     @Test
     fun findSvangerskapssakerByFnrAndType() {
@@ -53,6 +59,17 @@ class SakRepositoryTest {
         repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000002"), setOf("S")).also {
             assertThat(it).isEmpty()
         }
+    }
+
+    @Test
+    fun countSvangerskapssakerByType() {
+        lagSak(
+            fnr = "10000000001",
+            kapittelNr = "FA",
+            valg = "SV",
+            type = "S")
+        assertThat(repository.countSvangerskapssakerByType(setOf("S"))).isEqualTo(1)
+        assertThat(repository.countSvangerskapssakerByType(setOf("X"))).isEqualTo(0)
     }
 
     private fun lagSak(fnr: String, kapittelNr: String, valg: String, type: String) {
