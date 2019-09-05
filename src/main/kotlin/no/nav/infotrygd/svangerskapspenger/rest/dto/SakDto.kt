@@ -84,7 +84,9 @@ data class ApenSakMedLopendeUtbetaling(
         Iverksettelsesdato.
         Kolonne: IS10_ARBUFOER
     """)
-    val iverksatt: LocalDate // IS10_ARBUFOER
+    val iverksatt: LocalDate, // IS10_ARBUFOER
+
+    val utbetalinger: List<UtbetalingDto>
 )
 
 data class AvsluttedeSaker(
@@ -93,7 +95,8 @@ data class AvsluttedeSaker(
     """)
     val fraOgMed: LocalDate,
 
-    val saker: List<AvsluttetSak>)
+    val saker: List<AvsluttetSak>
+)
 
 data class AvsluttetSak(
     @ApiModelProperty(notes = """
@@ -106,5 +109,21 @@ data class AvsluttetSak(
         Stoppdato.
         Kolonne: IS10_STOPPDATO
     """)
-    val stoppdato: LocalDate    // IS10_STOPPDATO
+    val stoppdato: LocalDate,    // IS10_STOPPDATO
+
+    val utbetalinger: List<UtbetalingDto>
+)
+
+data class UtbetalingDto(
+    @ApiModelProperty(notes = """
+        Utbetalt fra og med.
+        Kolonne: IS15_UTBETFOM
+    """)
+    val utbetaltFom: LocalDate,
+
+    @ApiModelProperty(notes = """
+        Utbetalt til og med.
+        Kolonne: IS15_UTBETTOM
+    """)
+    val utbetaltTom: LocalDate
 )

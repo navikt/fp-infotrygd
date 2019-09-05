@@ -1,6 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.repository
 
 import no.nav.infotrygd.svangerskapspenger.model.Periode
+import no.nav.infotrygd.svangerskapspenger.model.Utbetaling
 import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.assertj.core.api.Assertions.assertThat
@@ -26,6 +27,8 @@ class PeriodeRepositoryTest {
         repository.deleteAll()
     }
 
+    private val fnr = FodselNr("10000000001")
+
     @Test
     fun findAvsluttedeSakerByFnr() {
 
@@ -37,8 +40,8 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, utgatt, ikkeFrisk, ikkeSv))
 
-        val result = repository.findAvsluttedeSakerByFnr(FodselNr("10000000001"), LocalDate.now().minusYears(1))
-        assertThat(result).isEqualTo(listOf(relevant))
+        val result = repository.findAvsluttedeSakerByFnr(fnr, LocalDate.now().minusYears(1))
+        assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
     @Test
@@ -57,8 +60,27 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, ikkeSv))
 
-        val result = repository.findOpneSakerMedLopendeUtbetaling(FodselNr("10000000001"))
-        assertThat(result).isEqualTo(listOf(relevant))
+        val result = repository.findOpneSakerMedLopendeUtbetaling(fnr)
+        assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+    }
+
+    @Test
+    fun utbetalinger() {
+        var p = periode("SV", "F", LocalDate.now())
+        p = p.copy(utbetalinger = listOf(
+            Utbetaling(
+                id = nextId(),
+                personKey = p.personKey,
+                arbufoerSeq = p.arbufoerSeq,
+                utbetaltFom = LocalDate.now().minusYears(1),
+                utbetaltTom = LocalDate.now()
+            )
+        ))
+
+        repository.save(p)
+
+        val result = repository.findAvsluttedeSakerByFnr(fnr, LocalDate.now().minusYears(1))
+        assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
     @Test
@@ -76,11 +98,14 @@ class PeriodeRepositoryTest {
     ): Periode {
         return Periode(
             id = nextId(),
-            fnr = FodselNr("10000000001"),
+            personKey = 1,
+            arbufoerSeq = 1,
+            fnr = fnr,
             stoenadstype = stoenadstype,
             frisk = frisk,
             arbufoer = arbufoer,
-            stoppdato = null
+            stoppdato = null,
+            utbetalinger = listOf()
         )
     }
 }

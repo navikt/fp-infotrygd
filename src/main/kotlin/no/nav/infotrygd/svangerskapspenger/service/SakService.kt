@@ -1,6 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
 import no.nav.infotrygd.svangerskapspenger.model.Sak
+import no.nav.infotrygd.svangerskapspenger.model.Utbetaling
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import no.nav.infotrygd.svangerskapspenger.rest.dto.*
@@ -37,9 +38,19 @@ class SakService(
     }
 
     private fun apneSakerMedLopendeUtbetaling(fnr: FodselNr): List<ApenSakMedLopendeUtbetaling> {
-        return periodeRepository.findOpneSakerMedLopendeUtbetaling(fnr).map {
-            ApenSakMedLopendeUtbetaling(iverksatt = it.arbufoer)
+        return periodeRepository.findOpneSakerMedLopendeUtbetaling(fnr).map { periode ->
+            ApenSakMedLopendeUtbetaling(
+                iverksatt = periode.arbufoer,
+                utbetalinger = periode.utbetalinger.map { toDto(it) }
+            )
         }
+    }
+
+    private fun toDto(it: Utbetaling): UtbetalingDto {
+        return UtbetalingDto(
+            utbetaltFom = it.utbetaltFom,
+            utbetaltTom = it.utbetaltTom
+        )
     }
 
     private fun avsluttedeSaker(fnr: FodselNr): AvsluttedeSaker {
@@ -48,10 +59,12 @@ class SakService(
         return AvsluttedeSaker(
             fraOgMed = fom,
             saker = periodeRepository.findAvsluttedeSakerByFnr(fnr, fom)
-                .map { AvsluttetSak(
-                    iverksatt = it.arbufoer,
-                    stoppdato = it.stoppdato
-                        ?: throw IllegalStateException("Forsøkte å returnere en avsluttet sak uten stoppdato.")
+                .map { periode ->
+                    AvsluttetSak(
+                    iverksatt = periode.arbufoer,
+                    stoppdato = periode.stoppdato
+                        ?: throw IllegalStateException("Forsøkte å returnere en avsluttet sak uten stoppdato."),
+                    utbetalinger = periode.utbetalinger.map { toDto(it) }
                 ) }
         )
     }

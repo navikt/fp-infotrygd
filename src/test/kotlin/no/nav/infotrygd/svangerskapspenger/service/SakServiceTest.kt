@@ -3,6 +3,7 @@ package no.nav.infotrygd.svangerskapspenger.service
 import no.nav.infotrygd.svangerskapspenger.model.Periode
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
+import no.nav.infotrygd.svangerskapspenger.model.Utbetaling
 import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
@@ -51,18 +52,41 @@ internal class SakServiceTest {
     @Test
     fun apneSakerMedLopendeUtbetaling() {
         val iverksatt = LocalDate.now()
+        val utbetaltFom = iverksatt
+        val utbetaltTom = iverksatt.plusDays(1)
+        val arbufoerSeq = nextId()
+        val personKey = nextId()
         val periode = Periode(
             id = nextId(),
+            personKey = personKey,
+            arbufoerSeq = arbufoerSeq,
             fnr = fnr,
             stoenadstype = "SV",
             frisk = " ",
             arbufoer = iverksatt,
-            stoppdato = null
+            stoppdato = null,
+            utbetalinger = listOf(
+                Utbetaling(
+                    id = nextId(),
+                    personKey = personKey,
+                    arbufoerSeq = arbufoerSeq,
+                    utbetaltFom = utbetaltFom,
+                    utbetaltTom = utbetaltTom
+                )
+            )
         )
 
         periodeRepository.save(periode)
 
-        val forventet = listOf(ApenSakMedLopendeUtbetaling(iverksatt = iverksatt))
+        val forventet = listOf(ApenSakMedLopendeUtbetaling(
+            iverksatt = iverksatt,
+            utbetalinger = listOf(
+                UtbetalingDto(
+                    utbetaltFom = utbetaltFom,
+                    utbetaltTom = utbetaltTom
+                )
+            )
+        ))
         val result = sakService.findSakerByFnr(fnr)
         assertThat(result.apneSakerMedLopendeUtbetaling).isEqualTo(forventet)
     }
@@ -74,11 +98,22 @@ internal class SakServiceTest {
 
         val periode = Periode(
             id = nextId(),
+            personKey = 1,
+            arbufoerSeq = 1,
             fnr = fnr,
             stoenadstype = "SV",
             frisk = "F",
             arbufoer = iverksatt,
-            stoppdato = stoppdato
+            stoppdato = stoppdato,
+            utbetalinger = listOf(
+                Utbetaling(
+                    id = nextId(),
+                    personKey = 1,
+                    arbufoerSeq = 1,
+                    utbetaltFom = iverksatt,
+                    utbetaltTom = stoppdato
+                )
+            )
         )
 
         val fom = LocalDate.now().minusYears(1)
@@ -87,7 +122,13 @@ internal class SakServiceTest {
 
         val forventet = listOf(AvsluttetSak(
             iverksatt = iverksatt,
-            stoppdato = stoppdato
+            stoppdato = stoppdato,
+            utbetalinger = listOf(
+                UtbetalingDto(
+                    utbetaltFom = iverksatt,
+                    utbetaltTom = stoppdato
+                )
+            )
         ))
 
         val result = sakService.findSakerByFnr(fnr)

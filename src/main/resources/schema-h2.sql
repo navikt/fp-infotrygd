@@ -262,4 +262,38 @@ Create table INFOTRYGD_Q0.IS_PERIODE_10 (
     ENDRET_I_KILDE                 TIMESTAMP(6)        DEFAULT localtimestamp  , -- NOT NULL,
     KILDE_IS                       VARCHAR2(12)        DEFAULT ' '  , -- NOT NULL,
     REGION                         CHAR(1)             DEFAULT ' '  , -- NOT NULL,
-    ID_PERI10                      NUMBER              DEFAULT NOT NULL) -- endret fra NUMBER
+    ID_PERI10                      NUMBER              DEFAULT NOT NULL); -- endret fra NUMBER
+
+--------------------------------------------------
+-- Create Table INFOTRYGD_Q0.IS_UTBETALING_15
+--------------------------------------------------
+Create table INFOTRYGD_Q0.IS_UTBETALING_15 (
+    IS01_PERSONKEY                 NUMBER(15)          , -- NOT NULL,
+    IS10_ARBUFOER_SEQ              NUMBER(8)           , -- NOT NULL,
+    IS15_UTBETFOM_SEQ              NUMBER(8)           , -- NOT NULL,
+    IS15_UTBETFOM                  NUMBER(8)           , -- NOT NULL,
+    IS15_UTBETTOM                  NUMBER(8)           , -- NOT NULL,
+    IS15_UTBETDATO                 NUMBER(8)           , -- NOT NULL,
+    IS15_ARBGIVNR                  NUMBER(11)          , -- NOT NULL,
+    IS15_BILAG                     NUMBER(7)           , -- NOT NULL,
+    IS15_DSATS                     NUMBER(9, 2)        , -- NOT NULL,
+    IS15_GRAD                      CHAR(3)             , -- NOT NULL,
+    IS15_OP                        CHAR(2)             , -- NOT NULL,
+    IS15_TYPE                      CHAR(1)             , -- NOT NULL,
+    IS15_TILB_UTBETDATO            NUMBER(8)           , -- NOT NULL,
+    IS15_TILB_BILAG                NUMBER(7)           , -- NOT NULL,
+    IS15_TILB_OP                   CHAR(2)             , -- NOT NULL,
+    IS15_TIDSKONTO_KODE            CHAR(1)             , -- NOT NULL,
+    IS15_BRUKERID                  CHAR(7)             , -- NOT NULL,
+    IS15_REGDATO_BATCH             NUMBER(8)           , -- NOT NULL,
+    IS15_TILTAK_TYPE               CHAR(2)             , -- NOT NULL,
+    IS15_KORR                      CHAR(4)             , -- NOT NULL,
+    IS15_AARSAK_FORSKYV            CHAR(2)             , -- NOT NULL,
+    IS15_BEREGNET_I_OS             CHAR(1)             , -- NOT NULL,
+    TK_NR                          CHAR(4)             , -- NOT NULL,
+    F_NR                           CHAR(11)            , -- NOT NULL,
+    OPPRETTET                      TIMESTAMP(6)        DEFAULT current_timestamp  , -- NOT NULL,
+    ENDRET_I_KILDE                 TIMESTAMP(6)        DEFAULT current_timestamp  , -- NOT NULL,
+    KILDE_IS                       VARCHAR2(12)        DEFAULT ' '  , -- NOT NULL,
+    REGION                         CHAR(1)             DEFAULT ' '  , -- NOT NULL,
+    ID_UTBT                        NUMBER              DEFAULT NOT NULL);
