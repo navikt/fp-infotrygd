@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException
 @Component
 class ClientValidator(
     private val environment: Environment,
-    private val ctxHolder: OIDCRequestContextHolder,
+    private val ctxHolder: OIDCRequestContextHolder?,
 
     @Value("\${app.security.issuer}")
     private val issuer: String,
@@ -42,8 +42,8 @@ class ClientValidator(
     }
 
     private fun subject(): String? {
-        val oidcValidationContext: OIDCValidationContext = ctxHolder.oidcValidationContext
-        val claims: OIDCClaims? = oidcValidationContext.getClaims(issuer)
+        val oidcValidationContext: OIDCValidationContext? = ctxHolder?.oidcValidationContext
+        val claims: OIDCClaims? = oidcValidationContext?.getClaims(issuer)
         return claims?.subject
     }
 }

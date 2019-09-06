@@ -1,11 +1,10 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
-import io.micrometer.core.annotation.Timed
+import io.micrometer.core.instrument.Gauge
 import io.micrometer.core.instrument.MeterRegistry
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import org.slf4j.LoggerFactory
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import javax.annotation.PostConstruct
@@ -25,36 +24,36 @@ class MetricsComponent(
     private val timerOpneSakerMedLopendeUtbetaling = registry.timer("time_num_opne_saker_med_lopende_utbetaling")
     private val timerAvsluttedeSaker = registry.timer("time_num_avsluttede_saker")
 
-    @Timed(value = "table_metrics", description = "Tiden det tar å samle metrics for tabellene")
-    @Scheduled(fixedRate = 60_000)
     @PostConstruct
     fun tableMetrics() {
-        logger.info("Samler metrics om relevante data")
+        Gauge.builder("num_saker_under_behandling") {
+            timerSakerUnderBehandling.recordCallable {
+                sakRepository.countSvangerskapssakerByType(setOf("S ", "R "))
+            }
+        }.register(registry)
 
-        val sakerUnderBehandling : Long = timerSakerUnderBehandling.recordCallable {
-            sakRepository.countSvangerskapssakerByType(setOf("S ", "R "))
-        }
+        Gauge.builder("num_klagesaker") {
+            timerKlagesaker.recordCallable {
+                sakRepository.countSvangerskapssakerByType(setOf("K "))
+            }
+        }.register(registry)
 
-        val klagesaker = timerKlagesaker.recordCallable {
-            sakRepository.countSvangerskapssakerByType(setOf("K "))
-        }
+        Gauge.builder("num_ankesaker") {
+            timerAnkesaker.recordCallable {
+                sakRepository.countSvangerskapssakerByType(setOf("A "))
+            }
+        }.register(registry)
 
-        val ankesaker = timerAnkesaker.recordCallable {
-            sakRepository.countSvangerskapssakerByType(setOf("A "))
-        }
+        Gauge.builder("num_opne_saker_med_lopende_utbetaling") {
+            timerOpneSakerMedLopendeUtbetaling.recordCallable {
+                periodeRepository.countOpneSakerMedLopendeUtbetaling()
+            }
+        }.register(registry)
 
-        val opneSakerMedLopendeUtbetaling = timerOpneSakerMedLopendeUtbetaling.recordCallable {
-            periodeRepository.countOpneSakerMedLopendeUtbetaling()
-        }
-
-        val avsluttedeSaker = timerAvsluttedeSaker.recordCallable {
-            periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1))
-        }
-
-        registry.gauge("num_saker_under_behandling", sakerUnderBehandling)
-        registry.gauge("num_klagesaker", klagesaker)
-        registry.gauge("num_ankesaker", ankesaker)
-        registry.gauge("num_opne_saker_med_lopende_utbetaling", opneSakerMedLopendeUtbetaling)
-        registry.gauge("num_avsluttede_saker", avsluttedeSaker)
+        Gauge.builder("num_avsluttede_saker") {
+            timerAvsluttedeSaker.recordCallable {
+                periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1))
+            }
+        }.register(registry)
     }
 }
