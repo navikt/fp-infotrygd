@@ -21,3 +21,8 @@ no.nav.security.oidc.issuer:
     accepted_audience: aud-localhost
     proxyurl: ~
     cookiename: localhost-idtoken
+
+app:
+  security:
+    issuer: azure
+    clientWhitelist: "12345678910"

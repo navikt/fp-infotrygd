@@ -33,3 +33,8 @@ no.nav.security.oidc.issuer:
     discoveryurl: ${APP_DISCOVERY_URL}
     accepted_audience: ${APP_AUD}
     proxyurl: ${APP_PROXY_URL}
+
+app:
+  security:
+    issuer: ${APP_CLIENT_ISSUER}
+    clientWhitelist: ${APP_CLIENT_WHITELIST}
