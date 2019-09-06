@@ -1,14 +1,15 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
-import io.micrometer.core.instrument.Gauge
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Timer
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.LocalDate
+import java.util.concurrent.atomic.AtomicLong
 import javax.annotation.PostConstruct
 
 @Component
@@ -19,50 +20,44 @@ class MetricsComponent(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    private val timerSakerUnderBehandling = timer("time_num_saker_under_behandling")
-    private val timerKlagesaker = timer("time_num_klagesaker")
-    private val timerAnkesaker = timer("time_num_ankesaker")
+    private val counts: MutableList<Count> = ArrayList()
 
-    private val timerOpneSakerMedLopendeUtbetaling = timer("time_num_opne_saker_med_lopende_utbetaling")
-    private val timerAvsluttedeSaker = timer("time_num_avsluttede_saker")
+    @PostConstruct
+    fun tableMetrics() {
+        count("num_saker_under_behandling") { sakRepository.countSvangerskapssakerByType(setOf("S ", "R ")) }
+        count("num_klagesaker") { sakRepository.countSvangerskapssakerByType(setOf("K ")) }
+        count("num_ankesaker") { sakRepository.countSvangerskapssakerByType(setOf("A ")) }
+        count("num_opne_saker_med_lopende_utbetaling") { periodeRepository.countOpneSakerMedLopendeUtbetaling() }
+        count("num_avsluttede_saker") { periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1)) }
+    }
 
-    private fun timer(name: String): Timer =
+    @Scheduled(fixedRate = 60_000)
+    fun update() {
+        logger.info("Updating metrics")
+        counts.forEach { it.update() }
+    }
+
+    private fun count(name: String, resolver: () -> Long) {
+        val t = createTimer("time_$name")
+        val c = Count(t, resolver)
+        counts.add(c)
+        registry.gauge(name, c.value)
+    }
+
+    private fun createTimer(name: String): Timer =
         Timer.builder(name)
             .publishPercentiles(0.5, 0.95)
             .minimumExpectedValue(Duration.ofMillis(1))
             .maximumExpectedValue(Duration.ofMinutes(10))
             .register(registry)
 
-    @PostConstruct
-    fun tableMetrics() {
-        Gauge.builder("num_saker_under_behandling") {
-            timerSakerUnderBehandling.recordCallable {
-                sakRepository.countSvangerskapssakerByType(setOf("S ", "R "))
-            }
-        }.register(registry)
+    class Count(private val timer: Timer, private val resolver: () -> Long) {
+        val value: AtomicLong = AtomicLong(resolve())
 
-        Gauge.builder("num_klagesaker") {
-            timerKlagesaker.recordCallable {
-                sakRepository.countSvangerskapssakerByType(setOf("K "))
-            }
-        }.register(registry)
+        fun update() {
+            value.set(resolve())
+        }
 
-        Gauge.builder("num_ankesaker") {
-            timerAnkesaker.recordCallable {
-                sakRepository.countSvangerskapssakerByType(setOf("A "))
-            }
-        }.register(registry)
-
-        Gauge.builder("num_opne_saker_med_lopende_utbetaling") {
-            timerOpneSakerMedLopendeUtbetaling.recordCallable {
-                periodeRepository.countOpneSakerMedLopendeUtbetaling()
-            }
-        }.register(registry)
-
-        Gauge.builder("num_avsluttede_saker") {
-            timerAvsluttedeSaker.recordCallable {
-                periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1))
-            }
-        }.register(registry)
+        private fun resolve() = timer.recordCallable { resolver() }
     }
 }
