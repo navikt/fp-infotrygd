@@ -52,7 +52,7 @@ class PeriodeRepositoryTest {
     }
 
     @Test
-    fun findOpneSakerMedLopendeUtbetaling() {
+    fun findOpneSakerMedLopendeUtbetalingByFnr() {
         val relevant = periode("SV", " ")
 
         val frisk = periode("SV", "F")
@@ -60,7 +60,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, ikkeSv))
 
-        val result = repository.findOpneSakerMedLopendeUtbetaling(fnr)
+        val result = repository.findOpneSakerMedLopendeUtbetalingByFnr(fnr)
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
@@ -81,6 +81,14 @@ class PeriodeRepositoryTest {
 
         val result = repository.findAvsluttedeSakerByFnr(fnr, LocalDate.now().minusYears(1))
         assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+    }
+
+    @Test
+    fun findOpneSakerMedLopendeUtbetaling() {
+        val relevant = periode("SV", " ")
+        repository.save(relevant)
+
+        assertThat(repository.findOpneSakerMedLopendeUtbetaling()).hasSize(1)
     }
 
     @Test

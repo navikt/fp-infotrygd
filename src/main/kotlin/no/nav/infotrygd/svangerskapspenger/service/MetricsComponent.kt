@@ -1,6 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
 import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Tag
 import io.micrometer.core.instrument.Timer
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
@@ -22,6 +23,8 @@ class MetricsComponent(
 
     private val counts: MutableList<Count> = ArrayList()
 
+    private var tom: List<LocalDate> = listOf()
+
     @PostConstruct
     fun tableMetrics() {
         count("num_saker_under_behandling") { sakRepository.countSvangerskapssakerByType(setOf("S ", "R ")) }
@@ -29,19 +32,37 @@ class MetricsComponent(
         count("num_ankesaker") { sakRepository.countSvangerskapssakerByType(setOf("A ")) }
         count("num_opne_saker_med_lopende_utbetaling") { periodeRepository.countOpneSakerMedLopendeUtbetaling() }
         count("num_avsluttede_saker") { periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1)) }
+
+        for (i in 0 until 12) {
+            count("num_opne_saker", Tag.of("month_diff", i.toString())) {
+                val now = LocalDate.now()
+                tom.count { it.year == now.year && it.month == now.month }.toLong()
+            }
+        }
+
+        updatePerioder()
     }
 
     @Scheduled(fixedRate = 60_000)
     fun update() {
         logger.info("Updating metrics")
         counts.forEach { it.update() }
+
+        updatePerioder()
     }
 
-    private fun count(name: String, resolver: () -> Long) {
+    private fun updatePerioder() {
+        tom = periodeRepository.findOpneSakerMedLopendeUtbetaling().flatMap { periode ->
+            val max = periode.utbetalinger.map { it.utbetaltTom }.max()
+            max?.let { listOf(it) } ?: listOf()
+        }
+    }
+
+    private fun count(name: String, vararg tags: Tag, resolver: () -> Long) {
         val t = createTimer("time_$name")
         val c = Count(t, resolver)
         counts.add(c)
-        registry.gauge(name, c.value)
+        registry.gauge(name, tags.toList(), c.value)
     }
 
     private fun createTimer(name: String): Timer =

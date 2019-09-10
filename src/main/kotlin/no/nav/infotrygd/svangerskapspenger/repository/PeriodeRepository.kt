@@ -33,7 +33,7 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
            AND p.stoenadstype = 'SV'
            AND p.frisk = ' '
     """)
-    fun findOpneSakerMedLopendeUtbetaling(fnr: FodselNr): List<Periode>
+    fun findOpneSakerMedLopendeUtbetalingByFnr(fnr: FodselNr): List<Periode>
 
     @Query("""
         SELECT COUNT(p) FROM Periode p
@@ -41,4 +41,11 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
            AND p.frisk = ' '
     """)
     fun countOpneSakerMedLopendeUtbetaling(): Long
+
+    @Query("""
+        SELECT p FROM Periode p
+         WHERE p.stoenadstype = 'SV'
+           AND p.frisk = ' '
+    """)
+    fun findOpneSakerMedLopendeUtbetaling(): List<Periode>
 }

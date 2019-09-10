@@ -38,7 +38,7 @@ class SakService(
     }
 
     private fun apneSakerMedLopendeUtbetaling(fnr: FodselNr): List<ApenSakMedLopendeUtbetaling> {
-        return periodeRepository.findOpneSakerMedLopendeUtbetaling(fnr).map { periode ->
+        return periodeRepository.findOpneSakerMedLopendeUtbetalingByFnr(fnr).map { periode ->
             ApenSakMedLopendeUtbetaling(
                 iverksatt = periode.arbufoer,
                 utbetalinger = periode.utbetalinger.map { toDto(it) }
