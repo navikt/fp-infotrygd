@@ -34,8 +34,8 @@ class MetricsComponent(
         count("num_avsluttede_saker") { periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1)) }
 
         for (i in 0 until 12) {
-            count("num_opne_saker", Tag.of("month_diff", i.toString())) {
-                val now = LocalDate.now()
+            count("num_opne_saker", Tag.of("month_diff", String.format("%02d", i))) {
+                val now = LocalDate.now().plusMonths(i.toLong())
                 tom.count { it.year == now.year && it.month == now.month }.toLong()
             }
         }
