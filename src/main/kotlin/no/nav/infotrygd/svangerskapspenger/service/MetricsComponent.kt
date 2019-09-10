@@ -34,7 +34,7 @@ class MetricsComponent(
         count("num_avsluttede_saker") { periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1)) }
 
         for (i in 0 until 12) {
-            count("num_opne_saker", Tag.of("month_diff", String.format("%02d", i))) {
+            count("num_opne_saker_stoppdato", Tag.of("month_diff", String.format("%02d", i))) {
                 val now = LocalDate.now().plusMonths(i.toLong())
                 tom.count { it.year == now.year && it.month == now.month }.toLong()
             }
@@ -53,8 +53,7 @@ class MetricsComponent(
 
     private fun updatePerioder() {
         tom = periodeRepository.findOpneSakerMedLopendeUtbetaling().flatMap { periode ->
-            val max = periode.utbetalinger.map { it.utbetaltTom }.max()
-            max?.let { listOf(it) } ?: listOf()
+            periode.stoppdato?.let { listOf(it) } ?: listOf()
         }
     }
 
