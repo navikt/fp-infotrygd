@@ -49,7 +49,8 @@ class SakService(
     private fun toDto(it: Utbetaling): UtbetalingDto {
         return UtbetalingDto(
             utbetaltFom = it.utbetaltFom,
-            utbetaltTom = it.utbetaltTom
+            utbetaltTom = it.utbetaltTom,
+            gradering = it.grad
         )
     }
 

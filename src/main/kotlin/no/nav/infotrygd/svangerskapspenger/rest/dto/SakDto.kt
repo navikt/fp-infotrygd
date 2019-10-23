@@ -125,5 +125,11 @@ data class UtbetalingDto(
         Utbetalt til og med.
         Kolonne: IS15_UTBETTOM
     """)
-    val utbetaltTom: LocalDate
+    val utbetaltTom: LocalDate,
+
+    @ApiModelProperty(notes = """
+        Gradering
+        Kolonne: IS15_GRAD
+    """)
+    val gradering: Int?
 )

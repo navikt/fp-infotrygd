@@ -73,7 +73,8 @@ class PeriodeRepositoryTest {
                 personKey = p.personKey,
                 arbufoerSeq = p.arbufoerSeq,
                 utbetaltFom = LocalDate.now().minusYears(1),
-                utbetaltTom = LocalDate.now()
+                utbetaltTom = LocalDate.now(),
+                grad = 10
             )
         ))
 

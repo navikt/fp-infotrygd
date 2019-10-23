@@ -56,6 +56,7 @@ internal class SakServiceTest {
         val utbetaltTom = iverksatt.plusDays(1)
         val arbufoerSeq = nextId()
         val personKey = nextId()
+        val gradering = 20
         val periode = Periode(
             id = nextId(),
             personKey = personKey,
@@ -71,7 +72,8 @@ internal class SakServiceTest {
                     personKey = personKey,
                     arbufoerSeq = arbufoerSeq,
                     utbetaltFom = utbetaltFom,
-                    utbetaltTom = utbetaltTom
+                    utbetaltTom = utbetaltTom,
+                    grad = gradering
                 )
             )
         )
@@ -83,7 +85,8 @@ internal class SakServiceTest {
             utbetalinger = listOf(
                 UtbetalingDto(
                     utbetaltFom = utbetaltFom,
-                    utbetaltTom = utbetaltTom
+                    utbetaltTom = utbetaltTom,
+                    gradering = gradering
                 )
             )
         ))
@@ -95,6 +98,7 @@ internal class SakServiceTest {
     fun avsluttedeSaker() {
         val iverksatt = LocalDate.now().minusMonths(1)
         val stoppdato = LocalDate.now().minusWeeks(1)
+        val gradering = 20
 
         val periode = Periode(
             id = nextId(),
@@ -111,7 +115,8 @@ internal class SakServiceTest {
                     personKey = 1,
                     arbufoerSeq = 1,
                     utbetaltFom = iverksatt,
-                    utbetaltTom = stoppdato
+                    utbetaltTom = stoppdato,
+                    grad = gradering
                 )
             )
         )
@@ -126,7 +131,8 @@ internal class SakServiceTest {
             utbetalinger = listOf(
                 UtbetalingDto(
                     utbetaltFom = iverksatt,
-                    utbetaltTom = stoppdato
+                    utbetaltTom = stoppdato,
+                    gradering = gradering
                 )
             )
         ))
