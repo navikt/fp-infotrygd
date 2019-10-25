@@ -35,18 +35,41 @@ internal class SakServiceTest {
         get() = SakService(sakRepository, periodeRepository)
 
     @Test
-    fun underBehandling() {
-        testSak(setOf("S", "R")){it.underBehandling}
-    }
+    fun ttt() {
+        val type = "S"
+        val resultat = "xx"
+        val sak = Sak(
+            id = nextId(),
+            fnr = fnr,
+            personKey = 123,
+            saksblokk = "x",
+            saksnummer = "11",
+            kapittelNr = "FA",
+            valg = "SV",
+            type = type,
+            resultat = resultat,
+            vedtaksdato = LocalDate.now(),
+            iverksattdato = LocalDate.now(),
+            status = listOf(
+                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 98, status = relevantStatus),
+                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = "X")
+            )
+        )
 
-    @Test
-    fun klagesaker() {
-        testSak(setOf("K")){it.klagesaker}
-    }
+        sakRepository.save(sak)
 
-    @Test
-    fun ankesaker() {
-        testSak(setOf("A")){it.ankesaker}
+        val res = sakService.findSakerByFnr(fnr)
+
+        val forventet = listOf(SakDto(
+            sakId = SakId(sak.saksblokk, sak.saksnummer.toInt()),
+            type = type,
+            status = relevantStatus,
+            resultat = resultat,
+            vedtatt = LocalDate.now(),
+            iverksatt = LocalDate.now()
+        ))
+
+        assertThat(res.saker).isEqualTo(forventet)
     }
 
     @Test
@@ -141,43 +164,5 @@ internal class SakServiceTest {
 
         assertThat(result.avsluttedeSaker.fraOgMed).isEqualTo(fom)
         assertThat(result.avsluttedeSaker.saker).isEqualTo(forventet)
-    }
-
-    fun testSak(relevanteTyper: Set<String>, relevantListe: (SakResult) -> List<SakDto>) {
-        val forventet = lagSak(type = relevanteTyper.first())
-
-        sakRepository.save(forventet)
-
-        sakService.findSakerByFnr(fnr).also {
-            val liste = relevantListe(it)
-            assertThat(liste).hasSize(1)
-            liste[0].apply {
-                assertThat(sakId).isEqualTo(SakId(forventet.saksblokk, forventet.saksnummer.toInt()))
-                assertThat(status).isEqualTo(relevantStatus)
-                assertThat(resultat).isEqualTo(forventet.resultat)
-                assertThat(vedtatt).isEqualTo(forventet.vedtaksdato)
-                assertThat(iverksatt).isEqualTo(forventet.iverksattdato)
-            }
-        }
-    }
-
-    private fun lagSak(type: String): Sak {
-        return Sak(
-            id = nextId(),
-            fnr = fnr,
-            personKey = 123,
-            saksblokk = "x",
-            saksnummer = "11",
-            kapittelNr = "FA",
-            valg = "SV",
-            type = type,
-            resultat = "xx",
-            vedtaksdato = LocalDate.now(),
-            iverksattdato = LocalDate.now(),
-            status = listOf(
-                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 98, status = relevantStatus),
-                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = "X")
-            )
-        )
     }
 }

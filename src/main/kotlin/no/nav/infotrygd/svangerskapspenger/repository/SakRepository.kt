@@ -12,9 +12,8 @@ interface SakRepository : JpaRepository<Sak, Long> {
         SELECT s FROM Sak s 
             WHERE s.fnr = :fnr 
               AND s.kapittelNr = 'FA' 
-              AND s.valg = 'SV' 
-              AND s.type IN :typer""")
-    fun findSvangerskapssakerByFnrAndType(fnr: FodselNr, typer: Set<String>): List<Sak>
+              AND s.valg = 'SV'""")
+    fun findSvangerskapssakerByFnr(fnr: FodselNr): List<Sak>
 
     @Query("""
         SELECT COUNT(s) FROM Sak s

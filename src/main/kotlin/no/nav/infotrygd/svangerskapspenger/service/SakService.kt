@@ -24,17 +24,10 @@ class SakService(
     fun findSakerByFnr(fnr: FodselNr): SakResult {
         return SakResult(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",
-            underBehandling = sakerByType(fnr, "S ", "R "),
-            klagesaker = sakerByType(fnr, "K "),
-            ankesaker = sakerByType(fnr, "A "),
+            saker = toDto(sakRepository.findSvangerskapssakerByFnr(fnr)),
             apneSakerMedLopendeUtbetaling = apneSakerMedLopendeUtbetaling(fnr),
             avsluttedeSaker = avsluttedeSaker(fnr)
         )
-    }
-
-    private fun sakerByType(fnr: FodselNr, vararg type: String): List<SakDto> {
-        val saker = sakRepository.findSvangerskapssakerByFnrAndType(fnr, setOf(*type))
-        return toDto(saker)
     }
 
     private fun apneSakerMedLopendeUtbetaling(fnr: FodselNr): List<ApenSakMedLopendeUtbetaling> {
@@ -77,7 +70,8 @@ class SakService(
                 status = it.status.minBy { it.lopeNr }?.status ?: "UKJENT",
                 resultat = it.resultat.trim(),
                 vedtatt = it.vedtaksdato,
-                iverksatt = it.iverksattdato
+                iverksatt = it.iverksattdato,
+                type = it.type.trim()
             )
         }
     }

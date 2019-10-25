@@ -7,14 +7,7 @@ data class SakResult(
     @ApiModelProperty(notes = "Relevant tillegsinformasjon om resultatet.")
     val info: String?,
 
-    @ApiModelProperty(notes = "Saker/søknader under behandling (ikke ferdigbehandlet). Disse hentes fra Sak-basen.")
-    val underBehandling: List<SakDto>, // S10_KAPITTELNR='FA', S10_VALG='SV', S10_TYPE IN ('S,'R')
-
-    @ApiModelProperty(notes = "Klagesaker. Disse hentes fra Sak-basen.")
-    val klagesaker: List<SakDto>,       // samme som over, men S10_TYPE='K'
-
-    @ApiModelProperty(notes = "Ankesaker. Disse hentes fra Sak-basen.")
-    val ankesaker: List<SakDto>,        // samme som over, men S10_TYPE='A'
+    val saker: List<SakDto>,
 
     @ApiModelProperty(notes = "Åpne saker med løpende utbetaling. Disse hentes fra Foreldrepenge-base, ytelse Svangerskapspenger.")
     val apneSakerMedLopendeUtbetaling: List<ApenSakMedLopendeUtbetaling>,
@@ -27,6 +20,13 @@ data class SakResult(
 
 data class SakDto(
     val sakId: SakId?,
+
+    @ApiModelProperty(notes = """
+        Type sak.
+        
+        Kolonne: S10_TYPE
+    """)
+    val type: String,
 
     @ApiModelProperty(notes = """
         IP: - Saksbehandlingen kan starte med Statuskode IP (Ikke påbegynt). Da er det kun registrert en sakslinje uten at vedtaksbehandling er startet.

@@ -32,17 +32,7 @@ class SakRepositoryTest {
     }
 
     @Test
-    fun findSvangerskapssakerByFnrAndType() {
-        lagSak(
-            fnr = "10000000001",
-            kapittelNr = "xx",
-            valg = "xx",
-            type = "xx")
-
-        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000001"), setOf("xx")).also {
-            assertThat(it.isEmpty())
-        }
-
+    fun findSvangerskapssakerByFnr() {
         lagSak(
             fnr = "10000000001",
             kapittelNr = "FA",
@@ -50,13 +40,13 @@ class SakRepositoryTest {
             type = "S")
 
 
-        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000001"), setOf("S")).also {
+        repository.findSvangerskapssakerByFnr(FodselNr("10000000001")).also {
             assertThat(it).hasSize(1)
             assertThat(it[0].status).hasSize(1)
             assertThat(it[0].status[0].status).isEqualTo("A")
         }
 
-        repository.findSvangerskapssakerByFnrAndType(FodselNr("10000000002"), setOf("S")).also {
+        repository.findSvangerskapssakerByFnr(FodselNr("10000000002")).also {
             assertThat(it).isEmpty()
         }
     }
