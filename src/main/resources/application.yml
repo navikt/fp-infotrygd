@@ -30,8 +30,12 @@ http.proxy.parametername: notused
 
 no.nav.security.oidc.issuer:
   azure:
-    discoveryurl: ${APP_DISCOVERY_URL}
-    accepted_audience: ${APP_AUD}
+    discoveryurl: ${APP_AZURE_PROXY_DISCOVERY}
+    accepted_audience: ${APP_AZURE_PROXY_AUD}
+    proxyurl: ${APP_AZURE_PROXY_URL}
+  sts:
+    discoveryurl: ${APP_PROXY_DISCOVERY}
+    accepted_audience: ${APP_PROXY_AUD}
     proxyurl: ${APP_PROXY_URL}
 
 app:
