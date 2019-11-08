@@ -43,7 +43,7 @@ class SakService(
         return UtbetalingDto(
             utbetaltFom = it.utbetaltFom,
             utbetaltTom = it.utbetaltTom,
-            gradering = it.grad
+            gradering = it.grad ?: 100
         )
     }
 

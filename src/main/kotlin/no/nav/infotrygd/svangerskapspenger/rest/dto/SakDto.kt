@@ -131,5 +131,5 @@ data class UtbetalingDto(
         Gradering
         Kolonne: IS15_GRAD
     """)
-    val gradering: Int?
+    val gradering: Int
 )
