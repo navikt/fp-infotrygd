@@ -40,5 +40,4 @@ no.nav.security.oidc.issuer:
 
 app:
   security:
-    issuer: ${APP_CLIENT_ISSUER}
     clientWhitelist: ${APP_CLIENT_WHITELIST}
