@@ -29,5 +29,4 @@ no.nav.security.oidc.issuer:
 
 app:
   security:
-    issuer: sts
-    clientWhitelist: "12345678910"
+    clientWhitelist: "sts/12345678910,azure/12345678910"
