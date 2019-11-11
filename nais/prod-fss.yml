@@ -6,7 +6,7 @@ metadata:
   labels:
     team: infotrygd
 spec:
-  image: docker.pkg.github.com/navikt/infotrygd-svangerskapspenger/svangerskapspenger:2019.09.10-99f3c34-34
+  image: {{version}}
   port: 8080 # Required. The port number which is exposed by the container and should receive HTTP traffic.
   liveness: # HTTP endpoint that signals 200 OK when the application is running.
     path: /actuator/health
