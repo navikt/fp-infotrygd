@@ -1,6 +1,8 @@
 server.port: 8080
 
 spring:
+  application:
+    name: ${NAIS_APP_NAME:infotrygd-svangerskapspenger}
   datasource:
     url: ${APP_DATASOURCE_URL}
     username: ${APP_DATASOURCE_USERNAME}
