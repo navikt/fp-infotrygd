@@ -45,7 +45,7 @@ class MetricsComponent(
 
     @Scheduled(fixedRate = 60_000)
     fun update() {
-        logger.info("Updating metrics")
+        logger.debug("Updating metrics")
         counts.forEach { it.update() }
 
         updatePerioder()
