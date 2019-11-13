@@ -89,7 +89,8 @@ class SakRepositoryTest {
             iverksattdato = LocalDate.now(),
             status = listOf(
                 status
-            )
+            ),
+            registrert = LocalDate.now()
         )
         repository.save(sak)
     }

@@ -53,7 +53,8 @@ internal class SakServiceTest {
             status = listOf(
                 Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 98, status = relevantStatus),
                 Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = "X")
-            )
+            ),
+            registrert = LocalDate.now()
         )
 
         sakRepository.save(sak)
@@ -66,7 +67,8 @@ internal class SakServiceTest {
             status = relevantStatus,
             resultat = resultat,
             vedtatt = LocalDate.now(),
-            iverksatt = LocalDate.now()
+            iverksatt = LocalDate.now(),
+            registrert = LocalDate.now()
         ))
 
         assertThat(res.saker).isEqualTo(forventet)
@@ -77,6 +79,7 @@ internal class SakServiceTest {
         val iverksatt = LocalDate.now()
         val utbetaltFom = iverksatt
         val utbetaltTom = iverksatt.plusDays(1)
+        val registrert = iverksatt.plusMonths(1)
         val arbufoerSeq = nextId()
         val personKey = nextId()
         val gradering = 20
@@ -89,6 +92,7 @@ internal class SakServiceTest {
             frisk = " ",
             arbufoer = iverksatt,
             stoppdato = null,
+            registrert = registrert,
             utbetalinger = listOf(
                 Utbetaling(
                     id = nextId(),
@@ -105,6 +109,7 @@ internal class SakServiceTest {
 
         val forventet = listOf(ApenSakMedLopendeUtbetaling(
             iverksatt = iverksatt,
+            registrert = registrert,
             utbetalinger = listOf(
                 UtbetalingDto(
                     utbetaltFom = utbetaltFom,
@@ -121,6 +126,7 @@ internal class SakServiceTest {
     fun avsluttedeSaker() {
         val iverksatt = LocalDate.now().minusMonths(1)
         val stoppdato = LocalDate.now().minusWeeks(1)
+        val registrert = iverksatt.plusMonths(1)
         val gradering = 20
 
         val periode = Periode(
@@ -132,6 +138,7 @@ internal class SakServiceTest {
             frisk = "F",
             arbufoer = iverksatt,
             stoppdato = stoppdato,
+            registrert = registrert,
             utbetalinger = listOf(
                 Utbetaling(
                     id = nextId(),
@@ -151,6 +158,7 @@ internal class SakServiceTest {
         val forventet = listOf(AvsluttetSak(
             iverksatt = iverksatt,
             stoppdato = stoppdato,
+            registrert = registrert,
             utbetalinger = listOf(
                 UtbetalingDto(
                     utbetaltFom = iverksatt,

@@ -51,6 +51,10 @@ data class Sak(
     @Convert(converter = NavReversedLocalDateConverter::class)
     val iverksattdato: LocalDate?,
 
+    @Column(name = "S10_REG_DATO", columnDefinition = "DECIMAL")
+    @Convert(converter = NavReversedLocalDateConverter::class)
+    val registrert: LocalDate?,
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumns(value = [
         JoinColumn(name = "S01_PERSONKEY", referencedColumnName = "S01_PERSONKEY"),

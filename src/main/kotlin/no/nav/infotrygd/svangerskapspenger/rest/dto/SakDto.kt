@@ -23,7 +23,6 @@ data class SakDto(
 
     @ApiModelProperty(notes = """
         Type sak.
-        
         Kolonne: S10_TYPE
     """)
     val type: String,
@@ -65,7 +64,13 @@ data class SakDto(
         Iverksettelsesdato.
         Kolonne: S10_IVERKSATTDATO
     """)
-    val iverksatt: LocalDate?    // S10_IVERKSATTDATO
+    val iverksatt: LocalDate?,    // S10_IVERKSATTDATO
+
+    @ApiModelProperty(notes = """
+        Registreringsdato for sak.
+        Kolonne: S10_REG_DATO
+    """)
+    val registrert: LocalDate?
 )
 
 data class SakId(
@@ -85,6 +90,12 @@ data class ApenSakMedLopendeUtbetaling(
         Kolonne: IS10_ARBUFOER
     """)
     val iverksatt: LocalDate, // IS10_ARBUFOER
+
+    @ApiModelProperty(notes = """
+        Registreringsdato for sak.
+        Kolonne: IS10_REG_DATO
+    """)
+    val registrert: LocalDate?,
 
     val utbetalinger: List<UtbetalingDto>
 )
@@ -110,6 +121,12 @@ data class AvsluttetSak(
         Kolonne: IS10_STOPPDATO
     """)
     val stoppdato: LocalDate,    // IS10_STOPPDATO
+
+    @ApiModelProperty(notes = """
+        Registreringsdato for sak.
+        Kolonne: IS10_REG_DATO
+    """)
+    val registrert: LocalDate?,
 
     val utbetalinger: List<UtbetalingDto>
 )

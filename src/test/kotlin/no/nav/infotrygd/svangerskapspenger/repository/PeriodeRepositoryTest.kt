@@ -114,7 +114,8 @@ class PeriodeRepositoryTest {
             frisk = frisk,
             arbufoer = arbufoer,
             stoppdato = null,
-            utbetalinger = listOf()
+            utbetalinger = listOf(),
+            registrert = LocalDate.now()
         )
     }
 }

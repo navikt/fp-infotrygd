@@ -34,7 +34,8 @@ class SakService(
         return periodeRepository.findOpneSakerMedLopendeUtbetalingByFnr(fnr).map { periode ->
             ApenSakMedLopendeUtbetaling(
                 iverksatt = periode.arbufoer,
-                utbetalinger = periode.utbetalinger.map { toDto(it) }
+                utbetalinger = periode.utbetalinger.map { toDto(it) },
+                registrert = periode.registrert
             )
         }
     }
@@ -58,6 +59,7 @@ class SakService(
                     iverksatt = periode.arbufoer,
                     stoppdato = periode.stoppdato
                         ?: throw IllegalStateException("Forsøkte å returnere en avsluttet sak uten stoppdato."),
+                    registrert = periode.registrert,
                     utbetalinger = periode.utbetalinger.map { toDto(it) }
                 ) }
         )
@@ -71,7 +73,8 @@ class SakService(
                 resultat = it.resultat.trim(),
                 vedtatt = it.vedtaksdato,
                 iverksatt = it.iverksattdato,
-                type = it.type.trim()
+                type = it.type.trim(),
+                registrert = it.registrert
             )
         }
     }

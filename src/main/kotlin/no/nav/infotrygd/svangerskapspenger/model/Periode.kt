@@ -1,5 +1,6 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
+import no.nav.infotrygd.svangerskapspenger.model.converters.NavCharDateConverter
 import no.nav.infotrygd.svangerskapspenger.model.converters.NavLocalDateConverter
 import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFodselNrConverter
 import no.nav.infotrygd.svangerskapspenger.values.FodselNr
@@ -39,6 +40,10 @@ data class Periode(
     @Column(name = "IS10_STOPPDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavLocalDateConverter::class)
     val stoppdato: LocalDate?,
+
+    @Column(name = "IS10_REG_DATO", columnDefinition = "CHAR")
+    @Convert(converter = NavCharDateConverter::class)
+    val registrert: LocalDate?,
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumns(value = [
