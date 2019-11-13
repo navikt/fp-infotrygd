@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicLong
-import javax.annotation.PostConstruct
 
 @Component
 class MetricsComponent(
@@ -25,8 +24,24 @@ class MetricsComponent(
 
     private var tom: List<LocalDate> = listOf()
 
-    @PostConstruct
-    fun tableMetrics() {
+    private var initialized = false
+
+
+
+    @Scheduled(fixedRate = 60_000)
+    fun update() {
+        if(!initialized) {
+            logger.info("Initializing metrics")
+            initialize()
+        }
+
+        logger.debug("Updating metrics")
+        counts.forEach { it.update() }
+
+        updatePerioder()
+    }
+
+    private fun initialize() {
         count("num_saker_under_behandling") { sakRepository.countSvangerskapssakerByType(setOf("S ", "R ")) }
         count("num_klagesaker") { sakRepository.countSvangerskapssakerByType(setOf("K ")) }
         count("num_ankesaker") { sakRepository.countSvangerskapssakerByType(setOf("A ")) }
@@ -40,15 +55,7 @@ class MetricsComponent(
             }
         }
 
-        updatePerioder()
-    }
-
-    @Scheduled(fixedRate = 60_000)
-    fun update() {
-        logger.debug("Updating metrics")
-        counts.forEach { it.update() }
-
-        updatePerioder()
+        initialized = true
     }
 
     private fun updatePerioder() {
