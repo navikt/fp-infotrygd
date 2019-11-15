@@ -118,9 +118,12 @@ data class AvsluttetSak(
 
     @ApiModelProperty(notes = """
         Stoppdato.
+        
+        Dette feltet ble innført i 2016-HL4.
+        
         Kolonne: IS10_STOPPDATO
     """)
-    val stoppdato: LocalDate,    // IS10_STOPPDATO
+    val stoppdato: LocalDate?,    // IS10_STOPPDATO
 
     @ApiModelProperty(notes = """
         Registreringsdato for sak.

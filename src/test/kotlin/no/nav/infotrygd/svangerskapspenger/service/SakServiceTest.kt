@@ -59,7 +59,7 @@ internal class SakServiceTest {
 
         sakRepository.save(sak)
 
-        val res = sakService.findSakerByFnr(fnr)
+        val res = sakService.findSakerByFnr(fnr, LocalDate.now().minusYears(1))
 
         val forventet = listOf(SakDto(
             sakId = SakId(sak.saksblokk, sak.saksnummer.toInt()),
@@ -118,7 +118,7 @@ internal class SakServiceTest {
                 )
             )
         ))
-        val result = sakService.findSakerByFnr(fnr)
+        val result = sakService.findSakerByFnr(fnr, LocalDate.now().minusYears(1))
         assertThat(result.apneSakerMedLopendeUtbetaling).isEqualTo(forventet)
     }
 
@@ -168,7 +168,7 @@ internal class SakServiceTest {
             )
         ))
 
-        val result = sakService.findSakerByFnr(fnr)
+        val result = sakService.findSakerByFnr(fnr, LocalDate.now().minusYears(1))
 
         assertThat(result.avsluttedeSaker.fraOgMed).isEqualTo(fom)
         assertThat(result.avsluttedeSaker.saker).isEqualTo(forventet)

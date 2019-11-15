@@ -21,12 +21,12 @@ class SakService(
         )
     }
 
-    fun findSakerByFnr(fnr: FodselNr): SakResult {
+    fun findSakerByFnr(fnr: FodselNr, fom: LocalDate): SakResult {
         return SakResult(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",
             saker = toDto(sakRepository.findSvangerskapssakerByFnr(fnr)),
             apneSakerMedLopendeUtbetaling = apneSakerMedLopendeUtbetaling(fnr),
-            avsluttedeSaker = avsluttedeSaker(fnr)
+            avsluttedeSaker = avsluttedeSaker(fnr, fom)
         )
     }
 
@@ -48,8 +48,7 @@ class SakService(
         )
     }
 
-    private fun avsluttedeSaker(fnr: FodselNr): AvsluttedeSaker {
-        val fom = LocalDate.now().minusYears(1)
+    private fun avsluttedeSaker(fnr: FodselNr, fom: LocalDate): AvsluttedeSaker {
 
         return AvsluttedeSaker(
             fraOgMed = fom,
@@ -57,8 +56,7 @@ class SakService(
                 .map { periode ->
                     AvsluttetSak(
                     iverksatt = periode.arbufoer,
-                    stoppdato = periode.stoppdato
-                        ?: throw IllegalStateException("Forsøkte å returnere en avsluttet sak uten stoppdato."),
+                    stoppdato = periode.stoppdato,
                     registrert = periode.registrert,
                     utbetalinger = periode.utbetalinger.map { toDto(it) }
                 ) }
