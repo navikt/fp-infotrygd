@@ -8,6 +8,7 @@ import no.nav.infotrygd.svangerskapspenger.service.ClientValidator
 import no.nav.infotrygd.svangerskapspenger.service.SakService
 import no.nav.security.oidc.api.Protected
 import no.nav.infotrygd.svangerskapspenger.values.FodselNr
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -26,8 +27,13 @@ class SakController(
     @GetMapping("saker")
     @Timed(value = "time_sak_controller", percentiles = [0.5, 0.95])
     fun underBehandling(
-            @RequestParam(required = true) fnr: String,
-            @RequestParam(required = false) @ApiParam("Finn avsluttede saker fra og med denne datoen. Defualt: Ett år tilbake i tid.", example = "2019-01-31") fom: LocalDate?): SakResult {
+            @RequestParam(required = true)
+            fnr: String,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @ApiParam("Finn avsluttede saker fra og med denne datoen. Defualt: Ett år tilbake i tid.", example = "1900-01-01")
+            fom: LocalDate?): SakResult {
 
         clientValidator.authorizeClient()
 
