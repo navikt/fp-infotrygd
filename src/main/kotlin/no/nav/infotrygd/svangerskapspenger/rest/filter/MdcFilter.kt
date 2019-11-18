@@ -8,30 +8,43 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.GenericFilterBean
 import java.util.*
-import javax.inject.Inject
 import javax.servlet.FilterChain
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 
 @Component
 @Order(LOWEST_PRECEDENCE)
-class HeadersToMDCFilterBean @Inject
-constructor(
-    @param:Value("\${spring.application.name}") private val applicationName: String
-) : GenericFilterBean() {
+class LogFilter(@Value("\${spring.application.name}") private val applicationName: String) : GenericFilterBean() {
     private val log = LoggerFactory.getLogger(javaClass)
     private val consumerIdHeader = "Nav-Consumer-Id"
     private val callIdHeader = "Nav-CallId"
 
+    private val dontLog = setOf("/actuator/health", "/actuator/prometheus")
+
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         putValues(HttpServletRequest::class.java.cast(request))
+        val req = request as HttpServletRequest
+        val res = response as HttpServletResponse
         try {
-            chain.doFilter(request, response)
+            val millis = time { chain.doFilter(request, response) }
+
+            if(!dontLog.contains(req.requestURI)) {
+                log.info("[${millis}ms]\t${res.status} ${req.method} ${req.requestURI}")
+            }
+
         } finally {
             MDC.clear()
         }
+    }
+
+    private fun time(block: () -> Unit): Long {
+        val t0 = System.nanoTime()
+        block()
+        val t1 = System.nanoTime()
+        return (t1 - t0) / 1_000_000
     }
 
     private fun putValues(request: HttpServletRequest) {
