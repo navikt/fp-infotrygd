@@ -67,14 +67,16 @@ class PeriodeRepositoryTest {
     @Test
     fun utbetalinger() {
         var p = periode("SV", "F", LocalDate.now())
-        p = p.copy(utbetalinger = listOf(
+        p = p.copy(utbetalingshistorikk = listOf(
             Utbetaling(
                 id = nextId(),
                 personKey = p.personKey,
                 arbufoerSeq = p.arbufoerSeq,
                 utbetaltFom = LocalDate.now().minusYears(1),
                 utbetaltTom = LocalDate.now(),
-                grad = 10
+                grad = 10,
+                korr = null,
+                type = null
             )
         ))
 
@@ -114,7 +116,7 @@ class PeriodeRepositoryTest {
             frisk = frisk,
             arbufoer = arbufoer,
             stoppdato = null,
-            utbetalinger = listOf(),
+            utbetalingshistorikk = listOf(),
             registrert = LocalDate.now()
         )
     }

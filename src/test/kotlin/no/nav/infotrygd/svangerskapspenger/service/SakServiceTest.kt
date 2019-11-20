@@ -93,14 +93,16 @@ internal class SakServiceTest {
             arbufoer = iverksatt,
             stoppdato = null,
             registrert = registrert,
-            utbetalinger = listOf(
+            utbetalingshistorikk = listOf(
                 Utbetaling(
                     id = nextId(),
                     personKey = personKey,
                     arbufoerSeq = arbufoerSeq,
                     utbetaltFom = utbetaltFom,
                     utbetaltTom = utbetaltTom,
-                    grad = gradering
+                    grad = gradering,
+                    type = null,
+                    korr = null
                 )
             )
         )
@@ -139,14 +141,16 @@ internal class SakServiceTest {
             arbufoer = iverksatt,
             stoppdato = stoppdato,
             registrert = registrert,
-            utbetalinger = listOf(
+            utbetalingshistorikk = listOf(
                 Utbetaling(
                     id = nextId(),
                     personKey = 1,
                     arbufoerSeq = 1,
                     utbetaltFom = iverksatt,
                     utbetaltTom = stoppdato,
-                    grad = gradering
+                    grad = gradering,
+                    korr = null,
+                    type = null
                 )
             )
         )
