@@ -52,6 +52,25 @@ class SakRepositoryTest {
     }
 
     @Test
+    fun relevanteTyper() {
+        val fnr = "10000000001"
+
+        val relevanteTyper = setOf("S", "R", "K", "A")
+        val urelevanteTyper = setOf("X", "Y", "Z")
+
+        for(type in relevanteTyper + urelevanteTyper) {
+            lagSak(
+                fnr = fnr,
+                kapittelNr = "FA",
+                valg = "SV",
+                type = type)
+        }
+
+        val res = repository.findSvangerskapssakerByFnr(FodselNr(fnr))
+        assertThat(res.map { it.type }.toSet()).isEqualTo(relevanteTyper)
+    }
+
+    @Test
     fun countSvangerskapssakerByType() {
         lagSak(
             fnr = "10000000001",
