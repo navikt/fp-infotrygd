@@ -1,5 +1,6 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
+import no.nav.infotrygd.svangerskapspenger.model.converters.Char2Converter
 import no.nav.infotrygd.svangerskapspenger.model.converters.NavReversedLocalDateConverter
 import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFodselNrConverter
 import no.nav.infotrygd.svangerskapspenger.values.FodselNr
@@ -33,9 +34,11 @@ data class Sak(
     val kapittelNr: String,
 
     @Column(name = "S10_VALG", columnDefinition = "CHAR")
+    @Convert(converter = Char2Converter::class)
     val valg: String,
 
     @Column(name = "S10_TYPE", columnDefinition = "CHAR")
+    @Convert(converter = Char2Converter::class)
     val type: String,
 
     @Column(name = "S10_RESULTAT", columnDefinition = "CHAR")
