@@ -76,12 +76,13 @@ class SakRepositoryTest {
             fnr = "10000000001",
             kapittelNr = "FA",
             valg = "SV",
-            type = "S")
-        assertThat(repository.countSvangerskapssakerByType(setOf("S"))).isEqualTo(1)
-        assertThat(repository.countSvangerskapssakerByType(setOf("X"))).isEqualTo(0)
+            type = "S",
+            resultat = "SB")
+        assertThat(repository.countAapneSvangerskapssakerByType(setOf("S"))).isEqualTo(1)
+        assertThat(repository.countAapneSvangerskapssakerByType(setOf("X"))).isEqualTo(0)
     }
 
-    private fun lagSak(fnr: String, kapittelNr: String, valg: String, type: String) {
+    private fun lagSak(fnr: String, kapittelNr: String, valg: String, type: String, resultat: String = "") {
         val snr = sakNr++.toString()
 
         val status = Status(
@@ -103,7 +104,7 @@ class SakRepositoryTest {
             kapittelNr = kapittelNr,
             valg = valg,
             type = type,
-            resultat = "xx",
+            resultat = resultat,
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
             status = listOf(

@@ -42,9 +42,9 @@ class MetricsComponent(
     }
 
     private fun initialize() {
-        count("num_saker_under_behandling") { sakRepository.countSvangerskapssakerByType(setOf("S ", "R ")) }
-        count("num_klagesaker") { sakRepository.countSvangerskapssakerByType(setOf("K ")) }
-        count("num_ankesaker") { sakRepository.countSvangerskapssakerByType(setOf("A ")) }
+        count("num_saker_under_behandling") { sakRepository.countAapneSvangerskapssakerByType(setOf("S ", "R ")) }
+        count("num_klagesaker") { sakRepository.countAapneSvangerskapssakerByType(setOf("K ")) }
+        count("num_ankesaker") { sakRepository.countAapneSvangerskapssakerByType(setOf("A ")) }
         count("num_opne_saker_med_lopende_utbetaling") { periodeRepository.countOpneSakerMedLopendeUtbetaling() }
         count("num_avsluttede_saker") { periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1)) }
 

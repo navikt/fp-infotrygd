@@ -17,9 +17,24 @@ interface SakRepository : JpaRepository<Sak, Long> {
     fun findSvangerskapssakerByFnr(fnr: FodselNr): List<Sak>
 
     @Query("""
-        SELECT COUNT(s) FROM Sak s
-            WHERE s.kapittelNr = 'FA'
-              AND s.valg = 'SV'
-              AND s.type IN :typer""")
-    fun countSvangerskapssakerByType(typer: Set<String>): Long
+        SELECT COUNT(sak) FROM Sak sak
+         INNER JOIN Status status
+               ON (
+                    sak.saksblokk = status.saksblokk
+                    and sak.saksnummer = status.saksnummer
+                    and sak.personKey = status.personKey
+                )
+         WHERE status.lopeNr in (
+                 SELECT MIN (s.lopeNr) FROM Status s
+                       WHERE s.saksblokk = status.saksblokk
+                         and s.saksnummer = status.saksnummer
+                         and s.personKey = status.personKey
+                 )
+           AND sak.kapittelNr = 'FA'
+           AND sak.valg = 'SV'
+           AND sak.type IN :typer
+           AND status.status not in ('FB', '  ')
+           AND sak.resultat in ('SB', '  ')
+    """)
+    fun countAapneSvangerskapssakerByType(typer: Set<String>): Long
 }
