@@ -1,14 +1,14 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
-import no.nav.infotrygd.svangerskapspenger.model.Periode
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
-import no.nav.infotrygd.svangerskapspenger.model.Utbetaling
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.Frisk
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import no.nav.infotrygd.svangerskapspenger.rest.dto.*
-import no.nav.infotrygd.svangerskapspenger.values.FodselNr
+import no.nav.infotrygd.svangerskapspenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +23,7 @@ import java.time.LocalDate
 @ActiveProfiles("test")
 internal class SakServiceTest {
     private val relevantStatus  = "Y"
-    private val fnr = FodselNr("10000000001")
+    private val fnr = TestData.foedselsNr()
 
     @Autowired
     lateinit var sakRepository: SakRepository
@@ -35,7 +35,7 @@ internal class SakServiceTest {
         get() = SakService(sakRepository, periodeRepository)
 
     @Test
-    fun ttt() {
+    fun saker() {
         val type = "S"
         val resultat = "xx"
         val sak = Sak(
@@ -80,29 +80,21 @@ internal class SakServiceTest {
         val utbetaltFom = iverksatt
         val utbetaltTom = iverksatt.plusDays(1)
         val registrert = iverksatt.plusMonths(1)
-        val arbufoerSeq = nextId()
-        val personKey = nextId()
         val gradering = 20
-        val periode = Periode(
-            id = nextId(),
-            personKey = personKey,
-            arbufoerSeq = arbufoerSeq,
-            fnr = fnr,
-            stoenadstype = "SV",
-            frisk = " ",
+
+        val pf = TestData.PeriodeFactory(fnr = fnr)
+
+        val periode = pf.periode().copy(
+            stoenadstype = Stoenadstype.RISIKOFYLT_ARBMILJOE,
+            frisk = Frisk.LOPENDE,
             arbufoer = iverksatt,
             stoppdato = null,
             registrert = registrert,
             utbetalingshistorikk = listOf(
-                Utbetaling(
-                    id = nextId(),
-                    personKey = personKey,
-                    arbufoerSeq = arbufoerSeq,
+                pf.utbetaling().copy(
                     utbetaltFom = utbetaltFom,
                     utbetaltTom = utbetaltTom,
-                    grad = gradering,
-                    type = null,
-                    korr = null
+                    grad = gradering
                 )
             )
         )
@@ -131,26 +123,19 @@ internal class SakServiceTest {
         val registrert = iverksatt.plusMonths(1)
         val gradering = 20
 
-        val periode = Periode(
-            id = nextId(),
-            personKey = 1,
-            arbufoerSeq = 1,
-            fnr = fnr,
-            stoenadstype = "SV",
-            frisk = "F",
+        val pf = TestData.PeriodeFactory(fnr = fnr)
+
+        val periode = pf.periode().copy(
+            stoenadstype = Stoenadstype.RISIKOFYLT_ARBMILJOE,
+            frisk = Frisk.FRISKMELDT,
             arbufoer = iverksatt,
             stoppdato = stoppdato,
             registrert = registrert,
             utbetalingshistorikk = listOf(
-                Utbetaling(
-                    id = nextId(),
-                    personKey = 1,
-                    arbufoerSeq = 1,
+                pf.utbetaling().copy(
                     utbetaltFom = iverksatt,
                     utbetaltTom = stoppdato,
-                    grad = gradering,
-                    korr = null,
-                    type = null
+                    grad = gradering
                 )
             )
         )

@@ -1,9 +1,9 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
+import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.svangerskapspenger.model.converters.Char2Converter
 import no.nav.infotrygd.svangerskapspenger.model.converters.NavReversedLocalDateConverter
-import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFodselNrConverter
-import no.nav.infotrygd.svangerskapspenger.values.FodselNr
+import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFoedselNrConverter
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import java.io.Serializable
@@ -18,8 +18,8 @@ data class Sak(
     var id: Long,
 
     @Column(name = "F_NR", columnDefinition = "CHAR")
-    @Convert(converter = ReversedFodselNrConverter::class)
-    val fnr: FodselNr,
+    @Convert(converter = ReversedFoedselNrConverter::class)
+    val fnr: FoedselsNr,
 
     @Column(name = "S01_PERSONKEY", columnDefinition = "DECIMAL")
     val personKey: Long,

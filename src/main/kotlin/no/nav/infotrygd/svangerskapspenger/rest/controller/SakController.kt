@@ -2,12 +2,12 @@ package no.nav.infotrygd.svangerskapspenger.rest.controller
 
 import io.micrometer.core.annotation.Timed
 import io.swagger.annotations.ApiParam
+import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.svangerskapspenger.rest.dto.CountDto
 import no.nav.infotrygd.svangerskapspenger.rest.dto.SakResult
 import no.nav.infotrygd.svangerskapspenger.service.ClientValidator
 import no.nav.infotrygd.svangerskapspenger.service.SakService
 import no.nav.security.oidc.api.Protected
-import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -39,7 +39,7 @@ class SakController(
 
         val defaultFom = LocalDate.now().minusYears(1)
 
-        return sakService.findSakerByFnr(FodselNr(fnr), fom ?: defaultFom)
+        return sakService.findSakerByFnr(FoedselsNr(fnr), fom ?: defaultFom)
     }
 
     @GetMapping("count")

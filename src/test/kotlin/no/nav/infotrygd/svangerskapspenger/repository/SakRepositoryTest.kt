@@ -1,9 +1,10 @@
 package no.nav.infotrygd.svangerskapspenger.repository
 
+import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
 import no.nav.infotrygd.svangerskapspenger.nextId
-import no.nav.infotrygd.svangerskapspenger.values.FodselNr
+import no.nav.infotrygd.svangerskapspenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -33,27 +34,29 @@ class SakRepositoryTest {
 
     @Test
     fun findSvangerskapssakerByFnr() {
+        val fnr = TestData.foedselsNr()
+
         lagSak(
-            fnr = "10000000001",
+            fnr = fnr,
             kapittelNr = "FA",
             valg = "SV",
             type = "S")
 
 
-        repository.findSvangerskapssakerByFnr(FodselNr("10000000001")).also {
+        repository.findSvangerskapssakerByFnr(fnr).also {
             assertThat(it).hasSize(1)
             assertThat(it[0].status).hasSize(1)
             assertThat(it[0].status[0].status).isEqualTo("A")
         }
 
-        repository.findSvangerskapssakerByFnr(FodselNr("10000000002")).also {
+        repository.findSvangerskapssakerByFnr(TestData.foedselsNr()).also {
             assertThat(it).isEmpty()
         }
     }
 
     @Test
     fun relevanteTyper() {
-        val fnr = "10000000001"
+        val fnr = TestData.foedselsNr()
 
         val relevanteTyper = setOf("S", "R", "K", "A")
         val urelevanteTyper = setOf("X", "Y", "Z")
@@ -66,14 +69,14 @@ class SakRepositoryTest {
                 type = type)
         }
 
-        val res = repository.findSvangerskapssakerByFnr(FodselNr(fnr))
+        val res = repository.findSvangerskapssakerByFnr(fnr)
         assertThat(res.map { it.type }.toSet()).isEqualTo(relevanteTyper)
     }
 
     @Test
     fun countSvangerskapssakerByType() {
         lagSak(
-            fnr = "10000000001",
+            fnr = TestData.foedselsNr(),
             kapittelNr = "FA",
             valg = "SV",
             type = "S",
@@ -82,7 +85,7 @@ class SakRepositoryTest {
         assertThat(repository.countAapneSvangerskapssakerByType(setOf("X"))).isEqualTo(0)
     }
 
-    private fun lagSak(fnr: String, kapittelNr: String, valg: String, type: String, resultat: String = "") {
+    private fun lagSak(fnr: FoedselsNr, kapittelNr: String, valg: String, type: String, resultat: String = "") {
         val snr = sakNr++.toString()
 
         val status = Status(
@@ -97,7 +100,7 @@ class SakRepositoryTest {
 
         val sak = Sak(
             id = nextId(),
-            fnr = FodselNr(fnr),
+            fnr = fnr,
             personKey = 123,
             saksblokk = "x",
             saksnummer = snr,
