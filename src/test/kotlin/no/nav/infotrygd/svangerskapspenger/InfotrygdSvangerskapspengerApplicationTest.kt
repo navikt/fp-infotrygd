@@ -1,6 +1,6 @@
 package no.nav.infotrygd.svangerskapspenger
 
-import no.nav.infotrygd.svangerskapspenger.testutil.svangerskapspengerNoAuthClient
+import no.nav.infotrygd.svangerskapspenger.testutil.restClientNoAuth
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +24,7 @@ class InfotrygdSvangerskapspengerApplicationTest {
 
     @Test
     fun health() {
-        val response = svangerskapspengerNoAuthClient(port)
+        val response = restClientNoAuth(port)
             .get()
             .uri("/actuator/health")
             .exchange()

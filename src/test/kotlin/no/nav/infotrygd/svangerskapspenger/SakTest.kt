@@ -2,8 +2,8 @@ package no.nav.infotrygd.svangerskapspenger
 
 import no.nav.infotrygd.svangerskapspenger.rest.dto.SakResult
 import no.nav.infotrygd.svangerskapspenger.testutil.TestData
-import no.nav.infotrygd.svangerskapspenger.testutil.svangerskapspengerClient
-import no.nav.infotrygd.svangerskapspenger.testutil.svangerskapspengerNoAuthClient
+import no.nav.infotrygd.svangerskapspenger.testutil.restClient
+import no.nav.infotrygd.svangerskapspenger.testutil.restClientNoAuth
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,7 +26,7 @@ class SakTest {
 
     @Test
     fun hentSaker() {
-        val sak = svangerskapspengerClient(port)
+        val sak = restClient(port)
             .get()
             .uri("/saker?fnr=$fnr")
             .accept(MediaType.APPLICATION_JSON)
@@ -39,7 +39,7 @@ class SakTest {
 
     @Test(expected = WebClientResponseException.Unauthorized::class)
     fun auth() {
-        svangerskapspengerNoAuthClient(port)
+        restClientNoAuth(port)
             .get()
             .uri("/saker?fnr=$fnr")
             .accept(MediaType.APPLICATION_JSON)

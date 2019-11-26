@@ -104,6 +104,22 @@ class PeriodeRepositoryTest {
         assertThat(repository.countOpneSakerMedLopendeUtbetaling()).isEqualTo(1)
     }
 
+    @Test
+    fun findByFnrAndStoenadstypeAndDates() {
+        val tema = Stoenadstype.RISIKOFYLT_ARBMILJOE
+        val dato = LocalDate.now()
+        val relevant = periode(tema, arbufoer = dato, frisk = Frisk.LOPENDE)
+        val feilTema = periode(Stoenadstype.ADOPSJON, arbufoer = dato, frisk = Frisk.LOPENDE)
+        val forTidlig = periode(tema, arbufoer = dato.minusYears(1), frisk = Frisk.LOPENDE)
+        val forSen = periode(tema, arbufoer = dato.plusYears(1), frisk = Frisk.LOPENDE)
+
+        repository.saveAll(listOf(relevant, feilTema, forTidlig, forSen))
+
+        val result = repository.findByFnrAndStoenadstypeAndDates(fnr, listOf(tema), dato.minusDays(1), dato.plusDays(1))
+
+        assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+    }
+
     private fun periode(
         stoenadstype: Stoenadstype,
         frisk: Frisk,
