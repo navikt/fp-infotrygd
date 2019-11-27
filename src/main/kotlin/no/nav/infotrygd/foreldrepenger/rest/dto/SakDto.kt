@@ -1,0 +1,201 @@
+package no.nav.infotrygd.foreldrepenger.rest.dto
+
+import io.swagger.annotations.ApiModelProperty
+import java.time.LocalDate
+
+data class SakResult(
+    @ApiModelProperty(notes = "Relevant tillegsinformasjon om resultatet.")
+    val info: String?,
+
+    val saker: List<SakDto>,
+
+    @ApiModelProperty(notes = "Åpne saker med løpende utbetaling. Disse hentes fra Foreldrepenge-base, ytelse Svangerskapspenger.")
+    val apneSakerMedLopendeUtbetaling: List<ApenSakMedLopendeUtbetaling>,
+
+    @ApiModelProperty(notes = "Avsluttede saker. Disse hentes fra Foreldrepenge-base, ytelse Svangerskapspenger.")
+    val avsluttedeSaker: AvsluttedeSaker // IS10_STONADS_TYPE='SV', IS10_FRISK='F', IS10_ARBUFOER >= i dag minus 1 år
+)
+
+// Saker fra Saksregister, ytelse Svangerskapspenger
+
+data class SakDto(
+    val sakId: SakId?,
+
+    @ApiModelProperty(notes = """
+        Type sak.
+        
+        S: Søknad
+        R: Revurdering
+        K: Klage
+        A: Anke
+        
+        Kolonne: S10_TYPE
+    """,
+        allowableValues = "S,R,K,A")
+    val type: String,
+
+    @ApiModelProperty(notes = """
+        IP: - Saksbehandlingen kan starte med Statuskode IP (Ikke påbegynt). Da er det kun registrert en sakslinje uten at vedtaksbehandling er startet.
+        UB: - Saksbehandling startet - når sak med status UB - Under Behandling - lagres, rapporteres hendelsen BehandlingOpprettet
+        SG: - Saksbehandler 1 har fullført og sendt til saksbehandler 2 for godkjenning
+        UK: - Underkjent av saksbehandler 2 med retur til saksbehandler 1
+        FB: - FerdigBehandlet
+        FI: - ferdig iverksatt
+        RF: - returnert feilsendt
+        RM: - returnert midlertidig
+        RT: - returnert til
+        ST: - sendt til
+        VD: - videresendt Direktoratet
+        VI: - venter på iverksetting
+        VT: - videresendt Trygderetten
+        
+        Kolonne: S15_STATUS.
+    """,
+        allowableValues = "IP,UB,SG,UK,FB,FI,RF,RM,RT,ST,VD,VI,VT"
+    )
+    val status: String,         // S15_STATUS
+
+    @ApiModelProperty(notes = """
+        Resultatkode for saken.
+        
+        Dette er NOEN av kodene:
+        
+        ?: beslutningsstøtte Besl st
+        A: Avslag
+        AK: avvist klage
+        AV: advarsel
+        DI: delvis innvilget
+        DT: delvis tilbakebetale
+        FB: ferdigbehandlet
+        FI: fortsatt innvilget
+        H: henlagt / trukket tilbake
+        HB: henlagt / bortfalt
+        I: Innvilget
+        IN: innvilget ny situasjon
+        IS: ikke straffbart
+        IT: ikke tilbakebetale
+        MO: midlertidig opphørt
+        MT: mottatt
+        O: opphørt
+        PA: politianmeldelse
+        R: redusert
+        SB: sak i bero
+        TB: tilbakebetale
+        TH: tips henlagt
+        TO: tips oppfølging
+        Ø: økning
+        
+        Kolonne: S10_RESULTAT
+    """)
+    val resultat: String?,       // S10_RESULTAT
+
+    @ApiModelProperty(notes = """
+        Vedtaksdato.
+        Kolonne: S10_VEDTAKSDATO
+    """,
+        example = "2019-01-01")
+    val vedtatt: LocalDate?,     // S10_VEDTAKSDATO
+
+    @ApiModelProperty(notes = """
+        Iverksettelsesdato.
+        Kolonne: S10_IVERKSATTDATO
+    """,
+        example = "2019-01-01")
+    val iverksatt: LocalDate?,    // S10_IVERKSATTDATO
+
+    @ApiModelProperty(notes = """
+        Registreringsdato for sak.
+        Kolonne: S10_REG_DATO
+    """,
+        example = "2019-01-01")
+    val registrert: LocalDate?
+)
+
+data class SakId(
+    @ApiModelProperty(notes = "Kolonne: S05_SAKSBLOKK")
+    val blokk: String,  // S05_SAKSBLOKK
+
+    @ApiModelProperty(notes = "Kolonne: S10_SAKSNR")
+    val nr: Int         // S10_SAKSNR
+)
+
+
+// Saker fra Foreldrepenge-base, ytelse Svangerskapspenger
+
+data class ApenSakMedLopendeUtbetaling(
+    @ApiModelProperty(notes = """
+        Iverksettelsesdato.
+        Kolonne: IS10_ARBUFOER
+    """,
+        example = "2019-01-01")
+    val iverksatt: LocalDate, // IS10_ARBUFOER
+
+    @ApiModelProperty(notes = """
+        Registreringsdato for sak.
+        Kolonne: IS10_REG_DATO
+    """,
+        example = "2019-01-01")
+    val registrert: LocalDate?,
+
+    val utbetalinger: List<UtbetalingDto>
+)
+
+data class AvsluttedeSaker(
+    @ApiModelProperty(notes = """
+        Listen 'saker' viser resultater fra og med denne datoen (tidsbegrenset søk).
+    """,
+        example = "2019-01-01")
+    val fraOgMed: LocalDate,
+
+    val saker: List<AvsluttetSak>
+)
+
+data class AvsluttetSak(
+    @ApiModelProperty(notes = """
+        Iverksettelsesdato.
+        Kolonne: IS10_ARBUFOER
+    """,
+        example = "2019-01-01")
+    val iverksatt: LocalDate,   // IS10_ARBUFOER
+
+    @ApiModelProperty(notes = """
+        Stoppdato.
+        
+        Dette feltet ble innført i 2016-HL4.
+        
+        Kolonne: IS10_STOPPDATO
+    """,
+        example = "2019-01-01")
+    val stoppdato: LocalDate?,    // IS10_STOPPDATO
+
+    @ApiModelProperty(notes = """
+        Registreringsdato for sak.
+        Kolonne: IS10_REG_DATO
+    """,
+        example = "2019-01-01")
+    val registrert: LocalDate?,
+
+    val utbetalinger: List<UtbetalingDto>
+)
+
+data class UtbetalingDto(
+    @ApiModelProperty(notes = """
+        Utbetalt fra og med.
+        Kolonne: IS15_UTBETFOM
+    """,
+        example = "2019-01-01")
+    val utbetaltFom: LocalDate,
+
+    @ApiModelProperty(notes = """
+        Utbetalt til og med.
+        Kolonne: IS15_UTBETTOM
+    """,
+        example = "2019-01-01")
+    val utbetaltTom: LocalDate,
+
+    @ApiModelProperty(notes = """
+        Gradering
+        Kolonne: IS15_GRAD
+    """)
+    val gradering: Int
+)
