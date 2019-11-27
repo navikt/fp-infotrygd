@@ -3,6 +3,7 @@ package no.nav.infotrygd.svangerskapspenger.service
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
 import no.nav.infotrygd.svangerskapspenger.model.kodeverk.Frisk
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.SakStatus
 import no.nav.infotrygd.svangerskapspenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
@@ -22,7 +23,7 @@ import java.time.LocalDate
 @DataJpaTest
 @ActiveProfiles("test")
 internal class SakServiceTest {
-    private val relevantStatus  = "Y"
+    private val relevantStatus  = SakStatus.FB
     private val fnr = TestData.foedselsNr()
 
     @Autowired
@@ -50,9 +51,9 @@ internal class SakServiceTest {
             resultat = resultat,
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
-            status = listOf(
+            statushistorikk = listOf(
                 Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 98, status = relevantStatus),
-                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = "X")
+                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = SakStatus.IKKE_BEHANDLET)
             ),
             registrert = LocalDate.now()
         )
@@ -64,7 +65,7 @@ internal class SakServiceTest {
         val forventet = listOf(SakDto(
             sakId = SakId(sak.saksblokk, sak.saksnummer.toInt()),
             type = type,
-            status = relevantStatus,
+            status = relevantStatus.kode,
             resultat = resultat,
             vedtatt = LocalDate.now(),
             iverksatt = LocalDate.now(),

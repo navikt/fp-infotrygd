@@ -1,6 +1,8 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
+import no.nav.infotrygd.svangerskapspenger.model.converters.SakStatusConverter
 import no.nav.infotrygd.svangerskapspenger.model.converters.StatusLopenrConverter
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.SakStatus
 import javax.persistence.*
 
 @Entity
@@ -24,5 +26,6 @@ data class Status(
     val lopeNr: Long,
 
     @Column(name = "S15_STATUS", columnDefinition = "CHAR")
-    val status: String
+    @Convert(converter = SakStatusConverter::class)
+    val status: SakStatus
 )

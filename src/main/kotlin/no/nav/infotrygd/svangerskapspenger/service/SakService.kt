@@ -67,8 +67,8 @@ class SakService(
         return saker.map {
             SakDto(
                 sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()),
-                status = it.status.minBy { it.lopeNr }?.status ?: "UKJENT",
-                resultat = it.resultat.trim(),
+                status = it.status.kode,
+                resultat = it.resultat,
                 vedtatt = it.vedtaksdato,
                 iverksatt = it.iverksattdato,
                 type = it.type.trim(),

@@ -52,7 +52,7 @@ data class SakDto(
         Resultatkode for saken.
         Kolonne: S10_RESULTAT
     """)
-    val resultat: String,       // S10_RESULTAT
+    val resultat: String?,       // S10_RESULTAT
 
     @ApiModelProperty(notes = """
         Vedtaksdato.

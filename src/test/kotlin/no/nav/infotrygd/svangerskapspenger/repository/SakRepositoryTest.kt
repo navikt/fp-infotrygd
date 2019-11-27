@@ -3,6 +3,7 @@ package no.nav.infotrygd.svangerskapspenger.repository
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Status
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.SakStatus
 import no.nav.infotrygd.svangerskapspenger.nextId
 import no.nav.infotrygd.svangerskapspenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
@@ -35,18 +36,19 @@ class SakRepositoryTest {
     @Test
     fun findSvangerskapssakerByFnr() {
         val fnr = TestData.foedselsNr()
-
+        val status = SakStatus.IP
         lagSak(
             fnr = fnr,
             kapittelNr = "FA",
             valg = "SV",
-            type = "S")
+            type = "S",
+            sakStatus = status)
 
 
         repository.findSvangerskapssakerByFnr(fnr).also {
             assertThat(it).hasSize(1)
-            assertThat(it[0].status).hasSize(1)
-            assertThat(it[0].status[0].status).isEqualTo("A")
+            assertThat(it[0].statushistorikk).hasSize(1)
+            assertThat(it[0].statushistorikk[0].status).isEqualTo(status)
         }
 
         repository.findSvangerskapssakerByFnr(TestData.foedselsNr()).also {
@@ -85,7 +87,7 @@ class SakRepositoryTest {
         assertThat(repository.countAapneSvangerskapssakerByType(setOf("X"))).isEqualTo(0)
     }
 
-    private fun lagSak(fnr: FoedselsNr, kapittelNr: String, valg: String, type: String, resultat: String = "") {
+    private fun lagSak(fnr: FoedselsNr, kapittelNr: String, valg: String, type: String, resultat: String? = null, sakStatus: SakStatus = SakStatus.IP) {
         val snr = sakNr++.toString()
 
         val status = Status(
@@ -93,7 +95,7 @@ class SakRepositoryTest {
             personKey = 123,
             saksblokk = "x",
             saksnummer = snr,
-            status = "A",
+            status = sakStatus,
             lopeNr = 1
         )
         statusRepository.save(status)
@@ -110,7 +112,7 @@ class SakRepositoryTest {
             resultat = resultat,
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
-            status = listOf(
+            statushistorikk = listOf(
                 status
             ),
             registrert = LocalDate.now()

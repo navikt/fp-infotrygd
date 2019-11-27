@@ -28,8 +28,8 @@ class GrunnlagTest {
     private lateinit var periodeRepository: PeriodeRepository
 
     private val fnr = TestData.foedselsNr()
-    private val queryString = "fodselNr=${fnr.asString}&fom=2018-01-01"
-    val uri = "/foreldrepenger/svangerskap?$queryString"
+    private val queryString = "fnr=${fnr.asString}&fom=2018-01-01"
+    val uri = "/grunnlag?$queryString"
 
     @Test
     fun grunnlag() {
@@ -64,7 +64,7 @@ class GrunnlagTest {
     }
 
     @Test
-    fun grullnagClientAuth() {
+    fun grunnlagClientAuth() {
         val client = restClient(port, subject = "wrong")
         val result = client.get()
             .uri(uri)

@@ -27,7 +27,7 @@ class InfotrygdController(
     private val grunnlagService: GrunnlagService
 ) {
     @Protected
-    @GetMapping("saker")
+    @GetMapping("/saker")
     fun saker(
             @RequestParam(required = true)
             fnr: String,
@@ -46,7 +46,7 @@ class InfotrygdController(
 
     @GetMapping(path = ["/grunnlag"])
     fun grunnlag(@RequestParam
-                    fodselNr: String,
+                    fnr: String,
 
                     @RequestParam
                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -57,6 +57,6 @@ class InfotrygdController(
                     tom: LocalDate?) : List<Foreldrepenger> {
 
         clientValidator.authorizeClient()
-        return grunnlagService.hentForeldrepenger(listOf(Stoenadstype.SVANGERSKAP, Stoenadstype.RISIKOFYLT_ARBMILJOE), FoedselsNr(fodselNr), fom, tom)
+        return grunnlagService.hentForeldrepenger(listOf(Stoenadstype.SVANGERSKAP, Stoenadstype.RISIKOFYLT_ARBMILJOE), FoedselsNr(fnr), fom, tom)
     }
 }
