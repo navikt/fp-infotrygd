@@ -16,7 +16,11 @@ abstract class AbstractCharConverter(private val size: Int) : AttributeConverter
 
         return dbData.trimEnd()
     }
+
 }
+
+@Converter
+class BrukerIdConverter : AbstractCharConverter(7)
 
 @Converter
 class Char2Converter : AbstractCharConverter(2)

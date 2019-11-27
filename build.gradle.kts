@@ -12,6 +12,7 @@ val jacksonVersion = "2.9.9"
 val swaggerVersion = "2.9.2"
 val oracleusername = "richard.martinsen@nav.no"
 val oraclepassword = "Infotrygd1"
+val navFoedselsnummerVersion = "1.0-SNAPSHOT.4"
 
 val mainClass = "no.nav.infotrygd.kontantstotte.InfotrygdSvangerskapspengerApplication"
 
@@ -38,6 +39,14 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "Github"
+        url = uri("https://maven.pkg.github.com/navikt/nav-foedselsnummer")
+        credentials {
+            username = "x-access-token" //project.findProperty("gpr.user") as String? ?: System.getenv("GPR_USER")
+            password = System.getenv("GPR_API_KEY") ?: project.findProperty("gpr.key") as String?
+        }
+    }
 }
 
 allOpen {
@@ -47,6 +56,8 @@ allOpen {
 }
 
 dependencies {
+    implementation("nav-foedselsnummer:core:$navFoedselsnummerVersion")
+    testImplementation("nav-foedselsnummer:testutils:$navFoedselsnummerVersion")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")

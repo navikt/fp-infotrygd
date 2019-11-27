@@ -1,7 +1,7 @@
 package no.nav.infotrygd.svangerskapspenger.repository
 
+import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.svangerskapspenger.model.Sak
-import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -14,7 +14,7 @@ interface SakRepository : JpaRepository<Sak, Long> {
               AND s.kapittelNr = 'FA' 
               AND s.valg = 'SV'
               AND s.type IN ('S', 'R', 'K', 'A')""")
-    fun findSvangerskapssakerByFnr(fnr: FodselNr): List<Sak>
+    fun findSvangerskapssakerByFnr(fnr: FoedselsNr): List<Sak>
 
     @Query("""
         SELECT COUNT(sak) FROM Sak sak

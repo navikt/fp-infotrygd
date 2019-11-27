@@ -1,11 +1,11 @@
 package no.nav.infotrygd.svangerskapspenger.service
 
+import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.svangerskapspenger.model.Sak
 import no.nav.infotrygd.svangerskapspenger.model.Utbetaling
 import no.nav.infotrygd.svangerskapspenger.repository.PeriodeRepository
 import no.nav.infotrygd.svangerskapspenger.repository.SakRepository
 import no.nav.infotrygd.svangerskapspenger.rest.dto.*
-import no.nav.infotrygd.svangerskapspenger.values.FodselNr
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -21,7 +21,7 @@ class SakService(
         )
     }
 
-    fun findSakerByFnr(fnr: FodselNr, fom: LocalDate): SakResult {
+    fun findSakerByFnr(fnr: FoedselsNr, fom: LocalDate): SakResult {
         return SakResult(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",
             saker = toDto(sakRepository.findSvangerskapssakerByFnr(fnr)),
@@ -30,7 +30,7 @@ class SakService(
         )
     }
 
-    private fun apneSakerMedLopendeUtbetaling(fnr: FodselNr): List<ApenSakMedLopendeUtbetaling> {
+    private fun apneSakerMedLopendeUtbetaling(fnr: FoedselsNr): List<ApenSakMedLopendeUtbetaling> {
         return periodeRepository.findOpneSakerMedLopendeUtbetalingByFnr(fnr).map { periode ->
             ApenSakMedLopendeUtbetaling(
                 iverksatt = periode.arbufoer,
@@ -48,7 +48,7 @@ class SakService(
         )
     }
 
-    private fun avsluttedeSaker(fnr: FodselNr, fom: LocalDate): AvsluttedeSaker {
+    private fun avsluttedeSaker(fnr: FoedselsNr, fom: LocalDate): AvsluttedeSaker {
 
         return AvsluttedeSaker(
             fraOgMed = fom,
@@ -67,8 +67,8 @@ class SakService(
         return saker.map {
             SakDto(
                 sakId = SakId(blokk = it.saksblokk, nr = it.saksnummer.toInt()),
-                status = it.status.minBy { it.lopeNr }?.status ?: "UKJENT",
-                resultat = it.resultat.trim(),
+                status = it.status.kode,
+                resultat = it.resultat,
                 vedtatt = it.vedtaksdato,
                 iverksatt = it.iverksattdato,
                 type = it.type.trim(),

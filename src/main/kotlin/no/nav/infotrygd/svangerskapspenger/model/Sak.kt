@@ -1,9 +1,10 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
+import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.svangerskapspenger.model.converters.Char2Converter
 import no.nav.infotrygd.svangerskapspenger.model.converters.NavReversedLocalDateConverter
-import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFodselNrConverter
-import no.nav.infotrygd.svangerskapspenger.values.FodselNr
+import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFoedselNrConverter
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.SakStatus
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import java.io.Serializable
@@ -18,8 +19,8 @@ data class Sak(
     var id: Long,
 
     @Column(name = "F_NR", columnDefinition = "CHAR")
-    @Convert(converter = ReversedFodselNrConverter::class)
-    val fnr: FodselNr,
+    @Convert(converter = ReversedFoedselNrConverter::class)
+    val fnr: FoedselsNr,
 
     @Column(name = "S01_PERSONKEY", columnDefinition = "DECIMAL")
     val personKey: Long,
@@ -42,7 +43,8 @@ data class Sak(
     val type: String,
 
     @Column(name = "S10_RESULTAT", columnDefinition = "CHAR")
-    val resultat: String,
+    @Convert(converter = Char2Converter::class)
+    val resultat: String?,
 
     /** INFO: NavReversedLocalDateConverter lar seg ikke sortere i databasen! */
     @Column(name = "S10_VEDTAKSDATO", columnDefinition = "DECIMAL")
@@ -65,5 +67,8 @@ data class Sak(
         JoinColumn(name = "S10_SAKSNR", referencedColumnName = "S10_SAKSNR")
     ])
     @Cascade(value = [CascadeType.ALL])
-    val status: List<Status>
-) : Serializable
+    val statushistorikk: List<Status>
+) : Serializable {
+    val status: SakStatus
+        get() = statushistorikk.minBy { it.lopeNr }?.status ?: SakStatus.IKKE_BEHANDLET
+}

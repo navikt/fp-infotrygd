@@ -1,9 +1,13 @@
 package no.nav.infotrygd.svangerskapspenger.model
 
-import no.nav.infotrygd.svangerskapspenger.model.converters.NavCharDateConverter
-import no.nav.infotrygd.svangerskapspenger.model.converters.NavLocalDateConverter
-import no.nav.infotrygd.svangerskapspenger.model.converters.ReversedFodselNrConverter
-import no.nav.infotrygd.svangerskapspenger.values.FodselNr
+import no.nav.commons.foedselsnummer.FoedselsNr
+import no.nav.commons.foedselsnummer.Kjoenn
+import no.nav.infotrygd.svangerskapspenger.model.converters.*
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.Arbeidskategori
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.Frisk
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.Stoenadstype
+import no.nav.infotrygd.svangerskapspenger.model.kodeverk.Tema
+import no.nav.infotrygd.svangerskapspenger.utils.reversert
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import java.io.Serializable
@@ -23,19 +27,57 @@ data class Periode(
     @Column(name = "IS10_ARBUFOER_SEQ", columnDefinition = "DECIMAL")
     val arbufoerSeq: Long,
 
-    @Column(name = "F_NR", columnDefinition = "CHAR")
-    @Convert(converter = ReversedFodselNrConverter::class)
-    val fnr: FodselNr,
-
     @Column(name = "IS10_STOENADS_TYPE", columnDefinition = "CHAR")
-    val stoenadstype: String?,
+    val stoenadstype: Stoenadstype?,
+
+    @Column(name = "F_NR", columnDefinition = "CHAR")
+    @Convert(converter = ReversedFoedselNrConverter::class)
+    val fnr: FoedselsNr,
 
     @Column(name = "IS10_FRISK", columnDefinition = "CHAR")
-    val frisk: String?,
+    @Convert(converter = FriskConverter::class)
+    val frisk: Frisk,
+
+    @Column(name = "IS10_UTBET_FOM", columnDefinition = "DECIMAL")
+    @Convert(converter = NavLocalDateConverter::class)
+    val utbetaltFom: LocalDate?,
+
+    @Column(name = "IS10_UTBET_TOM", columnDefinition = "DECIMAL")
+    @Convert(converter = NavLocalDateConverter::class)
+    val utbetaltTom: LocalDate?,
 
     @Column(name = "IS10_ARBUFOER", columnDefinition = "DECIMAL")
     @Convert(converter = NavLocalDateConverter::class)
     val arbufoer: LocalDate,
+
+    @Column(name = "IS10_ARBUFOER_OPPR", columnDefinition = "DECIMAL")
+    @Convert(converter = NavLocalDateConverter::class)
+    val arbufoerOpprinnelig: LocalDate,
+
+    @Column(name = "IS10_DEKNINGSGRAD", columnDefinition = "DECIMAL")
+    val dekningsgrad: Int?,
+
+    @Column(name = "IS10_FDATO", columnDefinition = "DECIMAL")
+    @Convert(converter = NavLocalDateConverter::class)
+    val foedselsdatoBarn: LocalDate?,
+
+    @Column(name = "IS10_TIDSK_BARNFNR", columnDefinition = "CHAR")
+    @Convert(converter = ReversedFoedselNrConverter::class)
+    val barnFnr: FoedselsNr?,
+
+    @Column(name = "IS10_MORFNR", columnDefinition = "DECIMAL")
+    @Convert(converter = ReversedLongFoedselNrConverter::class)
+    val morFnr: FoedselsNr?,
+
+    @Column(name = "IS10_STEBARNSADOPSJON", columnDefinition = "CHAR")
+    val stebarnsadopsjon: String?,
+
+    @Column(name = "IS10_ARBKAT", columnDefinition = "CHAR")
+    val arbeidskategori: Arbeidskategori?,
+
+    @Column(name = "IS10_BRUKERID", columnDefinition = "CHAR")
+    @Convert(converter = BrukerIdConverter::class)
+    val brukerId: String?,
 
     @Column(name = "IS10_STOPPDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavLocalDateConverter::class)
@@ -45,18 +87,63 @@ data class Periode(
     @Convert(converter = NavCharDateConverter::class)
     val registrert: LocalDate?,
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @Column(name = "TK_NR", columnDefinition = "CHAR")
+    val tkNr: String,
+
+    @OneToMany
     @JoinColumns(value = [
         JoinColumn(name = "IS01_PERSONKEY", referencedColumnName = "IS01_PERSONKEY"),
         JoinColumn(name = "IS10_ARBUFOER_SEQ", referencedColumnName = "IS10_ARBUFOER_SEQ")
     ])
     @Cascade(value = [CascadeType.ALL])
-    val utbetalingshistorikk: List<Utbetaling>
+    val utbetalingshistorikk: List<Utbetaling>,
+
+    @OneToMany
+    @JoinColumns(value = [
+        JoinColumn(name = "IS01_PERSONKEY", referencedColumnName = "IS01_PERSONKEY"),
+        JoinColumn(name = "IS10_ARBUFOER_SEQ", referencedColumnName = "IS10_ARBUFOER_SEQ")
+    ])
+    @Cascade(value = [CascadeType.ALL])
+    val inntekter: List<Inntekt>
 ) : Serializable {
     val utbetalinger: List<Utbetaling>
         get() {
             // Fra https://confluence.adeo.no/display/INFOTRYGD/Tjeneste+finnGrunnlag+-+Informasjonsmodell
             // IS15-perioder som er tilbakeført eller korrigert skal ikke tas med i uttrekk, dvs. IS15-TYPE = '7' eller IS15-KORR not = space.
             return utbetalingshistorikk.filter { it.type != "7" && it.korr.isNullOrBlank() }
+        }
+
+    val tema: Tema
+        get() {
+            val tema: Tema? = stoenadstype?.tema
+
+            if(tema != null) {
+                return tema
+            }
+
+            return Tema.UKJENT
+        }
+
+    val barnPersonKey: Long?
+        get() {
+            return barnFnr?.let { "$tkNr${it.reversert}".toLong() }
+        }
+
+    val barnKode: String
+        get() {
+            val sammeKjoennMor = stebarnsadopsjon in setOf("A", "D")
+            if (sammeKjoennMor) {
+                return "1"
+            }
+
+            val sammeKjoennFar = stebarnsadopsjon in setOf("B", "C", "E")
+            if (sammeKjoennFar) {
+                return "2"
+            }
+
+            return when (fnr.kjoenn) {
+                Kjoenn.KVINNE -> "1"
+                Kjoenn.MANN -> "2"
+            }
         }
 }
