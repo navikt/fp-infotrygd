@@ -1,4 +1,4 @@
-package no.nav.infotrygd.foreldrepenger
+package no.nav.infotrygd.foreldrepenger.it
 
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
@@ -19,7 +19,7 @@ import java.time.LocalDate
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class GrunnlagTest {
+class GammelGrunnlagFoedselTest {
 
     @LocalServerPort
     private var port: Int = 0
@@ -28,8 +28,8 @@ class GrunnlagTest {
     private lateinit var periodeRepository: PeriodeRepository
 
     private val fnr = TestData.foedselsNr()
-    private val queryString = "fnr=${fnr.asString}&fom=2018-01-01"
-    val uri = "/grunnlag/adopsjon?$queryString"
+    private val queryString = "fodselNr=${fnr.asString}&fom=2018-01-01"
+    val uri = "/foreldrepenger/foedsel?$queryString"
 
     @Test
     fun grunnlag() {
@@ -37,7 +37,7 @@ class GrunnlagTest {
         val pf = TestData.PeriodeFactory(fnr = fnr)
 
         val periode = pf.periode().copy(
-            stoenadstype = Stoenadstype.ADOPSJON,
+            stoenadstype = Stoenadstype.FOEDSEL,
             foedselsdatoBarn = LocalDate.now().minusYears(1)
         )
         periodeRepository.save(periode)

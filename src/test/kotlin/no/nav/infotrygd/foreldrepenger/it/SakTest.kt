@@ -1,4 +1,4 @@
-package no.nav.infotrygd.foreldrepenger
+package no.nav.infotrygd.foreldrepenger.it
 
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakResult
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
