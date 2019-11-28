@@ -44,8 +44,8 @@ class InfotrygdController(
         return sakService.findSakerByFnr(FoedselsNr(fnr), fom ?: defaultFom)
     }
 
-    @GetMapping(path = ["/grunnlag/adopsjon"])
-    fun adopsjon(@RequestParam
+    @GetMapping(path = ["/grunnlag"])
+    fun grunnlag(@RequestParam
                  fnr: String,
 
                  @RequestParam
@@ -57,56 +57,6 @@ class InfotrygdController(
                  tom: LocalDate?) : List<Foreldrepenger> {
 
         clientValidator.authorizeClient()
-        return grunnlagService.hentForeldrepenger(listOf(Stoenadstype.ADOPSJON), FoedselsNr(fnr), fom, tom)
-    }
-
-    @GetMapping(path = ["/grunnlag/foedsel"])
-    fun foedsel(@RequestParam
-                fnr: String,
-
-                @RequestParam
-                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                fom: LocalDate,
-
-                @RequestParam(required = false)
-                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                tom: LocalDate?) : List<Foreldrepenger> {
-
-        clientValidator.authorizeClient()
-        return grunnlagService.hentForeldrepenger(listOf(Stoenadstype.FOEDSEL), FoedselsNr(fnr), fom, tom)
-    }
-
-    @Deprecated("bruk /grunnlag-endepunktet")
-    @GetMapping(path = ["/foreldrepenger/adopsjon"])
-    fun adopsjonDeprecated(@RequestParam
-                 fodselNr: String,
-
-                 @RequestParam
-                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                 fom: LocalDate,
-
-                 @RequestParam(required = false)
-                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                 tom: LocalDate?) : List<Foreldrepenger> {
-
-        clientValidator.authorizeClient()
-        return grunnlagService.hentForeldrepenger(listOf(Stoenadstype.ADOPSJON), FoedselsNr(fodselNr), fom, tom)
-    }
-
-    @Deprecated("bruk /grunnlag-endepunktet")
-    @GetMapping(path = ["/foreldrepenger/foedsel"])
-    fun foedselDeprecated(@RequestParam
-                fodselNr: String,
-
-                @RequestParam
-                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                fom: LocalDate,
-
-                @RequestParam(required = false)
-                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                tom: LocalDate?) : List<Foreldrepenger> {
-
-        clientValidator.authorizeClient()
-        return grunnlagService.hentForeldrepenger(listOf(Stoenadstype.FOEDSEL), FoedselsNr(fodselNr), fom, tom)
+        return grunnlagService.hentForeldrepenger(listOf(Stoenadstype.ADOPSJON, Stoenadstype.FOEDSEL), FoedselsNr(fnr), fom, tom)
     }
 }

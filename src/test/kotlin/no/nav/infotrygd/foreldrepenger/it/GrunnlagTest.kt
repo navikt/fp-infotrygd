@@ -19,7 +19,7 @@ import java.time.LocalDate
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class GammelGrunnlagFoedselTest {
+class GrunnlagTest {
 
     @LocalServerPort
     private var port: Int = 0
@@ -28,8 +28,8 @@ class GammelGrunnlagFoedselTest {
     private lateinit var periodeRepository: PeriodeRepository
 
     private val fnr = TestData.foedselsNr()
-    private val queryString = "fodselNr=${fnr.asString}&fom=2018-01-01"
-    val uri = "/foreldrepenger/foedsel?$queryString"
+    private val queryString = "fnr=${fnr.asString}&fom=2018-01-01"
+    val uri = "/grunnlag?$queryString"
 
     @Test
     fun grunnlag() {
@@ -37,7 +37,7 @@ class GammelGrunnlagFoedselTest {
         val pf = TestData.PeriodeFactory(fnr = fnr)
 
         val periode = pf.periode().copy(
-            stoenadstype = Stoenadstype.FOEDSEL,
+            stoenadstype = Stoenadstype.ADOPSJON,
             foedselsdatoBarn = LocalDate.now().minusYears(1)
         )
         periodeRepository.save(periode)
