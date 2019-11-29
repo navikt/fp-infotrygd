@@ -16,9 +16,8 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
          WHERE p.fnr = :fnr
            AND p.stoenadstype IN ('AP', 'FP')
            AND p.frisk = 'F'
-           AND p.arbufoer >= :fom
     """)
-    fun findAvsluttedeSakerByFnr(fnr: FoedselsNr, fom: LocalDate): List<Periode>
+    fun findAvsluttedeSakerByFnr(fnr: FoedselsNr): List<Periode>
 
     @Query("""
         SELECT COUNT(p) FROM Periode p
@@ -54,16 +53,6 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
         SELECT p FROM Periode p
          WHERE p.fnr = :fnr
            AND p.stoenadstype IN :stoenadstyper
-           AND p.arbufoer >= :fom
-           AND p.arbufoer <= :tom
     """)
-    fun findByFnrAndStoenadstypeAndDates(fnr: FoedselsNr, stoenadstyper: List<Stoenadstype>, fom: LocalDate, tom: LocalDate): List<Periode>
-
-    @Query("""
-        SELECT p FROM Periode p
-         WHERE p.fnr = :fnr
-           AND p.stoenadstype IN :stoenadstyper
-           AND p.arbufoer >= :fom
-    """)
-    fun findByFnrAndStoenadstypeAndDates(fnr: FoedselsNr, stoenadstyper: List<Stoenadstype>, fom: LocalDate): List<Periode>
+    fun findByFnrAndStoenadstype(fnr: FoedselsNr, stoenadstyper: List<Stoenadstype>): List<Periode>
 }

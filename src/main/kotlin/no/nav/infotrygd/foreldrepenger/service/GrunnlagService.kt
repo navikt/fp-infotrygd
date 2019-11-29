@@ -17,11 +17,8 @@ class GrunnlagService(
 ) {
     fun hentForeldrepenger(stoenadstyper: List<Stoenadstype>, foedselsNr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<Foreldrepenger> {
 
-        val result = if(tom != null) {
-            periodeRepository.findByFnrAndStoenadstypeAndDates(foedselsNr, stoenadstyper, fom, tom)
-        } else {
-            periodeRepository.findByFnrAndStoenadstypeAndDates(foedselsNr, stoenadstyper, fom)
-        }
+        val result = periodeRepository.findByFnrAndStoenadstype(foedselsNr, stoenadstyper)
+            .filter { it.innenforPeriode(fom, tom) }
 
         return result.map { periode ->
             val vedtak = periode.barnPersonKey?.let { barnPersonKey ->

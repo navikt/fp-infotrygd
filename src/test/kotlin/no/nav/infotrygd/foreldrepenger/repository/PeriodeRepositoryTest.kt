@@ -36,13 +36,12 @@ class PeriodeRepositoryTest {
 
         val relevant = periode(Stoenadstype.ADOPSJON, Frisk.FRISKMELDT)
 
-        val utgatt = periode(Stoenadstype.ADOPSJON, Frisk.FRISKMELDT, LocalDate.now().minusYears(2))
         val ikkeFrisk = periode(Stoenadstype.ADOPSJON, Frisk.DOEDSSYK)
         val feilType = periode(Stoenadstype.SYKEPENGER, Frisk.FRISKMELDT)
 
-        repository.saveAll(listOf(relevant, utgatt, ikkeFrisk, feilType))
+        repository.saveAll(listOf(relevant, ikkeFrisk, feilType))
 
-        val result = repository.findAvsluttedeSakerByFnr(fnr, LocalDate.now().minusYears(1))
+        val result = repository.findAvsluttedeSakerByFnr(fnr)
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
@@ -84,7 +83,7 @@ class PeriodeRepositoryTest {
 
         repository.save(p)
 
-        val result = repository.findAvsluttedeSakerByFnr(fnr, LocalDate.now().minusYears(1))
+        val result = repository.findAvsluttedeSakerByFnr(fnr)
         assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
@@ -105,17 +104,14 @@ class PeriodeRepositoryTest {
     }
 
     @Test
-    fun findByFnrAndStoenadstypeAndDates() {
+    fun findByFnrAndStoenadstype() {
         val tema = Stoenadstype.ADOPSJON
-        val dato = LocalDate.now()
-        val relevant = periode(tema, arbufoer = dato, frisk = Frisk.LOPENDE)
-        val feilTema = periode(Stoenadstype.RISIKOFYLT_ARBMILJOE, arbufoer = dato, frisk = Frisk.LOPENDE)
-        val forTidlig = periode(tema, arbufoer = dato.minusYears(1), frisk = Frisk.LOPENDE)
-        val forSen = periode(tema, arbufoer = dato.plusYears(1), frisk = Frisk.LOPENDE)
+        val relevant = periode(tema, frisk = Frisk.LOPENDE)
+        val feilTema = periode(Stoenadstype.RISIKOFYLT_ARBMILJOE, frisk = Frisk.LOPENDE)
 
-        repository.saveAll(listOf(relevant, feilTema, forTidlig, forSen))
+        repository.saveAll(listOf(relevant, feilTema))
 
-        val result = repository.findByFnrAndStoenadstypeAndDates(fnr, listOf(tema), dato.minusDays(1), dato.plusDays(1))
+        val result = repository.findByFnrAndStoenadstype(fnr, listOf(tema))
 
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }

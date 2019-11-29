@@ -71,4 +71,20 @@ data class Sak(
 ) : Serializable {
     val status: SakStatus
         get() = statushistorikk.minBy { it.lopeNr }?.status ?: SakStatus.IKKE_BEHANDLET
+
+    fun innenforPeriode(fom: LocalDate, tom: LocalDate?): Boolean {
+        if(tom != null) {
+            require(fom == tom || fom.isBefore(tom)) { "Tom-dato kan ikke være før fom-dato." }
+        }
+
+        if(tom != null && tom.isBefore(registrert)) {
+            return false
+        }
+
+        if(fom.isAfter(registrert)) {
+            return false
+        }
+
+        return true
+    }
 }

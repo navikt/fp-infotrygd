@@ -29,6 +29,9 @@ class GrunnlagServiceTest {
 
     @Test
     fun hentForeldrepenger() {
+        val startdato = LocalDate.of(2019, 1, 1)
+        val stoppdato = startdato.plusDays(1)
+
         val gradering = 10.toBigDecimal()
 
         val factory = TestData.PeriodeFactory()
@@ -37,6 +40,8 @@ class GrunnlagServiceTest {
         val utbetaling = factory.utbetaling()
 
         val periode = factory.periode().copy(
+            arbufoer = startdato,
+            stoppdato = stoppdato,
             stoenadstype = Stoenadstype.SVANGERSKAP,
             foedselsdatoBarn = LocalDate.now().minusYears(1),
             inntekter = listOf(inntekt),
@@ -50,10 +55,9 @@ class GrunnlagServiceTest {
         )
         vedtakBarnRepository.save(vedtak)
 
+        val stoenadstyper = listOf(Stoenadstype.SVANGERSKAP)
         val resultat =
-            grunnlagService.hentForeldrepenger(listOf(Stoenadstype.SVANGERSKAP), factory.fnr, LocalDate.now().minusYears(1), null)
-
-        println(resultat)
+            grunnlagService.hentForeldrepenger(stoenadstyper, factory.fnr, LocalDate.now().minusYears(1), null)
 
         assertThat(resultat).hasSize(1)
         val fp = resultat[0]
@@ -61,5 +65,7 @@ class GrunnlagServiceTest {
         assertThat(fp.gradering?.toInt()).isEqualTo(gradering.toInt())
         assertThat(fp.vedtak).hasSize(1)
         assertThat(fp.arbeidsforhold).hasSize(1)
+
+        assertThat(grunnlagService.hentForeldrepenger(stoenadstyper, factory.fnr, stoppdato.plusDays(1), null)).isEmpty()
     }
 }

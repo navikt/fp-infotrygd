@@ -29,19 +29,24 @@ class InfotrygdController(
     @Protected
     @GetMapping("/saker")
     fun saker(
-            @RequestParam(required = true)
-            fnr: String,
+        @RequestParam(required = true)
+        fnr: String,
 
-            @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            @ApiParam("Finn avsluttede saker fra og med denne datoen. Defualt: Ett år tilbake i tid.", example = "1900-01-01")
-            fom: LocalDate?): SakResult {
+        @RequestParam(required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        @ApiParam("Finn saker fra og med denne datoen. Defualt: Ett år tilbake i tid.", example = "1900-01-01")
+        fom: LocalDate?,
+
+        @RequestParam(required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        @ApiParam("Finn saker til og med denne datoen.", example = "2019-01-01")
+        tom: LocalDate?): SakResult {
 
         clientValidator.authorizeClient()
 
         val defaultFom = LocalDate.now().minusYears(1)
 
-        return sakService.findSakerByFnr(FoedselsNr(fnr), fom ?: defaultFom)
+        return sakService.findSakerByFnr(FoedselsNr(fnr), fom ?: defaultFom, tom)
     }
 
     @GetMapping(path = ["/grunnlag"])

@@ -14,30 +14,28 @@ class SakService(
     private val sakRepository: SakRepository,
     private val periodeRepository: PeriodeRepository
 ) {
-    fun count(): CountDto {
-        return CountDto(
-            periodeTabell =  periodeRepository.count(),
-            sakTabell = sakRepository.count()
-        )
-    }
+    fun findSakerByFnr(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): SakResult {
+        val saker = sakRepository.findSakerByFnr(fnr)
+            .filter { it.innenforPeriode(fom, tom) }
 
-    fun findSakerByFnr(fnr: FoedselsNr, fom: LocalDate): SakResult {
         return SakResult(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",
-            saker = toDto(sakRepository.findSakerByFnr(fnr)),
-            apneSakerMedLopendeUtbetaling = apneSakerMedLopendeUtbetaling(fnr),
-            avsluttedeSaker = avsluttedeSaker(fnr, fom)
+            saker = toDto(saker),
+            apneSakerMedLopendeUtbetaling = apneSakerMedLopendeUtbetaling(fnr, fom, tom),
+            avsluttedeSaker = avsluttedeSaker(fnr, fom, tom)
         )
     }
 
-    private fun apneSakerMedLopendeUtbetaling(fnr: FoedselsNr): List<ApenSakMedLopendeUtbetaling> {
-        return periodeRepository.findOpneSakerMedLopendeUtbetalingByFnr(fnr).map { periode ->
-            ApenSakMedLopendeUtbetaling(
-                iverksatt = periode.arbufoer,
-                utbetalinger = periode.utbetalinger.map { toDto(it) },
-                registrert = periode.registrert
-            )
-        }
+    private fun apneSakerMedLopendeUtbetaling(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<ApenSakMedLopendeUtbetaling> {
+        return periodeRepository.findOpneSakerMedLopendeUtbetalingByFnr(fnr)
+            .filter { it.innenforPeriode(fom, tom) }
+            .map { periode ->
+                ApenSakMedLopendeUtbetaling(
+                    iverksatt = periode.arbufoer,
+                    utbetalinger = periode.utbetalinger.map { toDto(it) },
+                    registrert = periode.registrert
+                )
+            }
     }
 
     private fun toDto(it: Utbetaling): UtbetalingDto {
@@ -48,18 +46,18 @@ class SakService(
         )
     }
 
-    private fun avsluttedeSaker(fnr: FoedselsNr, fom: LocalDate): AvsluttedeSaker {
-
+    private fun avsluttedeSaker(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): AvsluttedeSaker {
         return AvsluttedeSaker(
             fraOgMed = fom,
-            saker = periodeRepository.findAvsluttedeSakerByFnr(fnr, fom)
+            saker = periodeRepository.findAvsluttedeSakerByFnr(fnr)
+                .filter { it.innenforPeriode(fom, tom) }
                 .map { periode ->
                     AvsluttetSak(
-                    iverksatt = periode.arbufoer,
-                    stoppdato = periode.stoppdato,
-                    registrert = periode.registrert,
-                    utbetalinger = periode.utbetalinger.map { toDto(it) }
-                ) }
+                        iverksatt = periode.arbufoer,
+                        stoppdato = periode.stoppdato,
+                        registrert = periode.registrert,
+                        utbetalinger = periode.utbetalinger.map { toDto(it) }
+                    ) }
         )
     }
 

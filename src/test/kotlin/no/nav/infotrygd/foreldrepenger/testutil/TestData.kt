@@ -3,12 +3,10 @@ package no.nav.infotrygd.foreldrepenger.testutil
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.commons.foedselsnummer.Kjoenn
 import no.nav.commons.foedselsnummer.testutils.FoedselsnummerGenerator
-import no.nav.infotrygd.foreldrepenger.model.Inntekt
-import no.nav.infotrygd.foreldrepenger.model.Periode
-import no.nav.infotrygd.foreldrepenger.model.Utbetaling
-import no.nav.infotrygd.foreldrepenger.model.VedtakBarn
+import no.nav.infotrygd.foreldrepenger.model.*
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Frisk
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Inntektsperiode
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakStatus
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.nextId
 import java.time.LocalDate
@@ -47,7 +45,10 @@ object TestData {
             stebarnsadopsjon = null,
             brukerId = "br.id",
             morFnr = foedselsNr(),
-            registrert = LocalDate.now()
+            registrert = LocalDate.now(),
+            arbufoerTom = null,
+            friskmeldtDato = null,
+            maksdato = null
         )
     }
 
@@ -73,6 +74,36 @@ object TestData {
             periode = Inntektsperiode.MAANEDLIG,
             refusjon = false
         )
+
+    fun sak(fnr: FoedselsNr = foedselsNr()): Sak {
+        val saksblokk = "X"
+        val saksnummer = "11"
+        val personKey = nextId()
+        return Sak(
+            id = nextId(),
+            fnr = fnr,
+            personKey = personKey,
+            saksblokk = saksblokk,
+            saksnummer = saksnummer,
+            kapittelNr = "BS",
+            valg = "PN",
+            type = "A",
+            resultat = "A",
+            vedtaksdato = LocalDate.now(),
+            iverksattdato = LocalDate.now(),
+            registrert = LocalDate.now(),
+            statushistorikk = listOf(
+                Status(
+                    id = nextId(),
+                    personKey = personKey,
+                    saksblokk = saksblokk,
+                    saksnummer = saksnummer,
+                    lopeNr = nextId() % 99,
+                    status = SakStatus.IKKE_BEHANDLET
+                )
+            )
+        )
+    }
 
     data class PeriodeFactory(
         val personKey: Long = nextId(),

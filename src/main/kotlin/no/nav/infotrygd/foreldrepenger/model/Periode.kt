@@ -50,6 +50,10 @@ data class Periode(
     @Convert(converter = NavLocalDateConverter::class)
     val arbufoer: LocalDate,
 
+    @Column(name = "IS10_ARBUFOER_TOM", columnDefinition = "DECIMAL")
+    @Convert(converter = NavLocalDateConverter::class)
+    val arbufoerTom: LocalDate?,
+
     @Column(name = "IS10_ARBUFOER_OPPR", columnDefinition = "DECIMAL")
     @Convert(converter = NavLocalDateConverter::class)
     val arbufoerOpprinnelig: LocalDate,
@@ -78,6 +82,14 @@ data class Periode(
     @Column(name = "IS10_BRUKERID", columnDefinition = "CHAR")
     @Convert(converter = BrukerIdConverter::class)
     val brukerId: String?,
+
+    @Column(name = "IS10_FRISKM_DATO", columnDefinition = "DECIMAL")
+    @Convert(converter = NavLocalDateConverter::class)
+    val friskmeldtDato: LocalDate?,
+
+    @Column(name = "IS10_MAX", columnDefinition = "DECIMAL")
+    @Convert(converter = NavLocalDateConverter::class)
+    val maksdato: LocalDate?,
 
     @Column(name = "IS10_STOPPDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavLocalDateConverter::class)
@@ -123,6 +135,28 @@ data class Periode(
 
             return Tema.UKJENT
         }
+
+    val opphoerFom: LocalDate?
+        get() = stoppdato
+            ?: friskmeldtDato
+            ?: arbufoerTom?.plusDays(1)
+            ?: maksdato
+
+    fun innenforPeriode(fom: LocalDate, tom: LocalDate?): Boolean {
+        if(tom != null) {
+            require(fom == tom || fom.isBefore(tom)) { "Tom-dato kan ikke være før fom-dato." }
+        }
+
+        if(tom != null && tom.isBefore(arbufoer)) {
+            return false
+        }
+
+        if(opphoerFom != null && fom.isAfter(opphoerFom)) {
+            return false
+        }
+
+        return true
+    }
 
     val barnPersonKey: Long?
         get() {
