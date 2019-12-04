@@ -107,9 +107,10 @@ class PeriodeRepositoryTest {
     fun findByFnrAndStoenadstype() {
         val tema = Stoenadstype.ADOPSJON
         val relevant = periode(tema, frisk = Frisk.LOPENDE)
+        val historikk = periode(tema, frisk = Frisk.HISTORIKK)
         val feilTema = periode(Stoenadstype.RISIKOFYLT_ARBMILJOE, frisk = Frisk.LOPENDE)
 
-        repository.saveAll(listOf(relevant, feilTema))
+        repository.saveAll(listOf(relevant, historikk, feilTema))
 
         val result = repository.findByFnrAndStoenadstype(fnr, listOf(tema))
 
