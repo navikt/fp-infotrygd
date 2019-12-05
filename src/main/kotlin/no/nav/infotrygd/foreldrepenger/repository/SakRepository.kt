@@ -31,7 +31,7 @@ interface SakRepository : JpaRepository<Sak, Long> {
                          and s.personKey = status.personKey
                  )
            AND sak.kapittelNr = 'FA'
-           AND sak.valg = 'SV'
+           AND sak.valg in ('AE', 'AP', 'FE', 'FP', 'FU', 'FØ')
            AND sak.type IN :typer
            AND status.status not in ('FB', '  ')
            AND sak.resultat in ('SB', '  ')

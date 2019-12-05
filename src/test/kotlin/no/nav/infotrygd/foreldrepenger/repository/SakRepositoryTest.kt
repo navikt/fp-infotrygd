@@ -90,7 +90,7 @@ class SakRepositoryTest {
         lagSak(
             fnr = TestData.foedselsNr(),
             kapittelNr = "FA",
-            valg = "SV",
+            valg = "AE",
             type = "S",
             resultat = "SB")
         assertThat(repository.countAapneSakerByType(setOf("S"))).isEqualTo(1)
