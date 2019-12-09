@@ -163,4 +163,30 @@ internal class SakServiceTest {
         assertThat(result.avsluttedeSaker.fraOgMed).isEqualTo(fom)
         assertThat(result.avsluttedeSaker.saker).isEqualTo(forventet)
     }
+
+    @Test
+    fun ikkeStartetSaker() {
+        val iverksatt = LocalDate.now().minusMonths(1)
+        val registrert = iverksatt.plusMonths(1)
+
+        val pf = TestData.PeriodeFactory(fnr = fnr)
+
+        val periode = pf.periode().copy(
+            stoenadstype = Stoenadstype.ADOPSJON,
+            frisk = Frisk.PASSIV,
+            arbufoer = iverksatt,
+            registrert = registrert
+        )
+
+        periodeRepository.save(periode)
+
+        val forventet = listOf(IkkeStartet(
+            iverksatt = iverksatt,
+            registrert = registrert
+        ))
+
+        val result = sakService.findSakerByFnr(fnr, LocalDate.now().minusYears(1), LocalDate.now())
+
+        assertThat(result.ikkeStartet).isEqualTo(forventet)
+    }
 }

@@ -22,12 +22,13 @@ class SakService(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",
             saker = toDto(saker),
             apneSakerMedLopendeUtbetaling = apneSakerMedLopendeUtbetaling(fnr, fom, tom),
-            avsluttedeSaker = avsluttedeSaker(fnr, fom, tom)
+            avsluttedeSaker = avsluttedeSaker(fnr, fom, tom),
+            ikkeStartet = ikkeStartetSaker(fnr, fom, tom)
         )
     }
 
     private fun apneSakerMedLopendeUtbetaling(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<ApenSakMedLopendeUtbetaling> {
-        return periodeRepository.findOpneSakerMedLopendeUtbetalingByFnr(fnr)
+        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.lopende)
             .filter { it.innenforPeriode(fom, tom) }
             .map { periode ->
                 ApenSakMedLopendeUtbetaling(
@@ -49,7 +50,7 @@ class SakService(
     private fun avsluttedeSaker(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): AvsluttedeSaker {
         return AvsluttedeSaker(
             fraOgMed = fom,
-            saker = periodeRepository.findAvsluttedeSakerByFnr(fnr)
+            saker = periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede)
                 .filter { it.innenforPeriode(fom, tom) }
                 .map { periode ->
                     AvsluttetSak(
@@ -59,6 +60,15 @@ class SakService(
                         utbetalinger = periode.utbetalinger.map { toDto(it) }
                     ) }
         )
+    }
+
+    private fun ikkeStartetSaker(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<IkkeStartet> {
+        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.ikkeStartet)
+            .filter { it.innenforPeriode(fom, tom) }
+            .map { IkkeStartet(
+                iverksatt = it.arbufoer,
+                registrert = it.registrert
+            ) }
     }
 
     private fun toDto(saker: List<Sak>): List<SakDto> {

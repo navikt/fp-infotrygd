@@ -13,7 +13,10 @@ data class SakResult(
     val apneSakerMedLopendeUtbetaling: List<ApenSakMedLopendeUtbetaling>,
 
     @ApiModelProperty(notes = "Avsluttede saker. Disse hentes fra Foreldrepenge-base, ytelse Svangerskapspenger.")
-    val avsluttedeSaker: AvsluttedeSaker // IS10_STONADS_TYPE='SV', IS10_FRISK='F', IS10_ARBUFOER >= i dag minus 1 år
+    val avsluttedeSaker: AvsluttedeSaker, // IS10_STONADS_TYPE='SV', IS10_FRISK='F', IS10_ARBUFOER >= i dag minus 1 år
+
+    @ApiModelProperty(notes = "Saker som ikke har startet enda.")
+    val ikkeStartet: List<IkkeStartet>
 )
 
 // Saker fra Saksregister, ytelse Svangerskapspenger
@@ -198,4 +201,18 @@ data class UtbetalingDto(
         Kolonne: IS15_GRAD
     """)
     val gradering: Int
+)
+
+data class IkkeStartet(
+    @ApiModelProperty(notes = """
+        Iverksettelsesdato.
+        Kolonne: IS10_ARBUFOER
+    """)
+    val iverksatt: LocalDate?,
+
+    @ApiModelProperty(notes = """
+        Registreringsdato for sak.
+        Kolonne: IS10_REG_DATO
+    """)
+    val registrert: LocalDate?
 )

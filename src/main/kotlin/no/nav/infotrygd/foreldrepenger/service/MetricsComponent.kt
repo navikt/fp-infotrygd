@@ -43,8 +43,8 @@ class MetricsComponent(
         count("infotrygd_foreldrepenger_num_saker_under_behandling") { sakRepository.countAapneSakerByType(setOf("S ", "R ")) }
         count("infotrygd_foreldrepenger_num_klagesaker") { sakRepository.countAapneSakerByType(setOf("K ")) }
         count("infotrygd_foreldrepenger_num_ankesaker") { sakRepository.countAapneSakerByType(setOf("A ")) }
-        count("infotrygd_foreldrepenger_num_opne_saker_med_lopende_utbetaling") { periodeRepository.countOpneSakerMedLopendeUtbetaling() }
-        count("infotrygd_foreldrepenger_num_avsluttede_saker") { periodeRepository.countAvsluttedeSaker(LocalDate.now().minusYears(1)) }
+        count("infotrygd_foreldrepenger_num_opne_saker_med_lopende_utbetaling") { periodeRepository.countByFrisk(PeriodeRepository.lopende) }
+        count("infotrygd_foreldrepenger_num_avsluttede_saker") { periodeRepository.countByFrisk(PeriodeRepository.avsluttede) }
 
         for (i in 0 until 12) {
             count("infotrygd_foreldrepenger_num_opne_saker_stoppdato", Tag.of("month_diff", String.format("%02d", i))) {

@@ -41,7 +41,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, ikkeFrisk, feilType))
 
-        val result = repository.findAvsluttedeSakerByFnr(fnr)
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede)
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
@@ -49,7 +49,7 @@ class PeriodeRepositoryTest {
     fun countAvsluttedeSaker() {
         val relevant = periode(Stoenadstype.ADOPSJON, Frisk.FRISKMELDT)
         repository.save(relevant)
-        assertThat(repository.countAvsluttedeSaker(LocalDate.now().minusYears(1))).isEqualTo(1)
+        assertThat(repository.countByFrisk(PeriodeRepository.avsluttede)).isEqualTo(1)
     }
 
     @Test
@@ -61,7 +61,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, feilType))
 
-        val result = repository.findOpneSakerMedLopendeUtbetalingByFnr(fnr)
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.lopende)
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
@@ -83,7 +83,7 @@ class PeriodeRepositoryTest {
 
         repository.save(p)
 
-        val result = repository.findAvsluttedeSakerByFnr(fnr)
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede)
         assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
@@ -100,7 +100,7 @@ class PeriodeRepositoryTest {
         val relevant = periode(Stoenadstype.ADOPSJON, Frisk.LOPENDE)
         repository.save(relevant)
 
-        assertThat(repository.countOpneSakerMedLopendeUtbetaling()).isEqualTo(1)
+        assertThat(repository.countByFrisk(PeriodeRepository.lopende)).isEqualTo(1)
     }
 
     @Test
