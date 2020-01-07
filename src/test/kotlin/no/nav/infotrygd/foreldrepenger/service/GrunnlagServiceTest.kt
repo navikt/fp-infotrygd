@@ -57,7 +57,7 @@ class GrunnlagServiceTest {
 
         val stoenadstyper = listOf(Stoenadstype.SVANGERSKAP)
         val resultat =
-            grunnlagService.hentForeldrepenger(stoenadstyper, factory.fnr, LocalDate.now().minusYears(1), null)
+            grunnlagService.hentForeldrepenger(stoenadstyper, factory.fnr, startdato.minusYears(1), null)
 
         assertThat(resultat).hasSize(1)
         val fp = resultat[0]

@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.Duration
-import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicLong
 
 @Component
@@ -22,8 +21,6 @@ class MetricsComponent(
 
     private val counts: MutableList<Count> = ArrayList()
 
-    private var tom: List<LocalDate> = listOf()
-
     private var initialized = false
 
     @Scheduled(fixedRate = 60_000)
@@ -35,8 +32,6 @@ class MetricsComponent(
 
         logger.debug("Updating metrics")
         counts.forEach { it.update() }
-
-        updatePerioder()
     }
 
     private fun initialize() {
@@ -46,20 +41,7 @@ class MetricsComponent(
         count("infotrygd_foreldrepenger_num_opne_saker_med_lopende_utbetaling") { periodeRepository.countByFrisk(PeriodeRepository.lopende) }
         count("infotrygd_foreldrepenger_num_avsluttede_saker") { periodeRepository.countByFrisk(PeriodeRepository.avsluttede) }
 
-        for (i in 0 until 12) {
-            count("infotrygd_foreldrepenger_num_opne_saker_stoppdato", Tag.of("month_diff", String.format("%02d", i))) {
-                val now = LocalDate.now().plusMonths(i.toLong())
-                tom.count { it.year == now.year && it.month == now.month }.toLong()
-            }
-        }
-
         initialized = true
-    }
-
-    private fun updatePerioder() {
-        tom = periodeRepository.findOpneSakerMedLopendeUtbetaling().flatMap { periode ->
-            periode.stoppdato?.let { listOf(it) } ?: listOf()
-        }
     }
 
     private fun count(name: String, vararg tags: Tag, resolver: () -> Long) {

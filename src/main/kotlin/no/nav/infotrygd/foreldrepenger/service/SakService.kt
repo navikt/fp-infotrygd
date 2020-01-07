@@ -55,7 +55,7 @@ class SakService(
                 .map { periode ->
                     AvsluttetSak(
                         iverksatt = periode.arbufoer,
-                        stoppdato = periode.stoppdato,
+                        stoppdato = periode.opphoerFom,
                         registrert = periode.registrert,
                         utbetalinger = periode.utbetalinger.map { toDto(it) }
                     ) }
