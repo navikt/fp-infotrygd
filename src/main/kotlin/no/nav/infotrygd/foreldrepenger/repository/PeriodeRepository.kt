@@ -21,6 +21,7 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
          WHERE p.fnr = :fnr
            AND p.stoenadstype IN ('AP', 'FP')
            AND p.frisk IN :frisk
+           AND p.arbufoer != 0
     """)
     fun findByFnrAndFrisk(fnr: FoedselsNr, frisk: Set<Frisk>): List<Periode>
 
@@ -28,6 +29,7 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
         SELECT COUNT(p) FROM Periode p
          WHERE p.stoenadstype IN ('AP', 'FP')
            AND p.frisk IN :frisk
+           AND p.arbufoer != 0
     """)
     fun countByFrisk(frisk: Set<Frisk>): Long
 
@@ -35,6 +37,7 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
         SELECT p FROM Periode p
          WHERE p.stoenadstype IN ('AP', 'FP')
            AND p.frisk IN (' ', 'B', 'D', 'E')
+           AND p.arbufoer != 0
     """)
     fun findOpneSakerMedLopendeUtbetaling(): List<Periode>
 
@@ -43,6 +46,7 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
          WHERE p.fnr = :fnr
            AND p.stoenadstype IN :stoenadstyper
            AND p.frisk != 'H'
+           AND p.arbufoer != 0
     """)
     fun findByFnrAndStoenadstype(fnr: FoedselsNr, stoenadstyper: List<Stoenadstype>): List<Periode>
 }
