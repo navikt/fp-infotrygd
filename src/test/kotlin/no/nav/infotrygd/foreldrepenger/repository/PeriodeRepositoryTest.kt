@@ -75,6 +75,7 @@ class PeriodeRepositoryTest {
                 arbufoerSeq = p.arbufoerSeq,
                 utbetaltFom = LocalDate.now().minusYears(1),
                 utbetaltTom = LocalDate.now(),
+                utbetalingsdato = LocalDate.now(),
                 grad = 10,
                 korr = null,
                 type = null

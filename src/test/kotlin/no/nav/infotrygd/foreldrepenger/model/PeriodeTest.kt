@@ -122,6 +122,27 @@ class PeriodeTest {
         assertThat(beregnKode("x", Kjoenn.MANN)).isEqualTo("2")
     }
 
+    @Test
+    fun utbetalinger() {
+        assertThat(periodeMedUtbetalinger("1", "", LocalDate.now()).utbetalinger).isNotEmpty()
+
+        assertThat(periodeMedUtbetalinger("1", "KORR", LocalDate.now()).utbetalinger).isEmpty()
+        assertThat(periodeMedUtbetalinger("7", "", LocalDate.now()).utbetalinger).isEmpty()
+        assertThat(periodeMedUtbetalinger("1", "", null).utbetalinger).isEmpty()
+    }
+
+    private fun periodeMedUtbetalinger(type: String?, korr: String?, utbetalingsdato: LocalDate?): Periode {
+        val pf = TestData.PeriodeFactory()
+        val utbetaling = pf.utbetaling().copy(
+            type = type,
+            korr = korr,
+            utbetalingsdato = utbetalingsdato
+        )
+        return pf.periode().copy(
+            utbetalingshistorikk = listOf(utbetaling)
+        )
+    }
+
     private fun beregnKode(adopsjon: String, kjoenn: Kjoenn): String? {
         val fnr = TestData.foedselsNr(kjoenn = kjoenn)
 
