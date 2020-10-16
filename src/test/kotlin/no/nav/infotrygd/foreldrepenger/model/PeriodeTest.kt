@@ -50,7 +50,7 @@ class PeriodeTest {
         val maksdato = arbufoerTom.plusMonths(1)
 
         periode = periode.copy(maksdato = maksdato)
-        assertThat(periode.opphoerFom).isEqualTo(maksdato)
+        assertThat(periode.opphoerFom).isEqualTo(maksdato.plusDays(1))
 
         periode = periode.copy(arbufoerTom = arbufoerTom)
         assertThat(periode.opphoerFom).isEqualTo(arbufoerTom.plusDays(1))
