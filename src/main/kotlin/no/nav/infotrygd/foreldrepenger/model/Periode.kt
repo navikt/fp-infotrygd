@@ -141,7 +141,7 @@ data class Periode(
         get() = stoppdato
             ?: friskmeldtDato
             ?: arbufoerTom?.plusDays(1)
-            ?: maksdato
+            ?: maksdato?.plusDays(1)
 
     fun innenforPeriode(fom: LocalDate, tom: LocalDate?): Boolean {
         if(tom != null) {
