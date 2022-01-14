@@ -21,6 +21,9 @@ data class Periode(
     @Column(name = "ID_PERI10", nullable = false, columnDefinition = "DECIMAL")
     val id: Long,
 
+    @Column(name = "REGION", columnDefinition = "CHAR")
+    val region: String,
+
     @Column(name = "IS01_PERSONKEY", columnDefinition = "DECIMAL")
     val personKey: Long,
 
@@ -104,6 +107,7 @@ data class Periode(
 
     @OneToMany
     @JoinColumns(value = [
+        JoinColumn(name = "REGION", referencedColumnName = "REGION"),
         JoinColumn(name = "IS01_PERSONKEY", referencedColumnName = "IS01_PERSONKEY"),
         JoinColumn(name = "IS10_ARBUFOER_SEQ", referencedColumnName = "IS10_ARBUFOER_SEQ")
     ])
@@ -112,6 +116,7 @@ data class Periode(
 
     @OneToMany
     @JoinColumns(value = [
+        JoinColumn(name = "REGION", referencedColumnName = "REGION"),
         JoinColumn(name = "IS01_PERSONKEY", referencedColumnName = "IS01_PERSONKEY"),
         JoinColumn(name = "IS10_ARBUFOER_SEQ", referencedColumnName = "IS10_ARBUFOER_SEQ")
     ])

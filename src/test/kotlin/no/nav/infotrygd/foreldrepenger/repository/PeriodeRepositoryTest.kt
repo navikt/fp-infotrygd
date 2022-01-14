@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
+import javax.persistence.EntityManager
 
 @RunWith(SpringRunner::class)
 @DataJpaTest
@@ -23,6 +24,9 @@ class PeriodeRepositoryTest {
 
     @Autowired
     lateinit var repository: PeriodeRepository
+
+    @Autowired
+    lateinit var entityManager: EntityManager
 
     @Before
     fun setUp() {
@@ -78,7 +82,8 @@ class PeriodeRepositoryTest {
                 utbetalingsdato = LocalDate.now(),
                 grad = 10,
                 korr = null,
-                type = null
+                type = null,
+                region = "X"
             )
         ))
 
@@ -116,6 +121,54 @@ class PeriodeRepositoryTest {
         val result = repository.findByFnrAndStoenadstype(fnr, listOf(tema))
 
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+    }
+
+    @Test
+    fun `leser perioder som er flyttet mellom regioner`() {
+        val fnr = TestData.foedselsNr()
+        val personKey = 99L
+        val arbufoerSeq = 199L;
+        val stoenadstype = Stoenadstype.ADOPSJON
+
+        val pfA = TestData.PeriodeFactory(
+            region = "A",
+            stoenadstype = stoenadstype,
+            fnr = fnr,
+            personKey = personKey,
+            arbufoerSeq = arbufoerSeq
+        )
+
+        val periodeA = pfA.periode().copy(
+            inntekter = listOf(pfA.inntekt()),
+            utbetalingshistorikk = listOf(pfA.utbetaling())
+        )
+
+        repository.save(periodeA)
+
+        val pfB = TestData.PeriodeFactory(
+            region = "B",
+            stoenadstype = stoenadstype,
+            fnr = fnr,
+            personKey = personKey,
+            arbufoerSeq = arbufoerSeq
+        )
+
+        val periodeB = pfB.periode().copy(
+            inntekter = listOf(pfB.inntekt()),
+            utbetalingshistorikk = listOf(pfB.utbetaling())
+        )
+
+        repository.save(periodeB)
+
+        repository.flush()
+        entityManager.clear()
+
+        val resultat = repository.findByFnrAndStoenadstype(fnr, listOf(stoenadstype))
+        assertThat(resultat).hasSize(2)
+        for (periode in resultat) {
+            assertThat(periode.inntekter).hasSize(1)
+            assertThat(periode.utbetalingshistorikk).hasSize(1)
+        }
     }
 
     private fun periode(

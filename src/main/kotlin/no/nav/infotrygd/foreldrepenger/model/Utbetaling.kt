@@ -12,6 +12,9 @@ data class Utbetaling(
     @Column(name = "ID_UTBT", columnDefinition = "DECIMAL")
     val id: Long,
 
+    @Column(name = "REGION", columnDefinition = "CHAR")
+    val region: String,
+
     @Column(name = "IS01_PERSONKEY", columnDefinition = "DECIMAL")
     val personKey: Long,
 

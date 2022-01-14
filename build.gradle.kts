@@ -1,14 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val logbackVersion = "1.2.3"
-val logstashVersion = "5.3"
-val junitJupiterVersion = "5.4.2"
-val mockkVersion = "1.9.3"
-val wireMockVersion = "2.19.0"
-val filformatVersion = "1.2019.06.26-14.50-746e7610cb12"
-val micrometerRegistryVersion = "1.1.2"
 val tokenSupportVersion = "1.3.1"
-val jacksonVersion = "2.9.9"
 val swaggerVersion = "2.9.2"
 val oracleusername = "richard.martinsen@nav.no"
 val oraclepassword = "Infotrygd1"

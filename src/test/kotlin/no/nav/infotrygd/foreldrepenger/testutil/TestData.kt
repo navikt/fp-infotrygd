@@ -25,6 +25,7 @@ object TestData {
     fun periode(): Periode {
         return Periode(
             id = nextId(),
+            region = "X",
             personKey = 1,
             arbufoerSeq = 1,
             fnr = foedselsNr(),
@@ -55,6 +56,7 @@ object TestData {
     fun utbetaling(): Utbetaling =
         Utbetaling(
             id = nextId(),
+            region = "X",
             personKey = 1,
             arbufoerSeq = 1,
             utbetaltTom = LocalDate.now(),
@@ -68,6 +70,7 @@ object TestData {
     fun inntekt(): Inntekt =
         Inntekt(
             id = nextId(),
+            region = "X",
             personKey = 1,
             arbufoerSeq = 1,
             arbgiverNr = "12345678901",
@@ -111,22 +114,28 @@ object TestData {
         val arbufoerSeq: Long = nextId(),
         val fnr: FoedselsNr = foedselsNr(),
         val barnFnr: FoedselsNr = foedselsNr(),
+        val region: String = "X",
+        val stoenadstype: Stoenadstype = Stoenadstype.SVANGERSKAP,
         val stebarnsadopsjon: String? = null) {
 
         fun periode(): Periode = TestData.periode().copy(
+            region = region,
             personKey = personKey,
             arbufoerSeq = arbufoerSeq,
+            stoenadstype = stoenadstype,
             stebarnsadopsjon = stebarnsadopsjon,
             fnr = fnr,
             barnFnr = barnFnr
         )
 
         fun utbetaling(): Utbetaling = TestData.utbetaling().copy(
+            region = region,
             personKey = personKey,
             arbufoerSeq = arbufoerSeq
         )
 
         fun inntekt(): Inntekt = TestData.inntekt().copy(
+            region = region,
             personKey = personKey,
             arbufoerSeq = arbufoerSeq
         )
