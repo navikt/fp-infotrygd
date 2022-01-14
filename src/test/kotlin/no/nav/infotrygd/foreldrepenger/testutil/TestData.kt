@@ -144,6 +144,7 @@ object TestData {
             val periode = periode()
             return VedtakBarn(
                 id = nextId(),
+                region = region,
                 personKey = periode.barnPersonKey!!,
                 arbufoerSeq = arbufoerSeq.toString(),
                 kode = periode().barnKode,

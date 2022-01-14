@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface VedtakBarnRepository : JpaRepository<VedtakBarn, Long> {
-    fun findByPersonKeyAndArbufoerSeqAndKode(personKey: Long, arbufoerSeq: String, kode: String): VedtakBarn? // todo: noe mangler? region?
+    fun findByPersonKeyAndArbufoerSeqAndKodeAndRegion(personKey: Long, arbufoerSeq: String, kode: String, region: String): VedtakBarn?
 }

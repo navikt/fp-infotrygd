@@ -22,10 +22,11 @@ class GrunnlagService(
 
         return result.map { periode ->
             val vedtak = periode.barnPersonKey?.let { barnPersonKey ->
-                vedtakBarnRepository.findByPersonKeyAndArbufoerSeqAndKode(
+                vedtakBarnRepository.findByPersonKeyAndArbufoerSeqAndKodeAndRegion(
                     personKey = barnPersonKey,
                     arbufoerSeq = periode.arbufoerSeq.toString(),
-                    kode = periode.barnKode
+                    kode = periode.barnKode,
+                    region = periode.region
                 )
             }
             Foreldrepenger(
