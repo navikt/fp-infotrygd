@@ -40,8 +40,9 @@ no.nav.security.jwt:
     sts:
       discoveryurl: ${APP_STS_DISCOVERY_URL}
       accepted_audience: ${APP_STS_AUD}
-      proxyurl: ${APP_STS_PROXY_URL}
-
+    isso:
+      discoveryurl: ${APP_ISSO_DISCOVERY_URL}
+      accepted_audience: ${APP_ISSO_AUD}
 app:
   security:
     clientWhitelist: ${APP_CLIENT_WHITELIST}
