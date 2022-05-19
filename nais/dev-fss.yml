@@ -74,7 +74,7 @@ spec:
     - name: "APP_ISSO_DISCOVERY_URL"
       value: "https://isso-q.adeo.no/isso/oauth2/.well-known/openid-configuration"
     - name: "APP_ISSO_AUD"
-      value: "fpsak,fpsak-localhost,fpsak-q1,fpsak-q0,fpsak-t4,fpfordel,fpfordel-localhost,fpfordel-q1,fpfordel-q0,fpfordel-t4,fprisk,fprisk-localhost,fprisk-q1,fprisk-q0,fprisk-t4,fpabakus,fpabakus-localhost,fpabakus-q1,fpabakus-q0,fpabakus-t4,srvengangsstonad,srvfpfordel,srvfpabakus"
+      value: "fpsak,fpsak-localhost,fpsak-q1,fpfordel,fpfordel-localhost,fpfordel-q1,fpabakus,fpabakus-localhost,fpabakus-q1,srvengangsstonad,srvfpfordel,srvfpabakus"
 
     - name: "APP_STS_DISCOVERY_URL"
       value: "https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration"
@@ -82,4 +82,4 @@ spec:
       value: "srvengangsstonad,srvfpfordel,srvfpabakus"
 
     - name: "APP_CLIENT_WHITELIST"
-      value: "azure/1127bc34-00d9-4b58-a763-ace711525319,sts/srvengangsstonad,sts/srvfpfordel,sts/srvfprisk,sts/srvfpabakus,isso/srvengangsstonad,isso/srvfpfordel,isso/srvfprisk,isso/srvfpabakus"
+      value: "azure/1127bc34-00d9-4b58-a763-ace711525319,sts/srvengangsstonad,sts/srvfpfordel,sts/srvfpabakus,isso/srvengangsstonad,isso/srvfpfordel,isso/srvfpabakus"
