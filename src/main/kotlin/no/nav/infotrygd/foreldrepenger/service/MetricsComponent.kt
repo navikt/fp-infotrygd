@@ -65,6 +65,6 @@ class MetricsComponent(
             value.set(resolve())
         }
 
-        private fun resolve() = timer.recordCallable { resolver() }
+        private fun resolve() = timer.recordCallable { resolver() } !!
     }
 }

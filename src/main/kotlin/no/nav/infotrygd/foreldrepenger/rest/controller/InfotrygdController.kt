@@ -1,7 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.rest.controller
 
 import io.micrometer.core.annotation.Timed
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Parameter
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.rest.dto.Foreldrepenger
@@ -34,12 +34,12 @@ class InfotrygdController(
 
         @RequestParam(required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        @ApiParam("Finn saker fra og med denne datoen. Defualt: Ett år tilbake i tid.", example = "1900-01-01")
+        @Parameter(description = "Finn saker fra og med denne datoen. Defualt: Ett år tilbake i tid.", example = "1900-01-01")
         fom: LocalDate?,
 
         @RequestParam(required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        @ApiParam("Finn saker til og med denne datoen.", example = "2019-01-01")
+        @Parameter(description = "Finn saker til og med denne datoen.", example = "2019-01-01")
         tom: LocalDate?): SakResult {
 
         clientValidator.authorizeClient()

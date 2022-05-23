@@ -70,7 +70,7 @@ data class Sak(
     val statushistorikk: List<Status>
 ) : Serializable {
     val status: SakStatus
-        get() = statushistorikk.minBy { it.lopeNr }?.status ?: SakStatus.IKKE_BEHANDLET
+        get() = statushistorikk.minByOrNull { it.lopeNr }?.status ?: SakStatus.IKKE_BEHANDLET
 
     fun innenforPeriode(fom: LocalDate, tom: LocalDate?): Boolean {
         if(tom != null) {

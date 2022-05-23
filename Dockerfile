@@ -1,7 +1,7 @@
-FROM navikt/java:11
+FROM navikt/java:17
 
 ENV JAVA_OPTS="${JAVA_OPTS} -Xms270M"
 
-COPY build/libs/*.jar app.jar
+COPY target/*.jar app.jar
 EXPOSE 8080
 
