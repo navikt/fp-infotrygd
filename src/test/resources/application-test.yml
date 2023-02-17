@@ -28,12 +28,7 @@ no.nav.security.jwt:
       accepted_audience: aud-localhost
       proxyurl: ~
       cookiename: localhost-idtoken
-    isso:
-      discoveryurl: http://localhost:${mock-oauth2-server.port}/issuer1/.well-known/openid-configuration
-      accepted_audience: aud-localhost
-      proxyurl: ~
-      cookiename: localhost-idtoken
 
 app:
   security:
-    clientWhitelist: "sts/12345678910,isso/12345678910,azure/12345678910"
+    clientWhitelist: "sts/12345678910,azure/12345678910"
