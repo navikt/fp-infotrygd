@@ -41,7 +41,7 @@ jobs:
     name: Deploy prod
     if: github.ref_name == 'master'
     needs: [build-app]
-    uses: navikt/fp-gha-workflows/.github/workflows/deploy.yml@master
+    uses: navikt/fp-infotrygd-foreldrepenger/.github/workflows/deploy.yml@master
     with:
       image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
       cluster: prod-fss

@@ -24,7 +24,7 @@ on:
 jobs:
   deploy:
     name: Deploy dev
-    uses: navikt/${{ github.repository }}/.github/workflows/deploy.yml@master
+    uses: navikt/fp-infotrygd-foreldrepenger/.github/workflows/deploy.yml@master
     with:
       image: ghcr.io/${{ github.repository }}:${{ inputs.image }}
       cluster: ${{ inputs.environment }}-fss
