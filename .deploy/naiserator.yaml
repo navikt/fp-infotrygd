@@ -1,0 +1,54 @@
+kind: Application
+apiVersion: nais.io/v1alpha1
+metadata:
+  name: {{appName}}
+  namespace: teamforeldrepenger
+  labels:
+    team: teamforeldrepenger
+spec:
+  image:  {{image}}
+  port: 8080
+  ingresses:
+  {{#each ingresses as |url|}}
+     - {{url}}
+  {{/each}}
+  liveness:
+    path: /actuator/health
+    initialDelay: 30
+    timeout: 1
+    periodSeconds: 5
+    failureThreshold: 10
+  readiness:
+    path: /actuator/health
+    initialDelay: 20
+    timeout: 1
+  preStopHookPath: ""
+  prometheus:
+    enabled: true
+    path: /actuator/prometheus
+  replicas:
+    min: {{minReplicas}}
+    max: {{maxReplicas}}
+    cpuThresholdPercentage: 50
+  resources:
+    limits:
+      cpu: "1500m"
+      memory: "1024Mi"
+    requests:
+      cpu: "500m"
+      memory: "1024Mi"
+  vault:
+    enabled: true
+    paths:
+      - mountPath: /var/run/secrets/nais.io/defaultDSconfig
+        kvPath: {{oracleConfig}}
+      - mountPath: /var/run/secrets/nais.io/defaultDS
+        kvPath:  {{oracleSecret}}
+  azure:
+    application:
+      enabled: true
+  env:
+  {{#each env}}
+   - name: {{@key}}
+     value: "{{this}}"
+  {{/each}}

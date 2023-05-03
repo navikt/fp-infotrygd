@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: true
+        type: string
+        description: 'Image tag to deploy (example 2023.03.10.080433-f821119)'
+      cluster:
+        required: true
+        type: string
+        description: 'The cluster to deploy to (dev-fss|dev-gcp|prod-fss|prod-gcp)'
+      namespace:
+        required: false
+        type: string
+        description: 'The namespace to deploy to'
+        default: 'teamforeldrepenger'
+      app:
+        required: true
+        type: string
+        description: 'The app to deploy (foreldrepenger|svangerskapspenger)'
+env:
+  IMAGE: ${{ inputs.image }}
+
+jobs:
+  deploy:
+    name: deploy
+    environment: ${{ inputs.cluster }}:${{ inputs.namespace }}
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v3.3.0
+
+      - name: Deploy av fp-infotrygd-${{ inputs.app }} til ${{ inputs.cluster }}
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          PRINT_PAYLOAD: true
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_FP }}
+          CLUSTER: ${{ inputs.cluster }}
+          RESOURCE: .deploy/naiserator.yaml
+          VARS: .deploy/${{ inputs.app }}/${{ inputs.cluster }}-${{ inputs.namespace }}.json

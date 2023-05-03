@@ -1,0 +1,32 @@
+name: Deploy manuelt
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        required: true
+        type: string
+        description: 'Image tag to deploy (example 2023.03.10.080433-f821119)'
+      environment:
+        required: true
+        type: choice
+        description: 'The environment to deployed to (dev|prod)'
+        options:
+          - dev
+          - prod
+      app:
+        required: true
+        type: choice
+        description: 'The namespace to deployed to (foreldrepenger|svangerskapspenger)'
+        options:
+          - foreldrepenger
+          - svangerskapspenger
+
+jobs:
+  deploy:
+    name: Deploy dev
+    uses: navikt/${{ github.repository }}/.github/workflows/deploy.yml@master
+    with:
+      image: ghcr.io/${{ github.repository }}:${{ inputs.image }}
+      cluster: ${{ inputs.environment }}-fss
+      namespace: ${{ inputs.namespace }}
+    secrets: inherit
