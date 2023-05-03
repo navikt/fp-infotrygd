@@ -10,7 +10,7 @@
   "env": {
     "APP_DDL_AUTO": "none",
     "DEFAULTDS_SCHEMA": "INFOTRYGD_Q1",
-    "APP_AZURE_PROXY_URL": "https://webproxy-nais.nav.no:8088",
+    "AZURE_APP_PROXY_URL": "https://webproxy-nais.nav.no:8088",
     "APP_STS_DISCOVERY_URL": "https://security-token-service.dev.adeo.no/rest/v1/sts/.well-known/openid-configuration",
     "APP_STS_AUD": "srvengangsstonad,srvfpfordel,srvfpabakus,ida-q",
     "APP_CLIENT_WHITELIST": "azure/1127bc34-00d9-4b58-a763-ace711525319,sts/srvengangsstonad,sts/srvfpfordel,sts/srvfpabakus"
