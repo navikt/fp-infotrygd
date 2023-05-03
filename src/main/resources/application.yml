@@ -2,21 +2,20 @@ server.port: 8080
 
 spring:
   application:
-    name: ${NAIS_APP_NAME:infotrygd-foreldrepenger}
+    name: ${NAIS_APP_NAME:fp-infotrygd}
   datasource:
-    url: ${APP_DATASOURCE_URL}
-    username: ${APP_DATASOURCE_USERNAME}
-    password: ${APP_DATASOURCE_PASSWORD}
-    platform: ${APP_DATASOURCE_PLATFORM}
-    driver-class-name: ${APP_DATASOURCE_DRIVER}
+    url: ${DEFAULTDS_URL}
+    username: ${DEFAULTDS_USERNAME}
+    password: ${DEFAULTDS_PASSWORD}
+    driver-class-name: ${DEFAULTDS_DRIVER:oracle.jdbc.driver.OracleDriver}
   jpa:
     # For Oracle: database-platform: org.hibernate.dialect.Oracle10gDialect
-    database-platform: ${APP_JPA_PLATFORM}
+    database-platform: ${APP_JPA_PLATFORM:org.hibernate.dialect.Oracle10gDialect}
     hibernate:
       ddl-auto: ${APP_DDL_AUTO:validate}
     properties:
       hibernate:
-        default_schema: ${APP_DEFAULT_SCHEMA}
+        default_schema: ${DEFAULTDS_SCHEMA}
 
 management:
   endpoint:
@@ -34,9 +33,9 @@ no.nav.security.jwt:
   expirythreshold: 60 #threshold in minutes until token expires
   issuer:
     azure:
-      discoveryurl: ${APP_AZURE_DISCOVERY_URL}
-      accepted_audience: ${APP_AZURE_AUD}
-      proxyurl: ${APP_AZURE_PROXY_URL}
+      discoveryurl: ${AZURE_APP_WELL_KNOWN_URL}
+      accepted_audience: ${AZURE_APP_CLIENT_ID}
+      proxyurl: ${AZURE_APP_PROXY_URL}
     sts:
       discoveryurl: ${APP_STS_DISCOVERY_URL}
       accepted_audience: ${APP_STS_AUD}

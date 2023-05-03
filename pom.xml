@@ -8,14 +8,13 @@
 		<version>2.6.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>no.nav</groupId>
-	<artifactId>infotrygd-foreldrepenger</artifactId>
+
+	<groupId>no.nav.foreldrepenger</groupId>
+	<artifactId>fp-infotrygd</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>infotrygd-foreldrepenger</name>
-	<description></description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<kotlin.version>1.6.20</kotlin.version>
 		<testcontainers.version>1.16.2</testcontainers.version>
 		<token-validation.version>2.0.14</token-validation.version>

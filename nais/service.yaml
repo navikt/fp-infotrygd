@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: infotrygd-foreldrepenger
-  namespace: default
-spec:
-  type: ExternalName
-  externalName: infotrygd-foreldrepenger.infotrygd.svc.nais.local
