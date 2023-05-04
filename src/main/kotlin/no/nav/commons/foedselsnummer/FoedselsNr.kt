@@ -11,7 +11,7 @@ data class FoedselsNr(@JsonValue val asString: String) {
 
     val kjoenn: Kjoenn
         get() {
-            val kjoenn = asString[8].toInt()
+            val kjoenn = asString[8].code
             return if(kjoenn % 2 == 0) Kjoenn.KVINNE else Kjoenn.MANN
         }
 }

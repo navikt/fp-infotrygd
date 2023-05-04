@@ -19,7 +19,6 @@
 		<testcontainers.version>1.16.2</testcontainers.version>
 		<token-validation.version>2.0.14</token-validation.version>
 		<datasource-proxy.version>1.7</datasource-proxy.version>
-		<springdoc-openapi-ui.version>1.6.8</springdoc-openapi-ui.version>
 		<httpclient.version>4.5.13</httpclient.version>
 		<logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
 		<logback-syslog4j.version>1.0.0</logback-syslog4j.version>
@@ -89,12 +88,17 @@
 		</dependency>
 
 		<!-- Swagger -->
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>${springdoc-openapi-ui.version}</version>
-		</dependency>
 
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 		<dependency>
 			<groupId>net.ttddyy</groupId>
 			<artifactId>datasource-proxy</artifactId>
