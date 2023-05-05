@@ -10,5 +10,6 @@ class InfotrygdApplication
 
 fun main(args: Array<String>) {
     System.setProperty("oracle.jdbc.fanEnabled", "false")
+    System.setProperty("spring.devtools.restart.enabled", "false")
     runApplication<InfotrygdApplication>(*args)
 }
