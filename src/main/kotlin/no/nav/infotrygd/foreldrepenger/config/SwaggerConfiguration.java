@@ -12,9 +12,9 @@ public class SwaggerConfiguration {
     @Bean
     public OpenAPI swaggerOpenAPI() {
         return new OpenAPI()
-            .info(new Info().title("Fpsoknad-mottak")
-                .description("Mottar søknader om svangerskapspenger, foreldrepenger og engangsstønad fra frontend og sender dem videre inn i NAV for behandling")
-                .version("v0.0.1")
+            .info(new Info().title("fp-infotrygd")
+                .description("Gir mulighet for å innhente grunnlag fra saker behandlet i infotrygd.")
+                .version("v1.0")
                 .license(new License().name("MIT").url("http://nav.no")));
     }
 }

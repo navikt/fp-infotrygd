@@ -12,7 +12,7 @@
 
 	<groupId>no.nav.foreldrepenger</groupId>
 	<artifactId>fp-infotrygd</artifactId>
-	<version>0-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 
 	<properties>
 		<java.version>17</java.version>
@@ -27,20 +27,16 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
 		<kotlin.version>1.8.21</kotlin.version>
-		<testcontainers.version>1.16.2</testcontainers.version>
 		<token-validation.version>3.0.10</token-validation.version>
 
-		<datasource-proxy.version>1.8</datasource-proxy.version>
-
-		<httpclient.version>4.5.13</httpclient.version>
+		<httpclient.version>4.5.14</httpclient.version>
 
 		<logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
 		<db-util.version>1.0.7</db-util.version>
+
 		<wiremock.version>3.0.0-beta-8</wiremock.version>
 		<mockwebserver.version>4.11.0</mockwebserver.version>
 		<okhttp.version>4.11.0</okhttp.version>
-
-		<jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
 
 		<springdoc.version>2.1.0</springdoc.version>
 	</properties>
@@ -118,7 +114,7 @@
 		<dependency>
 			<groupId>net.ttddyy</groupId>
 			<artifactId>datasource-proxy</artifactId>
-			<version>${datasource-proxy.version}</version>
+			<version>1.9</version>
 		</dependency>
 
 		<dependency>
@@ -181,7 +177,7 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>${testcontainers.version}</version>
+			<version>1.18.0</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -264,7 +260,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco-maven-plugin.version}</version>
+				<version>0.8.10</version>
 			</plugin>
 		</plugins>
 	</build>
