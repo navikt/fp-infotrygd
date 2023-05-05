@@ -14,32 +14,18 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
         val lopende: Set<Frisk> = setOf(Frisk.LOPENDE)
         val avsluttede: Set<Frisk> = setOf(Frisk.FRISKMELDT, Frisk.TILBAKEKJOERT)
         val ikkeStartet: Set<Frisk> = setOf(Frisk.PASSIV, Frisk.AVVIST)
+        val stoenadstypeFp: Set<String> = setOf("AP", "FP")
+        val stoenadstypeSvp: Set<String> = setOf("SV")
     }
 
     @Query("""
         SELECT p FROM Periode p
          WHERE p.fnr = :fnr
-           AND p.stoenadstype IN ('AP', 'FP')
+           AND p.stoenadstype IN :stoenadstype
            AND p.frisk IN :frisk
            AND p.arbufoer != 0
     """)
-    fun findByFnrAndFrisk(fnr: FoedselsNr, frisk: Set<Frisk>): List<Periode>
-
-    @Query("""
-        SELECT COUNT(p) FROM Periode p
-         WHERE p.stoenadstype IN ('AP', 'FP')
-           AND p.frisk IN :frisk
-           AND p.arbufoer != 0
-    """)
-    fun countByFrisk(frisk: Set<Frisk>): Long
-
-    @Query("""
-        SELECT p FROM Periode p
-         WHERE p.stoenadstype IN ('AP', 'FP')
-           AND p.frisk IN (' ', 'B', 'D', 'E')
-           AND p.arbufoer != 0
-    """)
-    fun findOpneSakerMedLopendeUtbetaling(): List<Periode>
+    fun findByFnrAndFrisk(fnr: FoedselsNr, frisk: Set<Frisk>, stoenadstype: Set<String>): List<Periode>
 
     @Query("""
         SELECT p FROM Periode p

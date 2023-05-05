@@ -1,7 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.service
 
 import no.nav.commons.foedselsnummer.FoedselsNr
-import no.nav.infotrygd.foreldrepenger.rest.dto.Foreldrepenger
+import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
 import no.nav.infotrygd.foreldrepenger.repository.VedtakBarnRepository
@@ -15,7 +15,7 @@ class GrunnlagService(
     private val periodeRepository: PeriodeRepository,
     private val vedtakBarnRepository: VedtakBarnRepository
 ) {
-    fun hentForeldrepenger(stoenadstyper: List<Stoenadstype>, foedselsNr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<Foreldrepenger> {
+    fun hentYtelse(stoenadstyper: List<Stoenadstype>, foedselsNr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<YtelseGrunnlag> {
 
         val result = periodeRepository.findByFnrAndStoenadstype(foedselsNr, stoenadstyper)
             .filter { it.innenforPeriode(fom, tom) }
@@ -29,9 +29,9 @@ class GrunnlagService(
                     region = periode.region
                 )
             }
-            Foreldrepenger(
+            YtelseGrunnlag(
                 generelt = periodeToGrunnlag(periode),
-                foreldrepengerDetaljer = periodeToForeldrepengerDetaljer(periode, vedtak)
+                ytelseDetaljer = periodeToForeldrepengerDetaljer(periode, vedtak)
             )
         }
     }

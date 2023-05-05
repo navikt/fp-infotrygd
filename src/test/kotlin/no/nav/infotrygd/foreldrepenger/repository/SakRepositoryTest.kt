@@ -85,18 +85,6 @@ class SakRepositoryTest {
         assertThat(res.map { it.type }.toSet()).isEqualTo(relevanteTyper)
     }
 
-    @Test
-    fun countSvangerskapssakerByType() {
-        lagSak(
-            fnr = TestData.foedselsNr(),
-            kapittelNr = "FA",
-            valg = "AE",
-            type = "S",
-            resultat = "SB")
-        assertThat(repository.countAapneSakerByType(setOf("S"))).isEqualTo(1)
-        assertThat(repository.countAapneSakerByType(setOf("X"))).isEqualTo(0)
-    }
-
     private fun lagSak(fnr: FoedselsNr, kapittelNr: String, valg: String, type: String, resultat: String? = null, sakStatus: SakStatus = SakStatus.IP): Sak {
         val snr = sakNr++.toString()
 

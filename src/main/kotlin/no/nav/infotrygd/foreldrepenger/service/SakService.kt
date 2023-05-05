@@ -15,7 +15,7 @@ class SakService(
     private val periodeRepository: PeriodeRepository
 ) {
     fun findSakerByFnr(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): SakResult {
-        val saker = sakRepository.findSakerByFnr(fnr)
+        val saker = sakRepository.findSakerByFnr(fnr, SakRepository.valgFp)
             .filter { it.innenforPeriode(fom, tom) }
 
         return SakResult(
@@ -28,7 +28,7 @@ class SakService(
     }
 
     private fun apneSakerMedLopendeUtbetaling(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<ApenSakMedLopendeUtbetaling> {
-        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.lopende)
+        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.lopende, PeriodeRepository.stoenadstypeFp)
             .filter { it.innenforPeriode(fom, tom) }
             .map { periode ->
                 ApenSakMedLopendeUtbetaling(
@@ -50,7 +50,11 @@ class SakService(
     private fun avsluttedeSaker(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): AvsluttedeSaker {
         return AvsluttedeSaker(
             fraOgMed = fom,
-            saker = periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede)
+            saker = periodeRepository.findByFnrAndFrisk(
+                fnr,
+                PeriodeRepository.avsluttede,
+                PeriodeRepository.stoenadstypeFp
+            )
                 .filter { it.innenforPeriode(fom, tom) }
                 .map { periode ->
                     AvsluttetSak(
@@ -63,7 +67,7 @@ class SakService(
     }
 
     private fun ikkeStartetSaker(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<IkkeStartet> {
-        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.ikkeStartet)
+        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.ikkeStartet, PeriodeRepository.stoenadstypeFp)
             .filter { it.innenforPeriode(fom, tom) }
             .map { IkkeStartet(
                 iverksatt = it.arbufoer,

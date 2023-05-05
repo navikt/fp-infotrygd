@@ -45,15 +45,8 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, ikkeFrisk, feilType))
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede)
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stoenadstypeFp)
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
-    }
-
-    @Test
-    fun countAvsluttedeSaker() {
-        val relevant = periode(Stoenadstype.ADOPSJON, Frisk.FRISKMELDT)
-        repository.save(relevant)
-        assertThat(repository.countByFrisk(PeriodeRepository.avsluttede)).isEqualTo(1)
     }
 
     @Test
@@ -65,7 +58,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, feilType))
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.lopende)
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.lopende, PeriodeRepository.stoenadstypeFp)
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
@@ -89,24 +82,8 @@ class PeriodeRepositoryTest {
 
         repository.save(p)
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede)
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stoenadstypeFp)
         assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
-    }
-
-    @Test
-    fun findOpneSakerMedLopendeUtbetaling() {
-        val relevant = periode(Stoenadstype.ADOPSJON, Frisk.LOPENDE)
-        repository.save(relevant)
-
-        assertThat(repository.findOpneSakerMedLopendeUtbetaling()).hasSize(1)
-    }
-
-    @Test
-    fun countOpneSakerMedLopendeUtbetaling() {
-        val relevant = periode(Stoenadstype.ADOPSJON, Frisk.LOPENDE)
-        repository.save(relevant)
-
-        assertThat(repository.countByFrisk(PeriodeRepository.lopende)).isEqualTo(1)
     }
 
     @Test

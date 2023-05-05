@@ -122,7 +122,7 @@ class GrunnlagConvertersKtTest {
 
         val dto = periodeToForeldrepengerDetaljer(periode, vedtak)
 
-        val expected = ForeldrepengerDetaljer(
+        val expected = YtelseDetaljer(
             opprinneligIdentdato = opprinneligIdentdato,
             dekningsgrad = dekningsgrad,
             gradering = gradering,

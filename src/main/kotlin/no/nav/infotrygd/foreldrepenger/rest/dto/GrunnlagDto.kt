@@ -133,22 +133,22 @@ data class GrunnlagGenerelt(
 
 // --- Foreldrepenger ---
 
-interface Foreldrepengerfelt {
+interface YtelseFelt {
     val opprinneligIdentdato: LocalDate?
     val dekningsgrad: Int?
     val gradering: BigDecimal?
     val foedselsdatoBarn: LocalDate?
 }
 
-data class ForeldrepengerDetaljer(
+data class YtelseDetaljer(
     override val opprinneligIdentdato: LocalDate?,
     override val dekningsgrad: Int?,
     override val gradering: BigDecimal?,
     override val foedselsdatoBarn: LocalDate?
-) : Foreldrepengerfelt
+) : YtelseFelt
 
-data class Foreldrepenger(
+data class YtelseGrunnlag(
     private val generelt: GrunnlagGenerelt,
-    private val foreldrepengerDetaljer: ForeldrepengerDetaljer
+    private val ytelseDetaljer: YtelseDetaljer
 ) : Grunnlag by generelt,
-    Foreldrepengerfelt by foreldrepengerDetaljer
+    YtelseFelt by ytelseDetaljer

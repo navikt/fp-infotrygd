@@ -57,7 +57,7 @@ class GrunnlagServiceTest {
 
         val stoenadstyper = listOf(Stoenadstype.SVANGERSKAP)
         val resultat =
-            grunnlagService.hentForeldrepenger(stoenadstyper, factory.fnr, startdato.minusYears(1), null)
+            grunnlagService.hentYtelse(stoenadstyper, factory.fnr, startdato.minusYears(1), null)
 
         assertThat(resultat).hasSize(1)
         val fp = resultat[0]
@@ -66,6 +66,6 @@ class GrunnlagServiceTest {
         assertThat(fp.vedtak).hasSize(1)
         assertThat(fp.arbeidsforhold).hasSize(1)
 
-        assertThat(grunnlagService.hentForeldrepenger(stoenadstyper, factory.fnr, stoppdato.plusDays(1), null)).isEmpty()
+        assertThat(grunnlagService.hentYtelse(stoenadstyper, factory.fnr, stoppdato.plusDays(1), null)).isEmpty()
     }
 }

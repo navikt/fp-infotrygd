@@ -1,7 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.testutil.rest
 
 import no.nav.commons.foedselsnummer.FoedselsNr
-import no.nav.infotrygd.foreldrepenger.rest.dto.Foreldrepenger
+import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakResult
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.getForObject
@@ -12,7 +12,7 @@ class TestClient(private val restTemplate: RestTemplate) {
         return restTemplate.getForObject("/saker?fnr=${fnr.asString}")
     }
 
-    fun hentGrunnlag(fnr: FoedselsNr, fom: LocalDate): List<Foreldrepenger> {
+    fun hentGrunnlag(fnr: FoedselsNr, fom: LocalDate): List<YtelseGrunnlag> {
         return restTemplate.getForObject("/grunnlag?fnr=${fnr.asString}&fom=${fom}")
     }
 }

@@ -4,7 +4,7 @@ import net.ttddyy.dsproxy.listener.logging.DefaultQueryLogEntryCreator
 import net.ttddyy.dsproxy.listener.logging.SLF4JLogLevel
 import net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder
-import no.nav.infotrygd.foreldrepenger.Profiles.DEBUG_SQL
+import no.nav.infotrygd.foreldrepenger.Profiler.DEBUG_SQL
 import org.springframework.beans.factory.config.BeanPostProcessor
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component

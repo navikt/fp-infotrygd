@@ -4,12 +4,14 @@ import io.micrometer.core.annotation.Timed
 import io.swagger.v3.oas.annotations.Parameter
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
-import no.nav.infotrygd.foreldrepenger.rest.dto.Foreldrepenger
+import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakResult
 import no.nav.infotrygd.foreldrepenger.service.ClientValidator
 import no.nav.infotrygd.foreldrepenger.service.GrunnlagService
 import no.nav.infotrygd.foreldrepenger.service.SakService
 import no.nav.security.token.support.core.api.Protected
+import no.nav.security.token.support.core.api.Unprotected
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -19,14 +21,14 @@ import java.time.LocalDate
 
 @RestController
 @RequestMapping
-@Protected
+@Unprotected
 @Timed(value = "infotrygd_foreldrepenger_controller", percentiles = [0.5, 0.95])
 class InfotrygdController(
     private val sakService: SakService,
     private val clientValidator: ClientValidator,
-    private val grunnlagService: GrunnlagService
+    private val grunnlagService: GrunnlagService,
+    @Value("\${spring.application.name}") private val applicationName: String
 ) {
-    @Protected
     @GetMapping("/saker")
     fun saker(
         @RequestParam(required = true)
@@ -34,13 +36,17 @@ class InfotrygdController(
 
         @RequestParam(required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        @Parameter(description = "Finn saker fra og med denne datoen. Defualt: Ett år tilbake i tid.", example = "1900-01-01")
+        @Parameter(
+            description = "Finn saker fra og med denne datoen. Defualt: Ett år tilbake i tid.",
+            example = "1900-01-01"
+        )
         fom: LocalDate?,
 
         @RequestParam(required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        @Parameter(description ="Finn saker til og med denne datoen.", example = "2019-01-01")
-        tom: LocalDate?): SakResult {
+        @Parameter(description = "Finn saker til og med denne datoen.", example = "2019-01-01")
+        tom: LocalDate?
+    ): SakResult {
 
         clientValidator.authorizeClient()
 
@@ -50,18 +56,35 @@ class InfotrygdController(
     }
 
     @GetMapping(path = ["/grunnlag"])
-    fun grunnlag(@RequestParam
-                 fnr: String,
+    fun grunnlag(
+        @RequestParam
+        fnr: String,
 
-                 @RequestParam
-                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                 fom: LocalDate,
+        @RequestParam
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        fom: LocalDate,
 
-                 @RequestParam(required = false)
-                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                 tom: LocalDate?) : List<Foreldrepenger> {
+        @RequestParam(required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        tom: LocalDate?
+    ): List<YtelseGrunnlag> {
 
         clientValidator.authorizeClient()
-        return grunnlagService.hentForeldrepenger(listOf(Stoenadstype.ADOPSJON, Stoenadstype.FOEDSEL), FoedselsNr(fnr), fom, tom)
+
+        return if ("fp-infotrygd-svangerskapspenger" == applicationName) {
+            grunnlagService.hentYtelse(
+                listOf(
+                    Stoenadstype.SVANGERSKAP,
+                    Stoenadstype.RISIKOFYLT_ARBMILJOE
+                ), FoedselsNr(fnr), fom, tom
+            )
+        } else {
+            grunnlagService.hentYtelse(
+                listOf(
+                    Stoenadstype.ADOPSJON,
+                    Stoenadstype.FOEDSEL
+                ), FoedselsNr(fnr), fom, tom
+            )
+        }
     }
 }

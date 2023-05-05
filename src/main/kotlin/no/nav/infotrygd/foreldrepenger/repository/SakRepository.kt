@@ -8,33 +8,16 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface SakRepository : JpaRepository<Sak, Long> {
+
+    companion object {
+        val valgFp: Set<String> = setOf("AE", "AP", "FE", "FP", "FU", "FØ")
+        val valgSvp: Set<String> = setOf("SV")
+    }
     @Query("""
         SELECT s FROM Sak s 
             WHERE s.fnr = :fnr 
               AND s.kapittelNr = 'FA'
-              AND s.valg in ('AE', 'AP', 'FE', 'FP', 'FU', 'FØ')
+              AND s.valg in :valg
               AND s.type IN ('S', 'R', 'K', 'A')""")
-    fun findSakerByFnr(fnr: FoedselsNr): List<Sak>
-
-    @Query("""
-        SELECT COUNT(sak) FROM Sak sak
-         INNER JOIN Status status
-               ON (
-                    sak.saksblokk = status.saksblokk
-                    and sak.saksnummer = status.saksnummer
-                    and sak.personKey = status.personKey
-                )
-         WHERE status.lopeNr in (
-                 SELECT MIN (s.lopeNr) FROM Status s
-                       WHERE s.saksblokk = status.saksblokk
-                         and s.saksnummer = status.saksnummer
-                         and s.personKey = status.personKey
-                 )
-           AND sak.kapittelNr = 'FA'
-           AND sak.valg in ('AE', 'AP', 'FE', 'FP', 'FU', 'FØ')
-           AND sak.type IN :typer
-           AND status.status not in ('FB', '  ')
-           AND sak.resultat in ('SB', '  ')
-    """)
-    fun countAapneSakerByType(typer: Set<String>): Long
+    fun findSakerByFnr(fnr: FoedselsNr, valg: Set<String>): List<Sak>
 }

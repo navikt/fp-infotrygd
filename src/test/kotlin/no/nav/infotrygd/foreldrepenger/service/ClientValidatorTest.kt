@@ -1,7 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.service
 
 import com.nimbusds.jwt.JWTClaimsSet
-import no.nav.infotrygd.foreldrepenger.Profiles
+import no.nav.infotrygd.foreldrepenger.Profiler
 import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.security.token.support.core.jwt.JwtTokenClaims
@@ -37,7 +37,7 @@ internal class ClientValidatorTest {
     lateinit var clientValidator : ClientValidator
 
     private fun setupMocks(issuer: String, claimKey: String, claimValue: String) {
-        Mockito.`when`(environment.acceptsProfiles(Profiles.NOAUTH)).thenReturn(false)
+        Mockito.`when`(environment.acceptsProfiles(Profiler.NOAUTH)).thenReturn(false)
 
         Mockito.`when`(validationContext.issuers).thenReturn(listOf(issuer))
 

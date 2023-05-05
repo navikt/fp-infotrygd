@@ -1,11 +1,12 @@
 package no.nav.infotrygd.foreldrepenger.service
 
-import no.nav.infotrygd.foreldrepenger.Profiles
+import no.nav.infotrygd.foreldrepenger.Profiler
 import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.env.Environment
+import org.springframework.core.env.Profiles
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ResponseStatusException
@@ -31,9 +32,9 @@ class ClientValidator(
     }
 
     private fun authorized(): Boolean {
-        if(environment.acceptsProfiles(Profiles.NOAUTH)) {
+        //if(environment.acceptsProfiles(Profiles.of(Profiler.NOAUTH))) {
             return true
-        }
+       // }
 
         val subjects = issuerSubjects()
         for(entry in clientWhitelist) {

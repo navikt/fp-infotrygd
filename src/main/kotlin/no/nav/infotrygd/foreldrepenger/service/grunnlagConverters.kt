@@ -4,10 +4,10 @@ import no.nav.infotrygd.foreldrepenger.model.VedtakBarn
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
 
-fun periodeToForeldrepengerDetaljer(p: no.nav.infotrygd.foreldrepenger.model.Periode, vedtak: VedtakBarn?): ForeldrepengerDetaljer {
+fun periodeToForeldrepengerDetaljer(p: no.nav.infotrygd.foreldrepenger.model.Periode, vedtak: VedtakBarn?): YtelseDetaljer {
     check(p.tema == Tema.FORELDREPENGER) { "Forventet ytelse == FORELDREPENGER" }
 
-    return ForeldrepengerDetaljer(
+    return YtelseDetaljer(
         opprinneligIdentdato = p.arbufoerOpprinnelig,
         dekningsgrad = p.dekningsgrad,
         gradering = vedtak?.dekningsgrad,
