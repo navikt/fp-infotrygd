@@ -18,8 +18,8 @@ spring:
         default_schema: ${DEFAULTDS_SCHEMA}
 
 springdoc:
-  packages-to-scan: 'no.nav.infotrygd.foreldrepenger'
-  paths-to-match: '*'
+  packages-to-scan: no.nav.infotrygd.foreldrepenger
+  paths-to-match: *
 
 management:
   endpoint:
