@@ -3,7 +3,7 @@ package no.nav.infotrygd.foreldrepenger.model
 import no.nav.infotrygd.foreldrepenger.model.converters.NavLocalDateConverter
 import no.nav.infotrygd.foreldrepenger.model.converters.UtbetalingsgradConverter
 import java.time.LocalDate
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "IS_UTBETALING_15")

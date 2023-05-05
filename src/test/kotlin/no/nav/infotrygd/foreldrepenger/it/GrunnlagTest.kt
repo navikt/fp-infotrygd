@@ -6,15 +6,13 @@ import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClient
 import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClientException
 import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClientFactory
-import no.nav.infotrygd.foreldrepenger.testutil.restClient
-import no.nav.infotrygd.foreldrepenger.testutil.restClientNoAuth
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles

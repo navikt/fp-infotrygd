@@ -2,8 +2,8 @@ package no.nav.infotrygd.foreldrepenger.model.converters
 
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Frisk
 import java.lang.IllegalStateException
-import javax.persistence.AttributeConverter
-import javax.persistence.Converter
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.Converter
 
 @Converter
 class FriskConverter : AttributeConverter<Frisk, String> {

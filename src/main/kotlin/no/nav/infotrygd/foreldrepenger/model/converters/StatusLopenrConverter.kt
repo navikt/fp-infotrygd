@@ -1,6 +1,6 @@
 package no.nav.infotrygd.foreldrepenger.model.converters
 
-import javax.persistence.AttributeConverter
+import jakarta.persistence.AttributeConverter
 
 class StatusLopenrConverter : AttributeConverter<Long?, String?> {
     override fun convertToDatabaseColumn(attribute: Long?): String? {

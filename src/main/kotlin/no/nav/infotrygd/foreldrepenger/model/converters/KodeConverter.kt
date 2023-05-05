@@ -2,8 +2,8 @@ package no.nav.infotrygd.foreldrepenger.model.converters
 
 import no.nav.infotrygd.foreldrepenger.exception.UkjentDatabaseverdiException
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.*
-import javax.persistence.AttributeConverter
-import javax.persistence.Converter
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.Converter
 
 abstract class KodeConverter<T : Kode>(private val koder: List<T>, val fieldSize: Int = 0, val padChar: Char = ' ') : AttributeConverter<T?, String?> {
 

@@ -7,7 +7,7 @@ import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
 import no.nav.infotrygd.foreldrepenger.repository.VedtakBarnRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 @Service
 @Transactional

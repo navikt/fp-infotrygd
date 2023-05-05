@@ -1,7 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.model.converters
 
 import no.nav.commons.foedselsnummer.FoedselsNr
-import javax.persistence.AttributeConverter
+import jakarta.persistence.AttributeConverter
 
 class ReversedLongFoedselNrConverter : AttributeConverter<FoedselsNr?, Long?> {
     private val converter = ReversedFoedselNrConverter()

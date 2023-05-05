@@ -3,7 +3,7 @@ package no.nav.infotrygd.foreldrepenger.model
 import no.nav.infotrygd.foreldrepenger.model.converters.RefusjonJaNeiConverter
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Inntektsperiode
 import java.math.BigDecimal
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "IS_INNTEKT_13")

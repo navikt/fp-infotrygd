@@ -9,7 +9,7 @@ import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import java.io.Serializable
 import java.time.LocalDate
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "SA_SAK_10")

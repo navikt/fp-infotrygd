@@ -2,31 +2,46 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.7</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.0.6</version>
+		<relativePath/>
 	</parent>
 
 	<groupId>no.nav.foreldrepenger</groupId>
 	<artifactId>fp-infotrygd</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0-SNAPSHOT</version>
 
 	<properties>
 		<java.version>17</java.version>
-		<kotlin.version>1.6.20</kotlin.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+		<timestamp>${maven.build.timestamp}</timestamp>
+
+		<sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+		<sonar.projectKey>navikt_fp-infotrygd</sonar.projectKey>
+		<sonar.organization>navikt</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
+		<kotlin.version>1.8.21</kotlin.version>
 		<testcontainers.version>1.16.2</testcontainers.version>
-		<token-validation.version>2.0.14</token-validation.version>
+		<token-validation.version>3.0.10</token-validation.version>
+
 		<datasource-proxy.version>1.8</datasource-proxy.version>
+
 		<httpclient.version>4.5.13</httpclient.version>
-		<logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
-		<logback-syslog4j.version>1.0.0</logback-syslog4j.version>
-		<db-util.version>1.0.5</db-util.version>
-		<wiremock.version>2.27.2</wiremock.version>
-		<mockwebserver.version>4.9.3</mockwebserver.version>
-		<okhttp.version>4.9.3</okhttp.version>
-		<jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+
+		<logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
+		<db-util.version>1.0.7</db-util.version>
+		<wiremock.version>3.0.0-beta-8</wiremock.version>
+		<mockwebserver.version>4.11.0</mockwebserver.version>
+		<okhttp.version>4.11.0</okhttp.version>
+
+		<jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
+
 		<springdoc.version>2.1.0</springdoc.version>
 	</properties>
 

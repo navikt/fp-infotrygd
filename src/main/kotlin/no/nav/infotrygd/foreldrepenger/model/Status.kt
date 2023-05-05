@@ -3,7 +3,7 @@ package no.nav.infotrygd.foreldrepenger.model
 import no.nav.infotrygd.foreldrepenger.model.converters.SakStatusConverter
 import no.nav.infotrygd.foreldrepenger.model.converters.StatusLopenrConverter
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakStatus
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "SA_STATUS_15")
