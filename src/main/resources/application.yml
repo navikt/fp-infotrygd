@@ -19,7 +19,7 @@ spring:
 
 springdoc:
   packages-to-scan: no.nav.infotrygd.foreldrepenger
-  paths-to-match: *
+  paths-to-match: /**
 
 management:
   endpoint:
