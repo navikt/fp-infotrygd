@@ -52,13 +52,13 @@ class SakRepositoryTest {
                 sakStatus = status)
 
 
-            repository.findSakerByFnr(fnr).also {
+            repository.findSakerByFnr(fnr, SakRepository.valgFp).also {
                 assertThat(it).hasSize(1)
                 assertThat(it[0].statushistorikk).hasSize(1)
                 assertThat(it[0].status).isEqualTo(status)
             }
 
-            repository.findSakerByFnr(TestData.foedselsNr()).also {
+            repository.findSakerByFnr(TestData.foedselsNr(), SakRepository.valgFp).also {
                 assertThat(it).isEmpty()
             }
 
@@ -81,7 +81,7 @@ class SakRepositoryTest {
                 type = type)
         }
 
-        val res = repository.findSakerByFnr(fnr)
+        val res = repository.findSakerByFnr(fnr, SakRepository.valgFp)
         assertThat(res.map { it.type }.toSet()).isEqualTo(relevanteTyper)
     }
 
