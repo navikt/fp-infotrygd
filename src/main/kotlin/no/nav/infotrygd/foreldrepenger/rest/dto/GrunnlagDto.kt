@@ -1,11 +1,11 @@
 package no.nav.infotrygd.foreldrepenger.rest.dto
 
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import java.math.BigDecimal
 import java.time.LocalDate
 
 interface Grunnlag {
-    @get:ApiModelProperty(notes = """
+    @get:Schema(description = """
         Tema:
         SP  Sykepenger
         FA  Foreldrepenger
@@ -14,7 +14,7 @@ interface Grunnlag {
     val tema: Kodeverdi?
     val registrert: LocalDate?
 
-    @get:ApiModelProperty(notes = """
+    @get:Schema(description = """
         L   Løpende
         A   Avsluttet
         I   Ikke startet
@@ -24,7 +24,7 @@ interface Grunnlag {
     val iverksatt: LocalDate?
     val opphoerFom: LocalDate?
 
-    @get:ApiModelProperty(notes = """
+    @get:Schema(description = """
         Behandlingstema:
         - Sykepenger
         SP  Sykepenger
@@ -46,7 +46,7 @@ interface Grunnlag {
     val identdato: LocalDate
     val periode: Periode?
 
-    @get:ApiModelProperty(notes = """
+    @get:Schema(description = """
         Arbeidskategori:
         00   Fisker
         01   Arbeidstaker
@@ -95,7 +95,7 @@ data class Periode(
 
 data class Arbeidsforhold(
     val inntektForPerioden: BigDecimal?,
-    @get:ApiModelProperty(notes = """
+    @get:Schema(description = """
         Inntektsperiode:
         D   Daglig
         U   Ukentlig
