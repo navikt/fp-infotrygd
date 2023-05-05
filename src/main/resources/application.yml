@@ -19,7 +19,8 @@ spring:
 
 springdoc:
   packages-to-scan: no.nav.infotrygd.foreldrepenger
-  paths-to-match: /**
+  swagger-ui:
+    disable-swagger-default-url: true
 
 management:
   endpoint:
