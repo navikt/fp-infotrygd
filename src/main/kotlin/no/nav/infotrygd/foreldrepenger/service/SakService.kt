@@ -6,6 +6,7 @@ import no.nav.infotrygd.foreldrepenger.model.Utbetaling
 import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
 import no.nav.infotrygd.foreldrepenger.repository.SakRepository
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -14,9 +15,14 @@ class SakService(
     private val sakRepository: SakRepository,
     private val periodeRepository: PeriodeRepository
 ) {
+
+    private val LOG = LoggerFactory.getLogger(javaClass)
+
     fun findSakerByFnr(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): SakResult {
         val saker = sakRepository.findSakerByFnr(fnr, SakRepository.valgFp)
             .filter { it.innenforPeriode(fom, tom) }
+
+        LOG.info("Hentet {} saker.", saker.size)
 
         return SakResult(
             info = null, //"Ingen klagesaker. Ingen ankesaker.",

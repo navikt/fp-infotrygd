@@ -4,7 +4,10 @@ import no.nav.infotrygd.foreldrepenger.model.VedtakBarn
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
 
-fun periodeToForeldrepengerDetaljer(p: no.nav.infotrygd.foreldrepenger.model.Periode, vedtak: VedtakBarn?): YtelseDetaljer {
+fun periodeToForeldrepengerDetaljer(
+    p: no.nav.infotrygd.foreldrepenger.model.Periode,
+    vedtak: VedtakBarn?
+): YtelseDetaljer {
     check(p.tema == Tema.FORELDREPENGER) { "Forventet ytelse == FORELDREPENGER" }
 
     return YtelseDetaljer(
@@ -22,17 +25,15 @@ fun periodeToGrunnlag(p: no.nav.infotrygd.foreldrepenger.model.Periode): Grunnla
     val utbetaltFom = p.utbetaltFom
     val utbetaltTom = p.utbetaltTom
 
-    val periode: Periode? = if(utbetaltFom != null && utbetaltTom != null)
+    val periode: Periode? = if (utbetaltFom != null && utbetaltTom != null)
         Periode(utbetaltFom, utbetaltTom) else null
 
-    val arbeidskategori: Kodeverdi? = {
-        val kat = p.arbeidskategori
-        if (kat == null) {
-            null
-        } else {
-            Kodeverdi(kat.kode, kat.tekst)
-        }
-    }()
+    val kat = p.arbeidskategori
+    val arbeidskategori: Kodeverdi? = if (kat == null) {
+        null
+    } else {
+        Kodeverdi(kat.kode, kat.tekst)
+    }
 
     return GrunnlagGenerelt(
         tema = Kodeverdi(tema.kode, tema.tekst),

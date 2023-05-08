@@ -1,6 +1,7 @@
 server.port: 8080
 
 spring:
+  cloud.discovery.client.health-indicator.enabled: false
   application:
     name: ${NAIS_APP_NAME:fp-infotrygd}
   datasource:
@@ -25,11 +26,17 @@ springdoc:
 management:
   endpoint:
     health:
-      show-details: ALWAYS
+      show-details: never
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: health, info, prometheus
+  health:
+    ping:
+      enabled: false
+    diskspace:
+      enabled: false
+
 #oidc...
 http.proxy.parametername: notused
 
