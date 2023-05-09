@@ -77,7 +77,7 @@ class InfotrygdController(
         return if (appUtil.gjelderSvangerskapspenger()) {
             LOG.info("Henter grunnlag for SVP.")
             grunnlagService.hentYtelse(
-                listOf(
+                setOf(
                     Stoenadstype.SVANGERSKAP,
                     Stoenadstype.RISIKOFYLT_ARBMILJOE
                 ), FoedselsNr(fnr), fom, tom
@@ -85,7 +85,7 @@ class InfotrygdController(
         } else {
             LOG.info("Henter grunnlag for FP.")
             val ytelse = grunnlagService.hentYtelse(
-                listOf(
+                setOf(
                     Stoenadstype.ADOPSJON,
                     Stoenadstype.FOEDSEL
                 ), FoedselsNr(fnr), fom, tom

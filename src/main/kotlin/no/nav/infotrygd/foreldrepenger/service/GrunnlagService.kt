@@ -20,7 +20,7 @@ class GrunnlagService(
 
     private val LOG = LoggerFactory.getLogger(javaClass)
 
-    fun hentYtelse(stoenadstyper: List<Stoenadstype>, foedselsNr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<YtelseGrunnlag> {
+    fun hentYtelse(stoenadstyper: Set<Stoenadstype>, foedselsNr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<YtelseGrunnlag> {
 
         val result = periodeRepository.findByFnrAndStoenadstype(foedselsNr, stoenadstyper)
         LOG.info("Funnet {} resultater.", result.size)

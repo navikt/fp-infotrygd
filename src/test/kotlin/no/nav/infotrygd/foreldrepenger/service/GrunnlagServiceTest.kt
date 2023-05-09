@@ -55,7 +55,7 @@ class GrunnlagServiceTest {
         )
         vedtakBarnRepository.save(vedtak)
 
-        val stoenadstyper = listOf(Stoenadstype.SVANGERSKAP)
+        val stoenadstyper = setOf(Stoenadstype.SVANGERSKAP)
         val resultat =
             grunnlagService.hentYtelse(stoenadstyper, factory.fnr, startdato.minusYears(1), null)
 

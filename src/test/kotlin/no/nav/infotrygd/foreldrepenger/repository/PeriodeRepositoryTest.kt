@@ -95,7 +95,7 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, historikk, feilTema))
 
-        val result = repository.findByFnrAndStoenadstype(fnr, listOf(tema))
+        val result = repository.findByFnrAndStoenadstype(fnr, setOf(tema))
 
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
@@ -140,7 +140,7 @@ class PeriodeRepositoryTest {
         repository.flush()
         entityManager.clear()
 
-        val resultat = repository.findByFnrAndStoenadstype(fnr, listOf(stoenadstype))
+        val resultat = repository.findByFnrAndStoenadstype(fnr, setOf(stoenadstype))
         assertThat(resultat).hasSize(2)
         for (periode in resultat) {
             assertThat(periode.inntekter).hasSize(1)
