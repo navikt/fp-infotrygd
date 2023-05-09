@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
-class AppUtil(@Value("\${spring.application.name}") private val applicationName: String) {
+class ApplicationUtil(@Value("\${spring.application.name}") private val applicationName: String) {
     enum class Application(private val appName: String) {
         INFOTRYGD_FORELDREPENGER("fp-infotrygd-foreldrepenger"),
         INFOTRYGD_SVANGERSKAPSPENGER("fp-infotrygd-svangerskapspenger")

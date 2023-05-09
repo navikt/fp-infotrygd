@@ -2,7 +2,7 @@ package no.nav.infotrygd.foreldrepenger.rest.controller
 
 import io.swagger.v3.oas.annotations.Parameter
 import no.nav.commons.foedselsnummer.FoedselsNr
-import no.nav.infotrygd.foreldrepenger.config.AppUtil
+import no.nav.infotrygd.foreldrepenger.config.ApplicationUtil
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakResult
 import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
@@ -26,7 +26,7 @@ class InfotrygdController(
     private val sakService: SakService,
     private val clientValidator: ClientValidator,
     private val grunnlagService: GrunnlagService,
-    private val appUtil: AppUtil
+    private val appUtil: ApplicationUtil
 ) {
     private val LOG: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -84,14 +84,12 @@ class InfotrygdController(
             )
         } else {
             LOG.info("Henter grunnlag for FP.")
-            val ytelse = grunnlagService.hentYtelse(
+            grunnlagService.hentYtelse(
                 setOf(
                     Stoenadstype.ADOPSJON,
                     Stoenadstype.FOEDSEL
                 ), FoedselsNr(fnr), fom, tom
             )
-            LOG.info("Henter grunnlag fant {} ytelser for FP.", ytelse.size)
-            ytelse
         }
     }
 }
