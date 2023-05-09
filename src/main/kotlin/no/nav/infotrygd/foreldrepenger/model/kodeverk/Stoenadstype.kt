@@ -28,4 +28,8 @@ enum class Stoenadstype(val tema: Tema, override val kode: String, override val 
             else -> Kodeverdi(kode, tekst)
         }
     }
+
+    override fun toString(): String {
+        return kode
+    }
 }
