@@ -3,6 +3,7 @@ package no.nav.infotrygd.foreldrepenger.service
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.Sak
 import no.nav.infotrygd.foreldrepenger.model.Utbetaling
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
 import no.nav.infotrygd.foreldrepenger.repository.SakRepository
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
@@ -13,13 +14,14 @@ import java.time.LocalDate
 @Service
 class SakService(
     private val sakRepository: SakRepository,
-    private val periodeRepository: PeriodeRepository
+    private val periodeRepository: PeriodeRepository,
+    private val appUtil: ApplicationUtil
 ) {
 
     private val LOG = LoggerFactory.getLogger(javaClass)
 
     fun findSakerByFnr(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): SakResult {
-        val saker = sakRepository.findSakerByFnr(fnr, SakRepository.valgFp)
+        val saker = sakRepository.findSakerByFnrAndValg(fnr, getValg())
             .filter { it.innenforPeriode(fom, tom) }
 
         LOG.info("Hentet {} saker.", saker.size)
@@ -34,7 +36,7 @@ class SakService(
     }
 
     private fun apneSakerMedLopendeUtbetaling(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<ApenSakMedLopendeUtbetaling> {
-        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.lopende, PeriodeRepository.stoenadstypeFp)
+        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.løpende, getStønadstyper())
             .filter { it.innenforPeriode(fom, tom) }
             .map { periode ->
                 ApenSakMedLopendeUtbetaling(
@@ -59,7 +61,7 @@ class SakService(
             saker = periodeRepository.findByFnrAndFrisk(
                 fnr,
                 PeriodeRepository.avsluttede,
-                PeriodeRepository.stoenadstypeFp
+                getStønadstyper()
             )
                 .filter { it.innenforPeriode(fom, tom) }
                 .map { periode ->
@@ -73,7 +75,7 @@ class SakService(
     }
 
     private fun ikkeStartetSaker(fnr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<IkkeStartet> {
-        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.ikkeStartet, PeriodeRepository.stoenadstypeFp)
+        return periodeRepository.findByFnrAndFrisk(fnr, PeriodeRepository.ikkeStartet, getStønadstyper())
             .filter { it.innenforPeriode(fom, tom) }
             .map { IkkeStartet(
                 iverksatt = it.arbufoer,
@@ -92,6 +94,20 @@ class SakService(
                 type = it.type.trim(),
                 registrert = it.registrert
             )
+        }
+    }
+
+    private fun getValg(): Set<String> {
+        return when(appUtil.gjelderForeldrepenger()) {
+            true -> SakRepository.valgFp
+            false -> SakRepository.valgSvp
+        }
+    }
+
+    private fun getStønadstyper(): Set<Stoenadstype> {
+        return when(appUtil.gjelderForeldrepenger()) {
+            true -> PeriodeRepository.stønadstypeFp
+            false -> PeriodeRepository.stønadstypeSvp
         }
     }
 }

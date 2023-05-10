@@ -8,26 +8,25 @@ import no.nav.infotrygd.foreldrepenger.repository.VedtakBarnRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import jakarta.transaction.Transactional
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @Service
 @Transactional
 class GrunnlagService(
     private val periodeRepository: PeriodeRepository,
-    private val vedtakBarnRepository: VedtakBarnRepository
+    private val vedtakBarnRepository: VedtakBarnRepository,
+    private val appUtil: ApplicationUtil
 ) {
-
     private val LOG = LoggerFactory.getLogger(javaClass)
 
-    fun hentYtelse(stoenadstyper: Set<Stoenadstype>, foedselsNr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<YtelseGrunnlag> {
+    fun hentYtelse(foedselsNr: FoedselsNr, fom: LocalDate, tom: LocalDate?): List<YtelseGrunnlag> {
 
-        val result = periodeRepository.findByFnrAndStoenadstype(foedselsNr, stoenadstyper)
-        LOG.info("Funnet {} resultater.", result.size)
-        val riktigePerioder = result.filter { it.innenforPeriode(fom, tom) }
-        LOG.info("Funnet {} resultater etter periode filtrering.", riktigePerioder.size)
+        val result = periodeRepository.findByFnrAndStoenadstype(foedselsNr, getStønadstyper())
+            .filter { it.innenforPeriode(fom, tom) }
 
-        return riktigePerioder.map { periode ->
+        LOG.debug("Funnet {} resultater etter periode filtrering.", result.size)
+
+        return result.map { periode ->
             val vedtak = periode.barnPersonKey?.let { barnPersonKey ->
                 vedtakBarnRepository.findByPersonKeyAndArbufoerSeqAndKodeAndRegion(
                     personKey = barnPersonKey,
@@ -40,6 +39,13 @@ class GrunnlagService(
                 generelt = periodeToGrunnlag(periode),
                 ytelseDetaljer = periodeToForeldrepengerDetaljer(periode, vedtak)
             )
+        }
+    }
+
+    private fun getStønadstyper(): Set<Stoenadstype> {
+        return when(appUtil.gjelderForeldrepenger()) {
+            true -> PeriodeRepository.stønadstypeFp
+            false -> PeriodeRepository.stønadstypeSvp
         }
     }
 }

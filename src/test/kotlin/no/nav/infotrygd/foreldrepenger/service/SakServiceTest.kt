@@ -14,13 +14,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
+import java.math.BigInteger
 import java.time.LocalDate
 
+@SpringBootTest
 @RunWith(SpringRunner::class)
-@DataJpaTest
 @ActiveProfiles("test")
 internal class SakServiceTest {
     private val relevantStatus  = SakStatus.FB
@@ -32,8 +33,11 @@ internal class SakServiceTest {
     @Autowired
     lateinit var periodeRepository: PeriodeRepository
 
+    @Autowired
+    lateinit var applicationUtil: ApplicationUtil
+
     val sakService: SakService
-        get() = SakService(sakRepository, periodeRepository)
+        get() = SakService(sakRepository, periodeRepository, applicationUtil)
 
     @Test
     fun saker() {
@@ -42,7 +46,7 @@ internal class SakServiceTest {
         val sak = Sak(
             id = nextId(),
             fnr = fnr,
-            personKey = 123,
+            personKey = BigInteger.valueOf(123),
             saksblokk = "x",
             saksnummer = "11",
             kapittelNr = "FA",
@@ -52,8 +56,8 @@ internal class SakServiceTest {
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
             statushistorikk = listOf(
-                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 98, status = relevantStatus),
-                Status(id = nextId(), personKey = 123, saksblokk = "x", saksnummer = "11", lopeNr = 99, status = SakStatus.IKKE_BEHANDLET)
+                Status(id = nextId(), personKey = BigInteger.valueOf(123), saksblokk = "x", saksnummer = "11", lopeNr = BigInteger.valueOf(98), status = relevantStatus),
+                Status(id = nextId(), personKey = BigInteger.valueOf(123), saksblokk = "x", saksnummer = "11", lopeNr = BigInteger.valueOf(99), status = SakStatus.IKKE_BEHANDLET)
             ),
             registrert = LocalDate.now()
         )

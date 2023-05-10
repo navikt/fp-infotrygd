@@ -1,5 +1,10 @@
 package no.nav.infotrygd.foreldrepenger
 
-private var current: Long = 1
+import java.math.BigInteger
 
-fun nextId(): Long = current++
+private var current: BigInteger = BigInteger.ONE
+
+fun nextId(): BigInteger {
+    current = current.add(BigInteger.ONE)
+    return current
+}

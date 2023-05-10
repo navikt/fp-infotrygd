@@ -13,22 +13,23 @@ import org.hibernate.annotations.CascadeType
 import java.io.Serializable
 import java.time.LocalDate
 import jakarta.persistence.*
+import java.math.BigInteger
 
 @Entity
 @Table(name = "IS_PERIODE_10")
 data class Periode(
     @Id
     @Column(name = "ID_PERI10", nullable = false, columnDefinition = "DECIMAL")
-    val id: Long,
+    val id: BigInteger,
 
     @Column(name = "REGION", columnDefinition = "CHAR")
     val region: String,
 
     @Column(name = "IS01_PERSONKEY", columnDefinition = "DECIMAL")
-    val personKey: Long,
+    val personKey: BigInteger,
 
     @Column(name = "IS10_ARBUFOER_SEQ", columnDefinition = "DECIMAL")
-    val arbufoerSeq: Long,
+    val arbufoerSeq: BigInteger,
 
     @Column(name = "IS10_STOENADS_TYPE", columnDefinition = "CHAR")
     val stoenadstype: Stoenadstype?,
@@ -186,4 +187,5 @@ data class Periode(
                 Kjoenn.MANN -> "2"
             }
         }
+
 }

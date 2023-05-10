@@ -1,28 +1,29 @@
 package no.nav.infotrygd.foreldrepenger.model
 
+import jakarta.persistence.*
 import no.nav.infotrygd.foreldrepenger.model.converters.RefusjonJaNeiConverter
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Inntektsperiode
 import java.math.BigDecimal
-import jakarta.persistence.*
+import java.math.BigInteger
 
 @Entity
 @Table(name = "IS_INNTEKT_13")
 data class Inntekt(
     @Id
     @Column(name = "ID_INNT", columnDefinition = "DECIMAL")
-    val id: Long,
+    val id: BigInteger,
 
     @Column(name = "REGION", columnDefinition = "CHAR")
     val region: String,
 
     @Column(name = "IS01_PERSONKEY", columnDefinition = "DECIMAL")
-    val personKey: Long,
+    val personKey: BigInteger,
 
     @Column(name = "IS10_ARBUFOER_SEQ", columnDefinition = "DECIMAL")
-    val arbufoerSeq: Long,
+    val arbufoerSeq: BigInteger,
 
     @Column(name = "IS13_ARBGIVNR", columnDefinition = "DECIMAL")
-    val arbgiverNr: String,
+    val arbgiverNr: BigInteger,
 
     @Column(name = "IS13_LOENN", columnDefinition = "DECIMAL")
     val loenn: BigDecimal,

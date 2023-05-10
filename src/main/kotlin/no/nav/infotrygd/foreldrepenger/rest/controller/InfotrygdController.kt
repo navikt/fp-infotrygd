@@ -2,14 +2,12 @@ package no.nav.infotrygd.foreldrepenger.rest.controller
 
 import io.swagger.v3.oas.annotations.Parameter
 import no.nav.commons.foedselsnummer.FoedselsNr
-import no.nav.infotrygd.foreldrepenger.config.ApplicationUtil
-import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakResult
 import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
 import no.nav.infotrygd.foreldrepenger.service.ClientValidator
 import no.nav.infotrygd.foreldrepenger.service.GrunnlagService
 import no.nav.infotrygd.foreldrepenger.service.SakService
-import no.nav.security.token.support.core.api.Unprotected
+import no.nav.security.token.support.core.api.Protected
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.format.annotation.DateTimeFormat
@@ -21,12 +19,11 @@ import java.time.LocalDate
 
 @RestController
 @RequestMapping
-@Unprotected
+@Protected
 class InfotrygdController(
     private val sakService: SakService,
     private val clientValidator: ClientValidator,
-    private val grunnlagService: GrunnlagService,
-    private val appUtil: ApplicationUtil
+    private val grunnlagService: GrunnlagService
 ) {
     private val LOG: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -52,7 +49,7 @@ class InfotrygdController(
         clientValidator.authorizeClient()
 
         val defaultFom = LocalDate.now().minusYears(1)
-        LOG.info("Henter saker for SVP.")
+
         return sakService.findSakerByFnr(FoedselsNr(fnr), fom ?: defaultFom, tom)
     }
 
@@ -74,22 +71,6 @@ class InfotrygdController(
 
         clientValidator.authorizeClient()
 
-        return if (appUtil.gjelderSvangerskapspenger()) {
-            LOG.info("Henter grunnlag for SVP.")
-            grunnlagService.hentYtelse(
-                setOf(
-                    Stoenadstype.SVANGERSKAP,
-                    Stoenadstype.RISIKOFYLT_ARBMILJOE
-                ), FoedselsNr(fnr), fom, tom
-            )
-        } else {
-            LOG.info("Henter grunnlag for FP.")
-            grunnlagService.hentYtelse(
-                setOf(
-                    Stoenadstype.ADOPSJON,
-                    Stoenadstype.FOEDSEL
-                ), FoedselsNr(fnr), fom, tom
-            )
-        }
+        return grunnlagService.hentYtelse(FoedselsNr(fnr), fom, tom)
     }
 }

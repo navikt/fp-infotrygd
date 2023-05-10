@@ -2,6 +2,7 @@ package no.nav.infotrygd.foreldrepenger.rest.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.time.LocalDate
 
 interface Grunnlag {
@@ -106,7 +107,7 @@ data class Arbeidsforhold(
         Y   Premiegrunnlag oppdragstaker (gjelder de 2 første ukene)
     """)
     val inntektsperiode: Kodeverdi,
-    val arbeidsgiverOrgnr: String,
+    val arbeidsgiverOrgnr: BigInteger,
     val refusjon: Boolean
 )
 

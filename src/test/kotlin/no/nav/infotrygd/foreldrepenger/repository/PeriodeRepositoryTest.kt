@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 import jakarta.persistence.EntityManager
+import java.math.BigInteger
 
 @RunWith(SpringRunner::class)
 @DataJpaTest
@@ -36,7 +37,7 @@ class PeriodeRepositoryTest {
     private val fnr = TestData.foedselsNr()
 
     @Test
-    fun findAvsluttedeSakerByFnr() {
+    fun findFpAvsluttedeSakerByFnr() {
 
         val relevant = periode(Stoenadstype.ADOPSJON, Frisk.FRISKMELDT)
 
@@ -45,12 +46,28 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, ikkeFrisk, feilType))
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stoenadstypeFp)
-        assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stønadstypeFp)
+        assertThat(result).isNotNull.hasSize(1) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+        assertThat(result.get(0).stoenadstype).isEqualTo(Stoenadstype.ADOPSJON)
     }
 
     @Test
-    fun findOpneSakerMedLopendeUtbetalingByFnr() {
+    fun findSvpAvsluttedeSakerByFnr() {
+
+        val relevant = periode(Stoenadstype.RISIKOFYLT_ARBMILJOE, Frisk.FRISKMELDT)
+
+        val ikkeFrisk = periode(Stoenadstype.RISIKOFYLT_ARBMILJOE, Frisk.DOEDSSYK)
+        val ikkeSv = periode(Stoenadstype.SYKEPENGER, Frisk.FRISKMELDT)
+
+        repository.saveAll(listOf(relevant, ikkeFrisk, ikkeSv))
+
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stønadstypeSvp)
+        assertThat(result).isNotNull.hasSize(1) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+        assertThat(result.get(0).stoenadstype).isEqualTo(Stoenadstype.RISIKOFYLT_ARBMILJOE)
+    }
+
+    @Test
+    fun findFpOpneSakerMedLopendeUtbetalingByFnr() {
         val relevant = periode(Stoenadstype.ADOPSJON, Frisk.LOPENDE)
 
         val frisk = periode(Stoenadstype.ADOPSJON, Frisk.FRISKMELDT)
@@ -58,12 +75,25 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, feilType))
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.lopende, PeriodeRepository.stoenadstypeFp)
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.løpende, PeriodeRepository.stønadstypeFp)
         assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
     @Test
-    fun utbetalinger() {
+    fun findSvpOpneSakerMedLopendeUtbetalingByFnr() {
+        val relevant = periode(Stoenadstype.RISIKOFYLT_ARBMILJOE, Frisk.LOPENDE)
+
+        val frisk = periode(Stoenadstype.RISIKOFYLT_ARBMILJOE, Frisk.FRISKMELDT)
+        val ikkeSv = periode(Stoenadstype.SYKEPENGER, Frisk.LOPENDE)
+
+        repository.saveAll(listOf(relevant, frisk, ikkeSv))
+
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.løpende, PeriodeRepository.stønadstypeSvp)
+        assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+    }
+
+    @Test
+    fun utbetalingerFp() {
         var p = periode(Stoenadstype.ADOPSJON, Frisk.FRISKMELDT, LocalDate.now())
         p = p.copy(utbetalingshistorikk = listOf(
             Utbetaling(
@@ -82,12 +112,36 @@ class PeriodeRepositoryTest {
 
         repository.save(p)
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stoenadstypeFp)
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stønadstypeFp)
         assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
     @Test
-    fun findByFnrAndStoenadstype() {
+    fun utbetalingerSvp() {
+        var p = periode(Stoenadstype.RISIKOFYLT_ARBMILJOE, Frisk.FRISKMELDT, LocalDate.now())
+        p = p.copy(utbetalingshistorikk = listOf(
+            Utbetaling(
+                id = nextId(),
+                personKey = p.personKey,
+                arbufoerSeq = p.arbufoerSeq,
+                utbetaltFom = LocalDate.now().minusYears(1),
+                utbetaltTom = LocalDate.now(),
+                utbetalingsdato = LocalDate.now(),
+                grad = 10,
+                korr = null,
+                type = null,
+                region = "X"
+            )
+        ))
+
+        repository.save(p)
+
+        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stønadstypeSvp)
+        assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+    }
+
+    @Test
+    fun findFpByFnrAndStoenadstype() {
         val tema = Stoenadstype.ADOPSJON
         val relevant = periode(tema, frisk = Frisk.LOPENDE)
         val historikk = periode(tema, frisk = Frisk.HISTORIKK)
@@ -101,10 +155,25 @@ class PeriodeRepositoryTest {
     }
 
     @Test
+    fun findSvpByFnrAndStoenadstype() {
+        val tema = Stoenadstype.RISIKOFYLT_ARBMILJOE
+
+        val relevant = periode(tema, frisk = Frisk.LOPENDE)
+        val historikk = periode(tema, frisk = Frisk.HISTORIKK)
+        val feilTema = periode(Stoenadstype.ADOPSJON, frisk = Frisk.LOPENDE)
+
+        repository.saveAll(listOf(relevant, historikk, feilTema))
+
+        val result = repository.findByFnrAndStoenadstype(fnr, setOf(tema))
+
+        assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+    }
+
+    @Test
     fun `leser perioder som er flyttet mellom regioner`() {
         val fnr = TestData.foedselsNr()
-        val personKey = 99L
-        val arbufoerSeq = 199L;
+        val personKey = BigInteger.valueOf(99L)
+        val arbufoerSeq = BigInteger.valueOf(99L);
         val stoenadstype = Stoenadstype.ADOPSJON
 
         val pfA = TestData.PeriodeFactory(

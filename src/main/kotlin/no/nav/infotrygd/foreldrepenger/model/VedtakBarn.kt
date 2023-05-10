@@ -5,13 +5,14 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.math.BigInteger
 
 @Entity
 @Table(name = "IS_VEDTAK_BARN_18")
 data class VedtakBarn(
     @Id
     @Column(name = "ID_VEDBA", nullable = false, columnDefinition = "DECIMAL")
-    val id: Long,
+    val id: BigInteger,
 
     @Column(name = "REGION", columnDefinition = "CHAR")
     val region: String,

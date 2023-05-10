@@ -3,7 +3,7 @@ server.port: 8080
 spring:
   cloud.discovery.client.health-indicator.enabled: false
   application:
-    name: ${NAIS_APP_NAME:fp-infotrygd}
+    name: ${NAIS_APP_NAME:fp-infotrygd-foreldrepenger}
   datasource:
     url: ${DEFAULTDS_URL}
     username: ${DEFAULTDS_USERNAME}

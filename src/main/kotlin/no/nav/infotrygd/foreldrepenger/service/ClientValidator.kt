@@ -32,9 +32,9 @@ class ClientValidator(
     }
 
     private fun authorized(): Boolean {
-        //if(environment.acceptsProfiles(Profiles.of(Profiler.NOAUTH))) {
+        if(environment.acceptsProfiles(Profiles.of(Profiler.NOAUTH))) {
             return true
-       // }
+        }
 
         val subjects = issuerSubjects()
         for(entry in clientWhitelist) {

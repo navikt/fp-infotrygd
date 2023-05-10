@@ -8,6 +8,7 @@ import no.nav.infotrygd.foreldrepenger.rest.dto.*
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import java.math.BigInteger
 import java.time.LocalDate
 
 class GrunnlagConvertersKtTest {
@@ -23,7 +24,7 @@ class GrunnlagConvertersKtTest {
         val stoenadstype = Stoenadstype.FOEDSEL
         val tema = stoenadstype.tema
         val inntektsperiode = Inntektsperiode.MAANEDLIG
-        val arbeidsgiverOrgnr = "12345678900"
+        val arbeidsgiverOrgnr = BigInteger.valueOf(12345678900)
         val inntektForPerioden = 1000.toBigDecimal()
         val arbeidskategori = Arbeidskategori.AMBASSADEPERSONELL
         val utbetalingsgrad = 100

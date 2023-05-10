@@ -42,7 +42,7 @@ class GrunnlagServiceTest {
         val periode = factory.periode().copy(
             arbufoer = startdato,
             stoppdato = stoppdato,
-            stoenadstype = Stoenadstype.SVANGERSKAP,
+            stoenadstype = Stoenadstype.FOEDSEL,
             foedselsdatoBarn = LocalDate.now().minusYears(1),
             inntekter = listOf(inntekt),
             utbetalingshistorikk = listOf(utbetaling)
@@ -55,9 +55,8 @@ class GrunnlagServiceTest {
         )
         vedtakBarnRepository.save(vedtak)
 
-        val stoenadstyper = setOf(Stoenadstype.SVANGERSKAP)
         val resultat =
-            grunnlagService.hentYtelse(stoenadstyper, factory.fnr, startdato.minusYears(1), null)
+            grunnlagService.hentYtelse(factory.fnr, startdato.minusYears(1), null)
 
         assertThat(resultat).hasSize(1)
         val fp = resultat[0]
@@ -66,6 +65,6 @@ class GrunnlagServiceTest {
         assertThat(fp.vedtak).hasSize(1)
         assertThat(fp.arbeidsforhold).hasSize(1)
 
-        assertThat(grunnlagService.hentYtelse(stoenadstyper, factory.fnr, stoppdato.plusDays(1), null)).isEmpty()
+        assertThat(grunnlagService.hentYtelse(factory.fnr, stoppdato.plusDays(1), null)).isEmpty()
     }
 }

@@ -10,20 +10,21 @@ import org.hibernate.annotations.CascadeType
 import java.io.Serializable
 import java.time.LocalDate
 import jakarta.persistence.*
+import java.math.BigInteger
 
 @Entity
 @Table(name = "SA_SAK_10")
 data class Sak(
     @Id
     @Column(name = "ID_SAK", columnDefinition = "DECIMAL", nullable = false)
-    var id: Long,
+    var id: BigInteger,
 
     @Column(name = "F_NR", columnDefinition = "CHAR")
     @Convert(converter = ReversedFoedselNrConverter::class)
     val fnr: FoedselsNr,
 
     @Column(name = "S01_PERSONKEY", columnDefinition = "DECIMAL")
-    val personKey: Long,
+    val personKey: BigInteger,
 
     @Column(name = "S05_SAKSBLOKK", columnDefinition = "CHAR")
     val saksblokk: String,

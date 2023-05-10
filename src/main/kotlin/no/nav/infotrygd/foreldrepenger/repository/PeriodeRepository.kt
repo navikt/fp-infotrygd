@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository
 @Repository
 interface PeriodeRepository : JpaRepository<Periode, Long> {
     companion object {
-        val lopende: Set<Frisk> = setOf(Frisk.LOPENDE)
+        val løpende: Set<Frisk> = setOf(Frisk.LOPENDE)
         val avsluttede: Set<Frisk> = setOf(Frisk.FRISKMELDT, Frisk.TILBAKEKJOERT)
         val ikkeStartet: Set<Frisk> = setOf(Frisk.PASSIV, Frisk.AVVIST)
-        val stoenadstypeFp: Set<Stoenadstype> = setOf(Stoenadstype.ADOPSJON, Stoenadstype.FOEDSEL)
-        val stoenadstypeSvp: Set<Stoenadstype> = setOf(Stoenadstype.RISIKOFYLT_ARBMILJOE)
+        val stønadstypeFp: Set<Stoenadstype> = setOf(Stoenadstype.ADOPSJON, Stoenadstype.FOEDSEL)
+        val stønadstypeSvp: Set<Stoenadstype> = setOf(Stoenadstype.SVANGERSKAP, Stoenadstype.RISIKOFYLT_ARBMILJOE)
     }
 
     @Query("""

@@ -9,6 +9,7 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.Inntektsperiode
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakStatus
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.nextId
+import java.math.BigInteger
 import java.time.LocalDate
 
 object TestData {
@@ -26,8 +27,8 @@ object TestData {
         return Periode(
             id = nextId(),
             region = "X",
-            personKey = 1,
-            arbufoerSeq = 1,
+            personKey = BigInteger.ONE,
+            arbufoerSeq = BigInteger.ONE,
             fnr = foedselsNr(),
             stoenadstype = Stoenadstype.SVANGERSKAP,
             frisk = Frisk.LOPENDE,
@@ -57,8 +58,8 @@ object TestData {
         Utbetaling(
             id = nextId(),
             region = "X",
-            personKey = 1,
-            arbufoerSeq = 1,
+            personKey = BigInteger.ONE,
+            arbufoerSeq = BigInteger.ONE,
             utbetaltTom = LocalDate.now(),
             utbetaltFom = LocalDate.now(),
             utbetalingsdato = LocalDate.now(),
@@ -71,9 +72,9 @@ object TestData {
         Inntekt(
             id = nextId(),
             region = "X",
-            personKey = 1,
-            arbufoerSeq = 1,
-            arbgiverNr = "12345678901",
+            personKey = BigInteger.ONE,
+            arbufoerSeq = BigInteger.ONE,
+            arbgiverNr = BigInteger.valueOf(12345678901),
             loenn = 1.toBigDecimal(),
             periode = Inntektsperiode.MAANEDLIG,
             refusjon = false
@@ -102,7 +103,7 @@ object TestData {
                     personKey = personKey,
                     saksblokk = saksblokk,
                     saksnummer = saksnummer,
-                    lopeNr = nextId() % 99,
+                    lopeNr = nextId().mod(BigInteger.valueOf(99)),
                     status = SakStatus.IKKE_BEHANDLET
                 )
             )
@@ -110,8 +111,8 @@ object TestData {
     }
 
     data class PeriodeFactory(
-        val personKey: Long = nextId(),
-        val arbufoerSeq: Long = nextId(),
+        val personKey: BigInteger = nextId(),
+        val arbufoerSeq: BigInteger = nextId(),
         val fnr: FoedselsNr = foedselsNr(),
         val barnFnr: FoedselsNr = foedselsNr(),
         val region: String = "X",

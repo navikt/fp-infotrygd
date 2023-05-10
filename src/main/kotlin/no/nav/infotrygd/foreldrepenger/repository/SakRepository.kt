@@ -19,5 +19,5 @@ interface SakRepository : JpaRepository<Sak, Long> {
               AND s.kapittelNr = 'FA'
               AND s.valg in :valg
               AND s.type IN ('S', 'R', 'K', 'A')""")
-    fun findSakerByFnr(fnr: FoedselsNr, valg: Set<String>): List<Sak>
+    fun findSakerByFnrAndValg(fnr: FoedselsNr, valg: Set<String>): List<Sak>
 }

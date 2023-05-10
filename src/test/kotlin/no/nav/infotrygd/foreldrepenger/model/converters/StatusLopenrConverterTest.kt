@@ -2,6 +2,7 @@ package no.nav.infotrygd.foreldrepenger.model.converters
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import java.math.BigInteger
 
 class StatusLopenrConverterTest {
     val converter: StatusLopenrConverter =
@@ -9,7 +10,7 @@ class StatusLopenrConverterTest {
 
     @Test
     fun convertToDatabaseColumn() {
-        val result = converter.convertToDatabaseColumn(2)
+        val result = converter.convertToDatabaseColumn(BigInteger.valueOf(2))
         assertThat(result).isEqualTo("02")
 
         assertThat(converter.convertToDatabaseColumn(null)).isNull()
