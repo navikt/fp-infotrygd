@@ -1,15 +1,15 @@
 {
-  "appName": "fp-infotrygd-foreldrepenger",
+  "appName": "fp-infotrygd-svangerskapspenger",
   "minReplicas": "1",
   "maxReplicas": "2",
-  "oracleConfig": "oracle/data/prod/config/infotrygd_fpp",
-  "oracleSecret": "oracle/data/prod/creds/fp_infotrygd_p-user",
+  "oracleConfig": "oracle/data/prod/config/infotrygd_svp",
+  "oracleSecret": "oracle/data/prod/creds/infotrygd_svp-user",
   "ingresses": [
-    "https://fp-infotrygd-foreldrepenger.intern.nav.no"
+    "https://fp-infotrygd-svangerskapspenger.intern.nav.no"
   ],
   "env": {
     "APP_DDL_AUTO": "none",
-    "DEFAULTDS_SCHEMA": "INFOTRYGD_FPP",
+    "DEFAULTDS_SCHEMA": "INFOTRYGD_SVP",
     "AZURE_APP_PROXY_URL": "https://webproxy-nais.nav.no:8088",
     "APP_STS_DISCOVERY_URL": "https://security-token-service.nais.adeo.no/rest/v1/sts/.well-known/openid-configuration",
     "APP_STS_AUD": "",

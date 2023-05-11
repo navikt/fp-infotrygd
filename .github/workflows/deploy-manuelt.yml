@@ -28,5 +28,5 @@ jobs:
     with:
       image: ghcr.io/${{ github.repository }}:${{ inputs.image }}
       cluster: ${{ inputs.environment }}-fss
-      namespace: ${{ inputs.namespace }}
+      app: ${{ inputs.app }}
     secrets: inherit
