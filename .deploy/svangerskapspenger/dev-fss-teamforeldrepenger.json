@@ -2,7 +2,7 @@
   "appName": "fp-infotrygd-svangerskapspenger",
   "minReplicas": "1",
   "maxReplicas": "2",
-  "oracleConfig": "oracle/data/dev/config/infotrygd_q1",
+  "oracleConfig": "oracle/data/dev/config/cdcq",
   "oracleSecret": "oracle/data/dev/creds/cdcq-infotrygd_q1",
   "ingresses": [
     "https://fp-infotrygd-svangerskapspenger.dev.intern.nav.no"
