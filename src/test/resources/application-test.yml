@@ -6,6 +6,7 @@ spring:
     properties:
       hibernate:
         default_schema: INFOTRYGD_Q0
+    open-in-view: false
   datasource:
     url: jdbc:h2:mem:testdb:MODE=Oracle
     username: sa
@@ -21,11 +22,6 @@ no.nav.security.jwt:
   expirythreshold: 60 #threshold in minutes until token expires
   issuer:
     azure:
-      discoveryurl: http://localhost:${mock-oauth2-server.port}/issuer1/.well-known/openid-configuration
-      accepted_audience: aud-localhost
-      proxyurl: ~
-      cookiename: localhost-idtoken
-    sts:
       discoveryurl: http://localhost:${mock-oauth2-server.port}/issuer1/.well-known/openid-configuration
       accepted_audience: aud-localhost
       proxyurl: ~

@@ -14,22 +14,18 @@ spec:
   {{/each}}
   liveness:
     path: /actuator/health
-    initialDelay: 30
+    initialDelay: 10
     timeout: 1
     periodSeconds: 5
     failureThreshold: 10
   readiness:
     path: /actuator/health
-    initialDelay: 20
+    initialDelay: 10
     timeout: 1
-  preStopHookPath: ""
-  prometheus:
-    enabled: true
-    path: /actuator/prometheus
   replicas:
     min: {{minReplicas}}
     max: {{maxReplicas}}
-    cpuThresholdPercentage: 50
+    cpuThresholdPercentage: 80
   resources:
     limits:
       cpu: "1500m"

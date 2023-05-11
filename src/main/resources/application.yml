@@ -13,10 +13,11 @@ spring:
     # For Oracle: database-platform: org.hibernate.dialect.Oracle10gDialect
     database-platform: ${APP_JPA_PLATFORM:org.hibernate.dialect.Oracle10gDialect}
     hibernate:
-      ddl-auto: ${APP_DDL_AUTO:validate}
+      ddl-auto: ${APP_DDL_AUTO:none}
     properties:
       hibernate:
         default_schema: ${DEFAULTDS_SCHEMA}
+    open-in-view: false
 
 springdoc:
   packages-to-scan: no.nav.infotrygd.foreldrepenger

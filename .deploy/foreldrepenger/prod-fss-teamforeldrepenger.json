@@ -8,7 +8,6 @@
     "https://fp-infotrygd-foreldrepenger.intern.nav.no"
   ],
   "env": {
-    "APP_DDL_AUTO": "none",
     "DEFAULTDS_SCHEMA": "INFOTRYGD_FPP",
     "APP_CLIENT_WHITELIST": ""
   }
