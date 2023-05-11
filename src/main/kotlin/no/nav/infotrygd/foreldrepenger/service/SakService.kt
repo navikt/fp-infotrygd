@@ -1,5 +1,6 @@
 package no.nav.infotrygd.foreldrepenger.service
 
+import jakarta.transaction.Transactional
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.Sak
 import no.nav.infotrygd.foreldrepenger.model.Utbetaling
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 
 @Service
+@Transactional
 class SakService(
     private val sakRepository: SakRepository,
     private val periodeRepository: PeriodeRepository,

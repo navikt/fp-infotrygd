@@ -3,8 +3,8 @@ package no.nav.infotrygd.foreldrepenger.model.converters
 import no.nav.infotrygd.foreldrepenger.exception.UkjentDatabaseverdiException
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Kode
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
-
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 
 class KodeConverterTest {
 
@@ -24,9 +24,9 @@ class KodeConverterTest {
         assertThat(converter.convertToEntityAttribute("  ")).isNull()
     }
 
-    @Test(expected = UkjentDatabaseverdiException::class)
+    @Test
     fun convertToEntityAttribute_Exception() {
-        converter.convertToEntityAttribute("XX")
+        Assertions.assertThrows(UkjentDatabaseverdiException::class.java) { converter.convertToEntityAttribute("XX") }
     }
 
     @Test

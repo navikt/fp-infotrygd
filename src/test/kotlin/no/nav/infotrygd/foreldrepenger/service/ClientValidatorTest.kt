@@ -5,19 +5,19 @@ import no.nav.infotrygd.foreldrepenger.Profiler
 import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.security.token.support.core.jwt.JwtTokenClaims
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.core.env.Environment
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.web.server.ResponseStatusException
 
-
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [ClientValidator::class])
 @TestPropertySource(properties = [
     "app.security.clientWhitelist=sts/sub-claim,azure/sub-claim,azure/azp-claim,azure/appid-claim"
@@ -58,10 +58,10 @@ internal class ClientValidatorTest {
         clientValidator.authorizeClient()
     }
 
-    @Test(expected = ResponseStatusException::class)
+    @Test
     fun `Uautorisert STS token`() {
         setupMocks("sts", "sub", "ikke-whitelisted")
-        clientValidator.authorizeClient()
+        assertThrows(ResponseStatusException::class.java) { clientValidator.authorizeClient() }
     }
 
     @Test
@@ -70,10 +70,10 @@ internal class ClientValidatorTest {
         clientValidator.authorizeClient()
     }
 
-    @Test(expected = ResponseStatusException::class)
+    @Test
     fun `Uautorisert Azure token (subject)`() {
         setupMocks("azure", "sub", "ikke-whitelisted")
-        clientValidator.authorizeClient()
+        assertThrows(ResponseStatusException::class.java) { clientValidator.authorizeClient() }
     }
 
     @Test
@@ -82,10 +82,10 @@ internal class ClientValidatorTest {
         clientValidator.authorizeClient()
     }
 
-    @Test(expected = ResponseStatusException::class)
+    @Test
     fun `Uautorisert AzureV1 token (clientId)`() {
         setupMocks("azure", "appid", "ikke-whitelisted")
-        clientValidator.authorizeClient()
+        assertThrows(ResponseStatusException::class.java) { clientValidator.authorizeClient() }
     }
 
     @Test
@@ -94,15 +94,15 @@ internal class ClientValidatorTest {
         clientValidator.authorizeClient()
     }
 
-    @Test(expected = ResponseStatusException::class)
+    @Test
     fun `Uautorisert AzureV2 token (clientId)`() {
         setupMocks("azure", "azp", "ikke-whitelisted")
-        clientValidator.authorizeClient()
+        assertThrows(ResponseStatusException::class.java) { clientValidator.authorizeClient() }
     }
 
-    @Test(expected = ResponseStatusException::class)
+    @Test
     fun `Uautorisert Issuer`() {
         setupMocks("annen-issuer", "sub", "sub-claim")
-        clientValidator.authorizeClient()
+        assertThrows(ResponseStatusException::class.java) { clientValidator.authorizeClient() }
     }
 }

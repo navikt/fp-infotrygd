@@ -7,19 +7,19 @@ import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClient
 import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClientException
 import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClientFactory
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
-import org.junit.jupiter.api.assertThrows
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.LocalDate
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @Import(TestClientFactory::class)
@@ -64,7 +64,7 @@ class GrunnlagTest {
 
     @Test
     fun `tjenesten krever token for å få tilgang`() {
-        val e = assertThrows<TestClientException> {
+        val e = assertThrows(TestClientException::class.java) {
             clientNoAuth().hentGrunnlag(fnr, fom)
         }
         assertThat(e.status).isEqualTo(HttpStatus.UNAUTHORIZED)
@@ -72,7 +72,7 @@ class GrunnlagTest {
 
     @Test
     fun `tjenesten krever rett sub for å få tilgang`() {
-        val e = assertThrows<TestClientException> {
+        val e = assertThrows(TestClientException::class.java) {
             client(sub = "uautorisert").hentGrunnlag(fnr, fom)
         }
         assertThat(e.status).isEqualTo(HttpStatus.UNAUTHORIZED)

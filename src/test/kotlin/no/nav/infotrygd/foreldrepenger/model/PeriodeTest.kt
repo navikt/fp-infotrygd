@@ -6,7 +6,7 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import no.nav.infotrygd.foreldrepenger.utils.reversert
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 

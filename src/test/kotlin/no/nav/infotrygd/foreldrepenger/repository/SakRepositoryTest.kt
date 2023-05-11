@@ -7,17 +7,17 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakStatus
 import no.nav.infotrygd.foreldrepenger.nextId
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.math.BigInteger
 import java.time.LocalDate
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @DataJpaTest
 @ActiveProfiles("test")
 class SakRepositoryTest {
@@ -34,7 +34,7 @@ class SakRepositoryTest {
             return listOf("AE", "AP", "FE", "FP", "FU", "FØ")
         }
 
-    @Before
+    @BeforeEach
     fun setUp() {
         repository.deleteAll()
     }

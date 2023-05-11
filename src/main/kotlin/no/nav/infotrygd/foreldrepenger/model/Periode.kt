@@ -1,5 +1,6 @@
 package no.nav.infotrygd.foreldrepenger.model
 
+import jakarta.persistence.*
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.commons.foedselsnummer.Kjoenn
 import no.nav.infotrygd.foreldrepenger.model.converters.*
@@ -8,12 +9,12 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.Frisk
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.utils.reversert
+import org.hibernate.Hibernate
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import java.io.Serializable
-import java.time.LocalDate
-import jakarta.persistence.*
 import java.math.BigInteger
+import java.time.LocalDate
 
 @Entity
 @Table(name = "IS_PERIODE_10")
@@ -106,7 +107,7 @@ data class Periode(
     @Column(name = "TK_NR", columnDefinition = "CHAR")
     val tkNr: String,
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumns(value = [
         JoinColumn(name = "REGION", referencedColumnName = "REGION"),
         JoinColumn(name = "IS01_PERSONKEY", referencedColumnName = "IS01_PERSONKEY"),

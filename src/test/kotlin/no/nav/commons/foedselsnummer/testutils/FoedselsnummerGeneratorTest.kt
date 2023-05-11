@@ -2,7 +2,8 @@ package no.nav.commons.foedselsnummer.testutils
 
 import no.nav.commons.foedselsnummer.FoedselsNr
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 
@@ -14,11 +15,13 @@ internal class FoedselsnummerGeneratorTest {
         assertThat(fnr.asString).startsWith("010119")
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun tomForFoedselsnummer() {
         val generator = FoedselsnummerGenerator()
-        for(i in 0 until 10000) {
-            generator.foedselsnummer(LocalDate.of(2019, 1, 1))
+        assertThrows(IllegalStateException::class.java) {
+            for (i in 0 until 10000) {
+                generator.foedselsnummer(LocalDate.of(2019, 1, 1))
+            }
         }
     }
 

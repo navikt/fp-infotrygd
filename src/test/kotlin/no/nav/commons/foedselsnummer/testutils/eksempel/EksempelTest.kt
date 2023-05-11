@@ -4,7 +4,7 @@ import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.commons.foedselsnummer.Kjoenn
 import no.nav.commons.foedselsnummer.testutils.FoedselsnummerGenerator
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class EksempelTest {

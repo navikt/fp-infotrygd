@@ -2,7 +2,7 @@ package no.nav.infotrygd.foreldrepenger.model.converters
 
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Frisk
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class FriskConverterTest {
 

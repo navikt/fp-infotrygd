@@ -7,7 +7,7 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.math.BigInteger
 import java.time.LocalDate
 

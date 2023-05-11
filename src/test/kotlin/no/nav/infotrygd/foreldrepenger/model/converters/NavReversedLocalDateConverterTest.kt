@@ -2,7 +2,7 @@ package no.nav.infotrygd.foreldrepenger.model.converters
 
 import no.nav.infotrygd.foreldrepenger.model.converters.AbstractNavLocalDateConverter.Companion.NULL_VALUE
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class NavReversedLocalDateConverterTest {

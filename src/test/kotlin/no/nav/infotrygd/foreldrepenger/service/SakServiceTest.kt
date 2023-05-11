@@ -11,17 +11,18 @@ import no.nav.infotrygd.foreldrepenger.repository.SakRepository
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.math.BigInteger
 import java.time.LocalDate
 
 @SpringBootTest
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
+
 @ActiveProfiles("test")
 internal class SakServiceTest {
     private val relevantStatus  = SakStatus.FB
@@ -66,15 +67,25 @@ internal class SakServiceTest {
 
         val res = sakService.findSakerByFnr(fnr, LocalDate.now().minusYears(1), LocalDate.now())
 
-        val forventet = listOf(SakDto(
-            sakId = SakId(sak.saksblokk, sak.saksnummer.toInt()),
-            type = type,
-            status = relevantStatus.kode,
-            resultat = resultat,
-            vedtatt = LocalDate.now(),
-            iverksatt = LocalDate.now(),
-            registrert = LocalDate.now()
-        ))
+        val forventet = listOf(
+            SakDto(
+                sakId = SakId(sak.saksblokk, sak.saksnummer.toInt()),
+                type = type,
+                status = relevantStatus.kode,
+                resultat = resultat,
+                vedtatt = LocalDate.now(),
+                iverksatt = LocalDate.now(),
+                registrert = LocalDate.now()
+            ), SakDto(
+                sakId = SakId(sak.saksblokk, sak.saksnummer.toInt()),
+                type = type,
+                status = relevantStatus.kode,
+                resultat = resultat,
+                vedtatt = LocalDate.now(),
+                iverksatt = LocalDate.now(),
+                registrert = LocalDate.now()
+            )
+        )
 
         assertThat(res.saker).isEqualTo(forventet)
     }
