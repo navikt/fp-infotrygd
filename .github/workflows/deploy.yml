@@ -26,7 +26,7 @@ env:
 jobs:
   deploy:
     name: deploy
-    environment: ${{ inputs.cluster }}:${{ inputs.namespace }}
+    environment: ${{ inputs.app }}:${{ inputs.cluster }}:${{ inputs.namespace }}
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v3.5.2
