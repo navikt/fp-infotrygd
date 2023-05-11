@@ -10,9 +10,6 @@
   "env": {
     "APP_DDL_AUTO": "none",
     "DEFAULTDS_SCHEMA": "INFOTRYGD_FPP",
-    "AZURE_APP_PROXY_URL": "https://webproxy-nais.nav.no:8088",
-    "APP_STS_DISCOVERY_URL": "https://security-token-service.nais.adeo.no/rest/v1/sts/.well-known/openid-configuration",
-    "APP_STS_AUD": "",
     "APP_CLIENT_WHITELIST": ""
   }
 }

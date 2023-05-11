@@ -47,6 +47,7 @@ spec:
   azure:
     application:
       enabled: true
+  webproxy: true
   env:
   {{#each env}}
    - name: {{@key}}
