@@ -29,7 +29,6 @@ jobs:
   deploy-fp:
     strategy:
       matrix:
-        app: [ 'foreldrepenger', 'svangerskapspenger' ]
         envs: [ 'dev', 'prod' ]
     name: Deploy FP to ${{ matrix.envs }}
     if: github.ref_name == 'master'
