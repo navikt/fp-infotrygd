@@ -8,10 +8,10 @@ spring:
     url: ${DEFAULTDS_URL}
     username: ${DEFAULTDS_USERNAME}
     password: ${DEFAULTDS_PASSWORD}
-    driver-class-name: ${DEFAULTDS_DRIVER:oracle.jdbc.driver.OracleDriver}
+    driver-class-name: ${DEFAULTDS_DRIVER:oracle.jdbc.OracleDriver}
   jpa:
-    # For Oracle: database-platform: org.hibernate.dialect.Oracle10gDialect
-    database-platform: ${APP_JPA_PLATFORM:org.hibernate.dialect.Oracle10gDialect}
+    # For Oracle: database-platform: org.hibernate.dialect.OracleDialect
+    database-platform: ${APP_JPA_PLATFORM:org.hibernate.dialect.OracleDialect}
     hibernate:
       ddl-auto: ${APP_DDL_AUTO:none}
     properties:
