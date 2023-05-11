@@ -8,8 +8,6 @@ import no.nav.infotrygd.foreldrepenger.service.ClientValidator
 import no.nav.infotrygd.foreldrepenger.service.GrunnlagService
 import no.nav.infotrygd.foreldrepenger.service.SakService
 import no.nav.security.token.support.core.api.Protected
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -25,8 +23,6 @@ class InfotrygdController(
     private val clientValidator: ClientValidator,
     private val grunnlagService: GrunnlagService
 ) {
-    private val LOG: Logger = LoggerFactory.getLogger(javaClass)
-
     @GetMapping("/saker")
     fun saker(
         @RequestParam(required = true)
