@@ -26,18 +26,33 @@ jobs:
       push-image: ${{ github.ref_name == 'master' }}
     secrets: inherit
 
-  deploy:
+  deploy-fp:
     strategy:
       matrix:
         app: [ 'foreldrepenger', 'svangerskapspenger' ]
         envs: [ 'dev', 'prod' ]
-
-    name: Deploy ${{ matrix.app }} to ${{ matrix.envs }}
+    name: Deploy FP to ${{ matrix.envs }}
     if: github.ref_name == 'master'
     needs: [build-app]
     uses: navikt/fp-infotrygd-foreldrepenger/.github/workflows/deploy.yml@master
     with:
       image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
-      app: ${{ matrix.app }}
+      app: foreldrepenger
     secrets: inherit
+
+  deploy-svp:
+    strategy:
+      matrix:
+        envs: [ 'dev', 'prod' ]
+    name: Deploy SVP to ${{ matrix.envs }}
+    if: github.ref_name == 'master'
+    needs: [build-app]
+    uses: navikt/fp-infotrygd-foreldrepenger/.github/workflows/deploy.yml@master
+    with:
+      image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
+      cluster: ${{ matrix.envs }}-fss
+      app: svangerskapspenger
+    secrets: inherit
+
+
