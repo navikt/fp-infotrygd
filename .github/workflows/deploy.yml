@@ -29,7 +29,7 @@ jobs:
     environment: ${{ inputs.app }}:${{ inputs.cluster }}:${{ inputs.namespace }}
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v3.5.3
+      - uses: actions/checkout@v3.6.0
 
       - name: Deploy av fp-infotrygd-${{ inputs.app }} til ${{ inputs.cluster }}
         uses: nais/deploy/actions/deploy@v1
