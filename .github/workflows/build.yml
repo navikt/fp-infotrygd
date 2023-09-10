@@ -36,6 +36,7 @@ jobs:
         envs: [ 'dev', 'prod' ]
     name: Deploy FP to ${{ matrix.envs }}
     permissions:
+      contents: read
       id-token: write
     if: github.ref_name == 'master'
     needs: [build-app]
@@ -52,6 +53,7 @@ jobs:
         envs: [ 'dev', 'prod' ]
     name: Deploy SVP to ${{ matrix.envs }}
     permissions:
+      contents: read
       id-token: write
     if: github.ref_name == 'master'
     needs: [build-app]
