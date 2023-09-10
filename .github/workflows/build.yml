@@ -22,6 +22,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     uses: navikt/fp-gha-workflows/.github/workflows/build-app-no-db.yml@main
     with:
       sonar-scan: false
@@ -34,11 +35,13 @@ jobs:
       matrix:
         envs: [ 'dev', 'prod' ]
     name: Deploy FP to ${{ matrix.envs }}
+    permissions:
+      id-token: write
     if: github.ref_name == 'master'
     needs: [build-app]
     uses: navikt/fp-infotrygd/.github/workflows/deploy.yml@master
     with:
-      image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
+      image: ${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
       app: foreldrepenger
     secrets: inherit
@@ -48,11 +51,13 @@ jobs:
       matrix:
         envs: [ 'dev', 'prod' ]
     name: Deploy SVP to ${{ matrix.envs }}
+    permissions:
+      id-token: write
     if: github.ref_name == 'master'
     needs: [build-app]
     uses: navikt/fp-infotrygd/.github/workflows/deploy.yml@master
     with:
-      image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
+      image: ${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
       app: svangerskapspenger
     secrets: inherit
