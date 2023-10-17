@@ -29,7 +29,7 @@
 		<kotlin.version>1.9.10</kotlin.version>
 		<token-validation.version>3.0.10</token-validation.version>
 
-		<okhttp.version>4.11.0</okhttp.version>
+		<okhttp.version>4.12.0</okhttp.version>
 		<springdoc.version>2.2.0</springdoc.version>
 	</properties>
 
