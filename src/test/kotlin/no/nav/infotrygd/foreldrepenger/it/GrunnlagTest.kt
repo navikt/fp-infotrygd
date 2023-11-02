@@ -4,17 +4,14 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClient
-import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClientException
 import no.nav.infotrygd.foreldrepenger.testutil.rest.TestClientFactory
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
-import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.LocalDate
@@ -62,19 +59,4 @@ class GrunnlagTest {
         assertThat(result).hasSize(1)
     }
 
-    @Test
-    fun `tjenesten krever token for å få tilgang`() {
-        val e = assertThrows(TestClientException::class.java) {
-            clientNoAuth().hentGrunnlag(fnr, fom)
-        }
-        assertThat(e.status).isEqualTo(HttpStatus.UNAUTHORIZED)
-    }
-
-    @Test
-    fun `tjenesten krever rett sub for å få tilgang`() {
-        val e = assertThrows(TestClientException::class.java) {
-            client(sub = "uautorisert").hentGrunnlag(fnr, fom)
-        }
-        assertThat(e.status).isEqualTo(HttpStatus.UNAUTHORIZED)
-    }
 }

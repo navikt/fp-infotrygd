@@ -8,7 +8,13 @@
     "https://fp-infotrygd-foreldrepenger.intern.nav.no"
   ],
   "env": {
-    "DEFAULTDS_SCHEMA": "INFOTRYGD_FPP",
-    "APP_CLIENT_WHITELIST": ""
-  }
+    "DEFAULTDS_SCHEMA": "INFOTRYGD_FPP"
+  },
+  "AZURE_IAC_RULES": [
+    {
+      "app": "fpsak",
+      "namespace": "teamforeldrepenger",
+      "cluster": "prod-fss"
+    }
+  ]
 }
