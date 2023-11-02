@@ -8,8 +8,7 @@
     "https://fp-infotrygd-foreldrepenger.dev.intern.nav.no"
   ],
   "env": {
-    "DEFAULTDS_SCHEMA": "INFOTRYGD_FPQ",
-    "APP_CLIENT_WHITELIST": "azure/11815622-aad9-49b5-997e-5d3c5b9c12f7"
+    "DEFAULTDS_SCHEMA": "INFOTRYGD_FPQ"
   },
   "AZURE_IAC_RULES": [
     {

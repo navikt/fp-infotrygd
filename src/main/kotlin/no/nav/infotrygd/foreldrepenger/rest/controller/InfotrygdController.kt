@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Parameter
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakResult
 import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
-import no.nav.infotrygd.foreldrepenger.service.ClientValidator
 import no.nav.infotrygd.foreldrepenger.service.GrunnlagService
 import no.nav.infotrygd.foreldrepenger.service.SakService
 import no.nav.security.token.support.core.api.Protected
@@ -20,7 +19,6 @@ import java.time.LocalDate
 @Protected
 class InfotrygdController(
     private val sakService: SakService,
-    private val clientValidator: ClientValidator,
     private val grunnlagService: GrunnlagService
 ) {
     @GetMapping("/saker")
@@ -42,8 +40,6 @@ class InfotrygdController(
         tom: LocalDate?
     ): SakResult {
 
-        clientValidator.authorizeClient()
-
         val defaultFom = LocalDate.now().minusYears(1)
 
         return sakService.findSakerByFnr(FoedselsNr(fnr), fom ?: defaultFom, tom)
@@ -64,8 +60,6 @@ class InfotrygdController(
         @Parameter(description = "Finn saker til og med denne datoen.", example = "2019-01-01")
         tom: LocalDate?
     ): List<YtelseGrunnlag> {
-
-        clientValidator.authorizeClient()
 
         return grunnlagService.hentYtelse(FoedselsNr(fnr), fom, tom)
     }

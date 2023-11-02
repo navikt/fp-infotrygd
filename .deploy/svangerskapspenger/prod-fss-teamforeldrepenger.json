@@ -8,8 +8,7 @@
     "https://fp-infotrygd-svangerskapspenger.intern.nav.no"
   ],
   "env": {
-    "DEFAULTDS_SCHEMA": "INFOTRYGD_SVP",
-    "APP_CLIENT_WHITELIST": "azure/17f6b413-aba3-46be-bdde-793ad7081e28"
+    "DEFAULTDS_SCHEMA": "INFOTRYGD_SVP"
   },
   "AZURE_IAC_RULES": [
     {

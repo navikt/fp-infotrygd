@@ -48,6 +48,3 @@ no.nav.security.jwt:
       discoveryurl: ${AZURE_APP_WELL_KNOWN_URL}
       accepted_audience: ${AZURE_APP_CLIENT_ID}
       proxyurl: ${HTTPS_PROXY}
-app:
-  security:
-    clientWhitelist: ${APP_CLIENT_WHITELIST}
