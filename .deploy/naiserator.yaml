@@ -43,6 +43,9 @@ spec:
   azure:
     application:
       enabled: true
+      claims:
+        extra:
+          - "azp_name"
   webproxy: true
   env:
   {{#each env}}
@@ -50,12 +53,12 @@ spec:
      value: "{{this}}"
   {{/each}}
   {{#if AZURE_IAC_RULES}}
-    accessPolicy:
-      inbound:
-        rules:
-        {{#each AZURE_IAC_RULES}}
-        - application: {{app}}
-          namespace: {{namespace}}
-          cluster: {{cluster}}
-        {{/each}}
+  accessPolicy:
+    inbound:
+      rules:
+      {{#each AZURE_IAC_RULES}}
+       - application: {{app}}
+         namespace: {{namespace}}
+         cluster: {{cluster}}
+      {{/each}}
   {{/if}}
