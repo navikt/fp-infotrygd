@@ -4,6 +4,7 @@ import no.nav.infotrygd.foreldrepenger.model.converters.NavLocalDateConverter
 import no.nav.infotrygd.foreldrepenger.model.converters.UtbetalingsgradConverter
 import java.time.LocalDate
 import jakarta.persistence.*
+import java.math.BigDecimal
 import java.math.BigInteger
 
 @Entity
@@ -22,6 +23,9 @@ data class Utbetaling(
     @Column(name = "IS10_ARBUFOER_SEQ", columnDefinition = "DECIMAL")
     val arbufoerSeq: BigInteger,
 
+    @Column(name = "IS15_ARBGIVNR", columnDefinition = "DECIMAL")
+    val arbgiverNr: BigInteger,
+
     @Column(name = "IS15_UTBETFOM", columnDefinition = "DECIMAL")
     @Convert(converter = NavLocalDateConverter::class)
     val utbetaltFom: LocalDate,
@@ -34,6 +38,9 @@ data class Utbetaling(
     @Convert(converter = NavLocalDateConverter::class)
     val utbetalingsdato: LocalDate?,
 
+    @Column(name = "IS15_DSATS", columnDefinition = "DECIMAL")
+    val dagsats: BigDecimal?,
+
     @Column(name = "IS15_GRAD", columnDefinition = "CHAR")
     @Convert(converter = UtbetalingsgradConverter::class)
     val grad: Int?,
@@ -43,4 +50,12 @@ data class Utbetaling(
 
     @Column(name = "IS15_KORR", columnDefinition = "CHAR")
     val korr: String?
-)
+) {
+    val erRefusjon get() = this.type == "5"
+    val orgnummer get() : String? {
+        if (this.arbgiverNr == BigInteger.ZERO) {
+            return null;
+        }
+        return this.arbgiverNr.toString();
+    }
+}

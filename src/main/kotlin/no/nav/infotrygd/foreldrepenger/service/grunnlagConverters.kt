@@ -3,6 +3,7 @@ package no.nav.infotrygd.foreldrepenger.service
 import no.nav.infotrygd.foreldrepenger.model.VedtakBarn
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
+import java.math.BigInteger
 
 fun periodeToForeldrepengerDetaljer(
     p: no.nav.infotrygd.foreldrepenger.model.Periode,
@@ -53,8 +54,9 @@ fun periodeToGrunnlag(p: no.nav.infotrygd.foreldrepenger.model.Periode): Grunnla
                     it.periode.kode,
                     it.periode.tekst
                 ),
-                arbeidsgiverOrgnr = it.arbgiverNr,
-                refusjon = it.refusjon
+                arbeidsgiverOrgnr = it.orgnummer,
+                refusjon = it.refusjon,
+                refusjonTom = it.refusjonTom
             )
         },
         vedtak = p.utbetalinger.map {
@@ -63,7 +65,10 @@ fun periodeToGrunnlag(p: no.nav.infotrygd.foreldrepenger.model.Periode): Grunnla
                 periode = Periode(
                     it.utbetaltFom,
                     it.utbetaltTom
-                )
+                ),
+                arbeidsgiverOrgnr = it.orgnummer,
+                erRefusjon = it.erRefusjon,
+                dagsats = it.dagsats
             )
         }
     )

@@ -8,6 +8,7 @@ import no.nav.infotrygd.foreldrepenger.rest.dto.*
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.LocalDate
 
@@ -24,7 +25,7 @@ class GrunnlagConvertersKtTest {
         val stoenadstype = Stoenadstype.FOEDSEL
         val tema = stoenadstype.tema
         val inntektsperiode = Inntektsperiode.MAANEDLIG
-        val arbeidsgiverOrgnr = BigInteger.valueOf(12345678900)
+        val arbeidsgiverOrgnr = "12345678900"
         val inntektForPerioden = 1000.toBigDecimal()
         val arbeidskategori = Arbeidskategori.AMBASSADEPERSONELL
         val utbetalingsgrad = 100
@@ -33,20 +34,25 @@ class GrunnlagConvertersKtTest {
         val status = frisk.status!!
 
         val refusjon = true
+        val refusjonTom = utbetaltTom.minusDays(2)
 
         val pf = TestData.PeriodeFactory()
 
         val inntekt = pf.inntekt().copy(
             periode = inntektsperiode,
-            arbgiverNr = arbeidsgiverOrgnr,
+            arbgiverNr = BigInteger(arbeidsgiverOrgnr),
             loenn = inntektForPerioden,
-            refusjon = refusjon
+            refusjon = refusjon,
+            refusjonTom = refusjonTom
         )
 
         val utbetaling = pf.utbetaling().copy(
             utbetaltFom = utbetaltFom,
             utbetaltTom = utbetaltTom,
-            grad = utbetalingsgrad
+            grad = utbetalingsgrad,
+            type = "5",
+            dagsats = BigDecimal(1000),
+            arbgiverNr = BigInteger(arbeidsgiverOrgnr)
         )
 
         val periode = pf.periode().copy(
@@ -86,13 +92,17 @@ class GrunnlagConvertersKtTest {
                         inntektsperiode.tekst
                     ),
                     arbeidsgiverOrgnr = arbeidsgiverOrgnr,
-                    refusjon = refusjon
+                    refusjon = refusjon,
+                    refusjonTom = refusjonTom
                 )
             ),
             vedtak = listOf(
                 Vedtak(
                     utbetalingsgrad = utbetalingsgrad,
-                    periode = Periode(utbetaltFom, utbetaltTom)
+                    periode = Periode(utbetaltFom, utbetaltTom),
+                    erRefusjon = true,
+                    arbeidsgiverOrgnr = arbeidsgiverOrgnr,
+                    dagsats = BigDecimal.valueOf(1000)
                 )
             )
         )
@@ -131,5 +141,102 @@ class GrunnlagConvertersKtTest {
         )
 
         assertThat(dto).isEqualTo(expected)
+    }
+
+    @Test
+    fun periodeToGrunnlagUtbetalingTilBruker() {
+        val registrert = LocalDate.now().minusMonths(6)
+        val saksbehandlerId = "XX123"
+        val opphoerFom = registrert.plusDays(50)
+
+        val utbetaltTom = LocalDate.now()
+        val utbetaltFom = utbetaltTom.minusMonths(1)
+        val stoenadstype = Stoenadstype.FOEDSEL
+        val tema = stoenadstype.tema
+        val inntektsperiode = Inntektsperiode.MAANEDLIG
+        val arbeidsgiverOrgnr = "12345678900"
+        val inntektForPerioden = 1000.toBigDecimal()
+        val arbeidskategori = Arbeidskategori.AMBASSADEPERSONELL
+        val utbetalingsgrad = 100
+
+        val frisk = Frisk.BARN
+        val status = frisk.status!!
+
+        val refusjon = false
+        val refusjonTom = null
+
+
+        val pf = TestData.PeriodeFactory()
+
+        val inntekt = pf.inntekt().copy(
+            periode = inntektsperiode,
+            arbgiverNr = BigInteger(arbeidsgiverOrgnr),
+            loenn = inntektForPerioden,
+            refusjon = refusjon,
+            refusjonTom = refusjonTom
+        )
+
+        val utbetaling = pf.utbetaling().copy(
+            utbetaltFom = utbetaltFom,
+            utbetaltTom = utbetaltTom,
+            grad = utbetalingsgrad,
+            type = "0",
+            dagsats = BigDecimal(1000),
+            arbgiverNr = BigInteger(arbeidsgiverOrgnr)
+        )
+
+        val periode = pf.periode().copy(
+            registrert = registrert,
+            frisk = frisk,
+            brukerId = saksbehandlerId,
+            arbufoer = utbetaltFom,
+            stoppdato = opphoerFom,
+            stoenadstype = stoenadstype,
+            utbetaltFom = utbetaltFom,
+            utbetaltTom = utbetaltTom,
+            arbeidskategori = arbeidskategori,
+            inntekter = listOf(inntekt),
+            utbetalingshistorikk = listOf(utbetaling)
+        )
+
+        val dto = periodeToGrunnlag(periode)
+        val forventet = GrunnlagGenerelt(
+            tema = Kodeverdi(tema.kode, tema.tekst),
+            registrert = registrert,
+            status = Kodeverdi(status.kode, status.tekst),
+            saksbehandlerId = saksbehandlerId,
+            iverksatt = utbetaltFom,
+            opphoerFom = opphoerFom,
+            behandlingstema = stoenadstype.toDto(),
+            identdato = utbetaltFom,
+            periode = Periode(utbetaltFom, utbetaltTom),
+            arbeidskategori = Kodeverdi(
+                arbeidskategori.kode,
+                arbeidskategori.tekst
+            ),
+            arbeidsforhold = listOf(
+                Arbeidsforhold(
+                    inntektForPerioden = inntektForPerioden,
+                    inntektsperiode = Kodeverdi(
+                        inntektsperiode.kode,
+                        inntektsperiode.tekst
+                    ),
+                    arbeidsgiverOrgnr = arbeidsgiverOrgnr,
+                    refusjon = refusjon,
+                    refusjonTom = refusjonTom
+                )
+            ),
+            vedtak = listOf(
+                Vedtak(
+                    utbetalingsgrad = utbetalingsgrad,
+                    periode = Periode(utbetaltFom, utbetaltTom),
+                    erRefusjon = false,
+                    arbeidsgiverOrgnr = arbeidsgiverOrgnr,
+                    dagsats = BigDecimal.valueOf(1000)
+                )
+            )
+        )
+
+        assertThat(dto).isEqualTo(forventet)
     }
 }

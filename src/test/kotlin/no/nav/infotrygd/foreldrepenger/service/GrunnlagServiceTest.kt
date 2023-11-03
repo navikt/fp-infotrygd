@@ -67,4 +67,44 @@ class GrunnlagServiceTest {
 
         assertThat(grunnlagService.hentYtelse(factory.fnr, stoppdato.plusDays(1), null)).isEmpty()
     }
+
+    @Test
+    fun hentGrunnlag_med_refusjon_og_opphør_av_refusjon() {
+        val startdato = LocalDate.of(2019, 1, 1)
+        val stoppdato = startdato.plusDays(10)
+        val refusjonTom = startdato.plusDays(5)
+
+        val prosent = 90
+
+        val factory = TestData.PeriodeFactory()
+
+        val inntekt = factory.inntekt().copy(
+            refusjon = true,
+            refusjonTom = refusjonTom
+        )
+        val utbetaling = factory.utbetaling()
+
+        val periode = factory.periode().copy(
+            arbufoer = startdato,
+            stoppdato = stoppdato,
+            stoenadstype = Stoenadstype.FOEDSEL,
+            inntekter = listOf(inntekt),
+            utbetalingshistorikk = listOf(utbetaling)
+        )
+
+        periodeRepository.save(periode)
+
+        val resultat =
+            grunnlagService.hentYtelse(factory.fnr, startdato.minusYears(1), null)
+
+        assertThat(resultat).hasSize(1)
+        val grunnlag = resultat[0]
+
+        assertThat(grunnlag.vedtak).hasSize(1)
+        assertThat(grunnlag.arbeidsforhold).hasSize(1)
+        assertThat(grunnlag.arbeidsforhold.get(0).refusjon).isEqualTo(true)
+        assertThat(grunnlag.arbeidsforhold.get(0).refusjonTom).isEqualTo(refusjonTom)
+
+        assertThat(grunnlagService.hentYtelse(factory.fnr, stoppdato.plusDays(1), null)).isEmpty()
+    }
 }
