@@ -9,6 +9,7 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.Inntektsperiode
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakStatus
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.nextId
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.LocalDate
 
@@ -65,7 +66,9 @@ object TestData {
             utbetalingsdato = LocalDate.now(),
             grad = null,
             type = null,
-            korr = null
+            korr = null,
+            arbgiverNr = BigInteger("12345678901"),
+            dagsats = BigDecimal.valueOf(1000)
         )
 
     fun inntekt(): Inntekt =
@@ -77,7 +80,8 @@ object TestData {
             arbgiverNr = BigInteger.valueOf(12345678901),
             loenn = 1.toBigDecimal(),
             periode = Inntektsperiode.MAANEDLIG,
-            refusjon = false
+            refusjon = false,
+            refusjonTom = null
         )
 
     fun sak(fnr: FoedselsNr = foedselsNr()): Sak {

@@ -86,7 +86,10 @@ interface Grunnlag {
 
 data class Vedtak(
     val utbetalingsgrad: Int,
-    val periode: Periode
+    val periode: Periode,
+    val arbeidsgiverOrgnr: String?,
+    val erRefusjon: Boolean,
+    val dagsats: BigDecimal?
 )
 
 data class Periode(
@@ -107,8 +110,9 @@ data class Arbeidsforhold(
         Y   Premiegrunnlag oppdragstaker (gjelder de 2 første ukene)
     """)
     val inntektsperiode: Kodeverdi,
-    val arbeidsgiverOrgnr: BigInteger,
-    val refusjon: Boolean
+    val arbeidsgiverOrgnr: String?,
+    val refusjon: Boolean,
+    val refusjonTom: LocalDate?
 )
 
 data class Kodeverdi(val kode: String, val termnavn: String)

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.LocalDate
 
@@ -106,7 +107,9 @@ class PeriodeRepositoryTest {
                 grad = 10,
                 korr = null,
                 type = null,
-                region = "X"
+                region = "X",
+                arbgiverNr = TestData.inntekt().arbgiverNr,
+                dagsats = BigDecimal.valueOf(1000)
             )
         ))
 
@@ -130,7 +133,9 @@ class PeriodeRepositoryTest {
                 grad = 10,
                 korr = null,
                 type = null,
-                region = "X"
+                region = "X",
+                arbgiverNr = TestData.inntekt().arbgiverNr,
+                dagsats = BigDecimal.valueOf(1000)
             )
         ))
 

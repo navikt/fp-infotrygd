@@ -1,10 +1,12 @@
 package no.nav.infotrygd.foreldrepenger.model
 
 import jakarta.persistence.*
+import no.nav.infotrygd.foreldrepenger.model.converters.NavLocalDateConverter
 import no.nav.infotrygd.foreldrepenger.model.converters.RefusjonJaNeiConverter
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Inntektsperiode
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.time.LocalDate
 
 @Entity
 @Table(name = "IS_INNTEKT_13")
@@ -33,5 +35,16 @@ data class Inntekt(
 
     @Column(name = "IS13_REF", columnDefinition = "CHAR")
     @Convert(converter = RefusjonJaNeiConverter::class)
-    val refusjon: Boolean
-)
+    val refusjon: Boolean,
+
+    @Column(name = "IS13_REF_TOM", columnDefinition = "DECIMAL")
+    @Convert(converter = NavLocalDateConverter::class)
+    val refusjonTom: LocalDate?
+) {
+    val orgnummer get() : String? {
+        if (this.arbgiverNr == BigInteger.ZERO) {
+            return null;
+        }
+        return this.arbgiverNr.toString();
+    }
+}
