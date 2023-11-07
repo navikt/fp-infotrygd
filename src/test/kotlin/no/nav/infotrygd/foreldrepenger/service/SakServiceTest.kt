@@ -76,14 +76,6 @@ internal class SakServiceTest {
                 vedtatt = LocalDate.now(),
                 iverksatt = LocalDate.now(),
                 registrert = LocalDate.now()
-            ), SakDto(
-                sakId = SakId(sak.saksblokk, sak.saksnummer.toInt()),
-                type = type,
-                status = relevantStatus.kode,
-                resultat = resultat,
-                vedtatt = LocalDate.now(),
-                iverksatt = LocalDate.now(),
-                registrert = LocalDate.now()
             )
         )
 

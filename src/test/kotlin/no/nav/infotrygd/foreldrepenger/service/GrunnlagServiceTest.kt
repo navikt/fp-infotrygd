@@ -74,8 +74,6 @@ class GrunnlagServiceTest {
         val stoppdato = startdato.plusDays(10)
         val refusjonTom = startdato.plusDays(5)
 
-        val prosent = 90
-
         val factory = TestData.PeriodeFactory()
 
         val inntekt = factory.inntekt().copy(

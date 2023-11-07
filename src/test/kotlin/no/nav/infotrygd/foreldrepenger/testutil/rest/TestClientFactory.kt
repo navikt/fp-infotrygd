@@ -59,7 +59,6 @@ class TestClientFactory(
 
         override fun handleError(url: URI, method: HttpMethod, response: ClientHttpResponse) {
             val status = response.statusCode
-            val contentType = response.headers.contentType
 
             val body = response.body.bufferedReader().use { it.readText() }
 
