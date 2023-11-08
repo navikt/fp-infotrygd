@@ -26,8 +26,8 @@ jobs:
     uses: navikt/fp-gha-workflows/.github/workflows/build-app-no-db.yml@main
     with:
       sonar-scan: false
-      build-image: ${{ github.ref_name == 'master' }}
-      push-image: ${{ github.ref_name == 'master' }}
+      build-image: true
+      push-image: true
     secrets: inherit
 
   deploy-fp:
@@ -38,7 +38,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    if: github.ref_name == 'master'
+    #if: github.ref_name == 'master'
     needs: [build-app]
     uses: navikt/fp-infotrygd/.github/workflows/deploy.yml@master
     with:
@@ -55,7 +55,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    if: github.ref_name == 'master'
+    #if: github.ref_name == 'master'
     needs: [build-app]
     uses: navikt/fp-infotrygd/.github/workflows/deploy.yml@master
     with:
