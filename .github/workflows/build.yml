@@ -26,19 +26,19 @@ jobs:
     uses: navikt/fp-gha-workflows/.github/workflows/build-app-no-db.yml@main
     with:
       sonar-scan: false
-      build-image: true
-      push-image: true
+      build-image: ${{ github.ref_name == 'master' }}
+      push-image: ${{ github.ref_name == 'master' }}
     secrets: inherit
 
   deploy-fp:
     strategy:
       matrix:
-        envs: [ 'dev' ]
+        envs: [ 'dev', 'prod' ]
     name: Deploy FP to ${{ matrix.envs }}
     permissions:
       contents: read
       id-token: write
-    #if: github.ref_name == 'master'
+    if: github.ref_name == 'master'
     needs: [build-app]
     uses: navikt/fp-infotrygd/.github/workflows/deploy.yml@master
     with:
@@ -50,12 +50,12 @@ jobs:
   deploy-svp:
     strategy:
       matrix:
-        envs: [ 'dev' ]
+        envs: [ 'dev', 'prod' ]
     name: Deploy SVP to ${{ matrix.envs }}
     permissions:
       contents: read
       id-token: write
-    #if: github.ref_name == 'master'
+    if: github.ref_name == 'master'
     needs: [build-app]
     uses: navikt/fp-infotrygd/.github/workflows/deploy.yml@master
     with:
