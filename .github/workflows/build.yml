@@ -33,7 +33,7 @@ jobs:
   deploy-fp:
     strategy:
       matrix:
-        envs: [ 'dev', 'prod' ]
+        envs: [ 'dev' ]
     name: Deploy FP to ${{ matrix.envs }}
     permissions:
       contents: read
@@ -50,7 +50,7 @@ jobs:
   deploy-svp:
     strategy:
       matrix:
-        envs: [ 'dev', 'prod' ]
+        envs: [ 'dev' ]
     name: Deploy SVP to ${{ matrix.envs }}
     permissions:
       contents: read
