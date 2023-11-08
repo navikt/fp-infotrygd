@@ -23,7 +23,7 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
          WHERE p.fnr = :fnr
            AND p.stoenadstype IN :stoenadstype
            AND p.frisk IN :frisk
-           AND p.arbufoer != 0
+           AND p.arbufoer is not null
     """)
     fun findByFnrAndFrisk(fnr: FoedselsNr, frisk: Set<Frisk>, stoenadstype: Set<Stoenadstype>): List<Periode>
 
@@ -32,7 +32,7 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
          WHERE p.fnr = :fnr
            AND p.stoenadstype IN :stoenadstype
            AND p.frisk != 'H'
-           AND p.arbufoer != 0
+           AND p.arbufoer is not null
     """)
     fun findByFnrAndStoenadstype(fnr: FoedselsNr, stoenadstype: Set<Stoenadstype>): List<Periode>
 }
