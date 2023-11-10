@@ -3,7 +3,7 @@ package no.nav.infotrygd.foreldrepenger.service
 import no.nav.infotrygd.foreldrepenger.model.VedtakBarn
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
-import java.math.BigInteger
+import java.math.RoundingMode
 
 fun periodeToForeldrepengerDetaljer(
     p: no.nav.infotrygd.foreldrepenger.model.Periode,
@@ -14,7 +14,7 @@ fun periodeToForeldrepengerDetaljer(
     return YtelseDetaljer(
         opprinneligIdentdato = p.arbufoerOpprinnelig,
         dekningsgrad = p.dekningsgrad,
-        gradering = vedtak?.dekningsgrad,
+        gradering = vedtak?.dekningsgrad?.setScale(0, RoundingMode.HALF_UP)?.toInt(),
         foedselsdatoBarn = p.foedselsdatoBarn
     )
 }

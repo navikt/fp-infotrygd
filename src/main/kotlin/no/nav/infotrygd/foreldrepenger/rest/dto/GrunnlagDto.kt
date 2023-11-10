@@ -2,7 +2,6 @@ package no.nav.infotrygd.foreldrepenger.rest.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.time.LocalDate
 
 interface Grunnlag {
@@ -141,14 +140,14 @@ data class GrunnlagGenerelt(
 interface YtelseFelt {
     val opprinneligIdentdato: LocalDate?
     val dekningsgrad: Int?
-    val gradering: BigDecimal?
+    val gradering: Int?
     val foedselsdatoBarn: LocalDate?
 }
 
 data class YtelseDetaljer(
     override val opprinneligIdentdato: LocalDate?,
     override val dekningsgrad: Int?,
-    override val gradering: BigDecimal?,
+    override val gradering: Int?,
     override val foedselsdatoBarn: LocalDate?
 ) : YtelseFelt
 
