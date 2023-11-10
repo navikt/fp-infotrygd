@@ -31,8 +31,8 @@ interface Grunnlag {
         SP  Sykepenger
         
         - Foreldrepenger
-        FØ  Foreldrepenger m/ fødsel
-        AP  Foreldrepenger m/ adopsjon
+        FØ  Foreldrepenger fødsel
+        AP  Foreldrepenger adopsjon
         SV  Svangerskapspenger
         
         - Pårørendesykdom
