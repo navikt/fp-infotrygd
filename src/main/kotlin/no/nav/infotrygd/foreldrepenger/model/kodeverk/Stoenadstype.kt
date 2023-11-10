@@ -7,8 +7,8 @@ enum class Stoenadstype(val tema: Tema, override val kode: String, override val 
     SYKEPENGER(Tema.SYKEPENGER,"", "Sykepenger"),
 
     // Foreldrepenger
-    FOEDSEL(Tema.FORELDREPENGER,"FP", "Foreldrepenger m/ fødsel"),
-    ADOPSJON(Tema.FORELDREPENGER,"AP", "Foreldrepenger m/ adopsjon"),
+    FOEDSEL(Tema.FORELDREPENGER,"FP", "Foreldrepenger fødsel"),
+    ADOPSJON(Tema.FORELDREPENGER,"AP", "Foreldrepenger adopsjon"),
     RISIKOFYLT_ARBMILJOE(Tema.FORELDREPENGER,"SV", "Svangerskapspenger"),
     SVANGERSKAP(Tema.FORELDREPENGER,"Z", "Svangerskapspenger"),
 
