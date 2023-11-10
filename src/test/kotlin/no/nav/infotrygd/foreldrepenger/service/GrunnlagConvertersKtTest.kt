@@ -115,13 +115,13 @@ class GrunnlagConvertersKtTest {
         val stoenadstype = Stoenadstype.FOEDSEL // ytelse = foreldrepenger
         val opprinneligIdentdato = LocalDate.now()
         val dekningsgrad = 75
-        val gradering = 50.toBigDecimal()
+        val gradering = 50
         val foedselsdatoBarn = LocalDate.now().minusYears(1)
 
         val pf = TestData.PeriodeFactory()
 
         val vedtak = pf.vedtakBarn().copy(
-            dekningsgrad = gradering
+            dekningsgrad = BigDecimal(gradering).add(BigDecimal("0.4"))
         )
 
         val periode = pf.periode().copy(

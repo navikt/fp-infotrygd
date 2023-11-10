@@ -61,7 +61,7 @@ class GrunnlagServiceTest {
         assertThat(resultat).hasSize(1)
         val fp = resultat[0]
 
-        assertThat(fp.gradering?.toInt()).isEqualTo(gradering.toInt())
+        assertThat(fp.gradering).isEqualTo(gradering.toInt())
         assertThat(fp.vedtak).hasSize(1)
         assertThat(fp.arbeidsforhold).hasSize(1)
 
