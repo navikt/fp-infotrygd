@@ -13,6 +13,4 @@ jobs:
     permissions:
       contents: write
     uses: navikt/fp-gha-workflows/.github/workflows/mvn-dependency-submission.yml@main
-    with:
-      java-version: 17
     secrets: inherit

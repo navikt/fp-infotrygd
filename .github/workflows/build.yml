@@ -28,7 +28,6 @@ jobs:
       sonar-scan: false
       build-image: ${{ github.ref_name == 'master' }}
       push-image: ${{ github.ref_name == 'master' }}
-      java-version: 17
     secrets: inherit
 
   deploy-fp:
