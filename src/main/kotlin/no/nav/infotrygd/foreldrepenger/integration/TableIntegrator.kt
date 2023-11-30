@@ -1,6 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.integration
 
 import org.hibernate.boot.Metadata
+import org.hibernate.boot.spi.BootstrapContext
 import org.hibernate.engine.spi.SessionFactoryImplementor
 import org.hibernate.integrator.spi.Integrator
 import org.hibernate.jpa.boot.spi.IntegratorProvider
@@ -20,9 +21,9 @@ class TableIntegrator : Integrator {
         }
 
     override fun integrate(
-        metadata: Metadata?,
-        sessionFactory: SessionFactoryImplementor?,
-        serviceRegistry: SessionFactoryServiceRegistry?
+        metadata: Metadata,
+        bootstrapContext: BootstrapContext,
+        sessionFactory: SessionFactoryImplementor
     ) {
         val result = mutableMapOf<String, List<String>>()
 
@@ -31,19 +32,15 @@ class TableIntegrator : Integrator {
             .getNamespaces()) {
 
             for (table in namespace.getTables()) {
-                val cols = table.columnIterator.asSequence().toList()
-                val names = cols.map { (it as Column).canonicalName }
+                val names = table.columns.map { (it as Column).canonicalName }
                 result[table.name] = names
             }
         }
         _tables = result
     }
 
-    override fun disintegrate(
-        sessionFactory: SessionFactoryImplementor?,
-        serviceRegistry: SessionFactoryServiceRegistry?
-    ) {
-
+    override fun disintegrate(p0: SessionFactoryImplementor, p1: SessionFactoryServiceRegistry) {
+        TODO("Not yet implemented")
     }
 }
 
