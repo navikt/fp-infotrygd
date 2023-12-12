@@ -27,7 +27,7 @@ class TableIntegrator : Integrator {
     ) {
         val result = mutableMapOf<String, List<String>>()
 
-        for (namespace in metadata!!
+        for (namespace in metadata
             .getDatabase()
             .getNamespaces()) {
 
