@@ -9,6 +9,7 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import reactor.core.publisher.Mono
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -27,7 +28,7 @@ class InfotrygdApplicationTest {
         val response = restClientNoAuth(port)
             .get()
             .uri("/actuator/health")
-            .exchange()
+            .exchangeToMono { Mono.just(it.mutate().build()) }
             .block() !!
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK)
