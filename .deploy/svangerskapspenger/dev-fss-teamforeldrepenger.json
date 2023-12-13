@@ -2,11 +2,16 @@
   "appName": "fp-infotrygd-svangerskapspenger",
   "minReplicas": "1",
   "maxReplicas": "2",
+  "limits": {
+    "cpu": "1",
+    "mem": "1024Mi"
+  },
+  "requests": {
+    "cpu": "200m",
+    "mem": "512Mi"
+  },
   "oracleConfig": "oracle/data/dev/config/cdcq",
   "oracleSecret": "oracle/data/dev/creds/cdcq-infotrygd_q1",
-  "ingresses": [
-    "https://fp-infotrygd-svangerskapspenger.dev.intern.nav.no"
-  ],
   "env": {
     "DEFAULTDS_SCHEMA": "INFOTRYGD_Q1"
   },

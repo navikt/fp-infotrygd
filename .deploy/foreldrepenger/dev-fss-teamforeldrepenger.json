@@ -2,11 +2,16 @@
   "appName": "fp-infotrygd-foreldrepenger",
   "minReplicas": "1",
   "maxReplicas": "2",
+  "limits": {
+    "cpu": "1",
+    "mem": "1024Mi"
+  },
+  "requests": {
+    "cpu": "200m",
+    "mem": "512Mi"
+  },
   "oracleConfig": "oracle/data/dev/config/infotrygd_fpq",
   "oracleSecret": "oracle/data/dev/creds/fp_infotrygd_q1-user",
-  "ingresses": [
-    "https://fp-infotrygd-foreldrepenger.dev.intern.nav.no"
-  ],
   "env": {
     "DEFAULTDS_SCHEMA": "INFOTRYGD_FPQ"
   },
