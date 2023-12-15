@@ -38,7 +38,7 @@ jobs:
           team: teamforeldrepenger
 
       - name: Deploy av fp-infotrygd-${{ inputs.app }} til ${{ inputs.cluster }} fra GAR
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           PRINT_PAYLOAD: true
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_FP }}
