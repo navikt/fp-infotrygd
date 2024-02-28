@@ -16,6 +16,7 @@ interface PeriodeRepository : JpaRepository<Periode, Long> {
         val ikkeStartet: Set<Frisk> = setOf(Frisk.PASSIV, Frisk.AVVIST)
         val stønadstypeFp: Set<Stoenadstype> = setOf(Stoenadstype.ADOPSJON, Stoenadstype.FOEDSEL)
         val stønadstypeSvp: Set<Stoenadstype> = setOf(Stoenadstype.SVANGERSKAP, Stoenadstype.RISIKOFYLT_ARBMILJOE)
+        val stønadstypeSp: Set<Stoenadstype> = setOf(Stoenadstype.SYKEPENGER)
     }
 
     @Query("""

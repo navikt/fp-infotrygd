@@ -19,7 +19,7 @@ on:
       app:
         required: true
         type: string
-        description: 'The app to deploy (foreldrepenger|svangerskapspenger)'
+        description: 'The app to deploy (foreldrepenger|svangerskapspenger|sykepenger)'
 
 jobs:
   deploy:

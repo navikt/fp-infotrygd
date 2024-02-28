@@ -64,4 +64,21 @@ jobs:
       app: svangerskapspenger
     secrets: inherit
 
+  deploy-sp:
+    strategy:
+      matrix:
+        envs: [ 'dev', 'prod' ]
+    name: Deploy SP to ${{ matrix.envs }}
+    permissions:
+      contents: read
+      id-token: write
+    if: github.ref_name == 'master'
+    needs: [ build-app ]
+    uses: navikt/fp-infotrygd/.github/workflows/deploy.yml@master
+    with:
+      image: ${{ needs.build-app.outputs.build-version }}
+      cluster: ${{ matrix.envs }}-fss
+      app: sykepenger
+    secrets: inherit
+
 

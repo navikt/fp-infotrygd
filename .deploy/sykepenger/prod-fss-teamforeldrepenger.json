@@ -1,0 +1,30 @@
+{
+  "appName": "fp-infotrygd-sykepenger",
+  "minReplicas": "1",
+  "maxReplicas": "2",
+  "limits": {
+    "cpu": "2",
+    "mem": "2048Mi"
+  },
+  "requests": {
+    "cpu": "200m",
+    "mem": "1024Mi"
+  },
+  "oracleConfig": "oracle/data/prod/config/infotrygd_spp",
+  "oracleSecret": "oracle/data/prod/creds/sp_infotrygd_p-user",
+  "env": {
+    "DEFAULTDS_SCHEMA": "INFOTRYGD_SPP"
+  },
+  "AZURE_IAC_RULES": [
+    {
+      "app": "fpabakus",
+      "namespace": "teamforeldrepenger",
+      "cluster": "prod-fss"
+    },
+    {
+      "app": "k9-abakus",
+      "namespace": "k9saksbehandling",
+      "cluster": "prod-fss"
+    }
+  ]
+}

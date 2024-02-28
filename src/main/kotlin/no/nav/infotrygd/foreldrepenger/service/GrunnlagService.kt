@@ -43,9 +43,10 @@ class GrunnlagService(
     }
 
     private fun getStønadstyper(): Set<Stoenadstype> {
-        return when(appUtil.gjelderForeldrepenger()) {
-            true -> PeriodeRepository.stønadstypeFp
-            false -> PeriodeRepository.stønadstypeSvp
+        return when(appUtil.getApplication()) {
+            ApplicationUtil.Application.INFOTRYGD_FORELDREPENGER -> PeriodeRepository.stønadstypeFp
+            ApplicationUtil.Application.INFOTRYGD_SVANGERSKAPSPENGER -> PeriodeRepository.stønadstypeSvp
+            ApplicationUtil.Application.INFOTRYGD_SYKEPENGER -> PeriodeRepository.stønadstypeSp
         }
     }
 }
