@@ -7,15 +7,17 @@ import org.springframework.stereotype.Service
 class ApplicationUtil(@Value("\${spring.application.name}") private val applicationName: String) {
     enum class Application(val appName: String) {
         INFOTRYGD_FORELDREPENGER("fp-infotrygd-foreldrepenger"),
-        INFOTRYGD_SVANGERSKAPSPENGER("fp-infotrygd-svangerskapspenger")
+        INFOTRYGD_SVANGERSKAPSPENGER("fp-infotrygd-svangerskapspenger"),
+        INFOTRYGD_SYKEPENGER("fp-infotrygd-sykepenger")
         ;
     }
 
-    fun gjelderForeldrepenger(): Boolean {
-        return Application.INFOTRYGD_FORELDREPENGER.appName == applicationName
-    }
-
-    fun gjelderSvangerskapspenger(): Boolean {
-        return Application.INFOTRYGD_SVANGERSKAPSPENGER.appName == applicationName
+    fun getApplication(): Application {
+        return when (applicationName) {
+            Application.INFOTRYGD_FORELDREPENGER.appName -> Application.INFOTRYGD_FORELDREPENGER
+            Application.INFOTRYGD_SVANGERSKAPSPENGER.appName -> Application.INFOTRYGD_SVANGERSKAPSPENGER
+            Application.INFOTRYGD_SYKEPENGER.appName -> Application.INFOTRYGD_SYKEPENGER
+            else -> { Application.INFOTRYGD_FORELDREPENGER }
+        }
     }
 }

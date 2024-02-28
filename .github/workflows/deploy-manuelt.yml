@@ -16,10 +16,11 @@ on:
       app:
         required: true
         type: choice
-        description: 'The namespace to deployed to (foreldrepenger|svangerskapspenger)'
+        description: 'The namespace to deployed to (foreldrepenger|svangerskapspenger|sykepenger)'
         options:
           - foreldrepenger
           - svangerskapspenger
+          - sykepenger
 
 jobs:
   deploy:

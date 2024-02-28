@@ -12,6 +12,7 @@ interface SakRepository : JpaRepository<Sak, Long> {
     companion object {
         val valgFp: Set<String> = setOf("AE", "AP", "FE", "FP", "FU", "FØ")
         val valgSvp: Set<String> = setOf("SV")
+        val valgSp: Set<String> = setOf("RS", "RT", "SP", "SU")
     }
     @Query("""
         SELECT s FROM Sak s 

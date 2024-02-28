@@ -100,16 +100,18 @@ class SakService(
     }
 
     private fun getValg(): Set<String> {
-        return when(appUtil.gjelderForeldrepenger()) {
-            true -> SakRepository.valgFp
-            false -> SakRepository.valgSvp
+        return when(appUtil.getApplication()) {
+            ApplicationUtil.Application.INFOTRYGD_FORELDREPENGER -> SakRepository.valgFp
+            ApplicationUtil.Application.INFOTRYGD_SVANGERSKAPSPENGER -> SakRepository.valgSvp
+            ApplicationUtil.Application.INFOTRYGD_SYKEPENGER -> SakRepository.valgSp
         }
     }
 
     private fun getStønadstyper(): Set<Stoenadstype> {
-        return when(appUtil.gjelderForeldrepenger()) {
-            true -> PeriodeRepository.stønadstypeFp
-            false -> PeriodeRepository.stønadstypeSvp
+        return when(appUtil.getApplication()) {
+            ApplicationUtil.Application.INFOTRYGD_FORELDREPENGER -> PeriodeRepository.stønadstypeFp
+            ApplicationUtil.Application.INFOTRYGD_SVANGERSKAPSPENGER -> PeriodeRepository.stønadstypeSvp
+            ApplicationUtil.Application.INFOTRYGD_SYKEPENGER -> PeriodeRepository.stønadstypeSp
         }
     }
 }
