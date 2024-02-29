@@ -9,13 +9,16 @@ spring:
     username: ${DEFAULTDS_USERNAME}
     password: ${DEFAULTDS_PASSWORD}
     driver-class-name: ${DEFAULTDS_DRIVER:oracle.jdbc.OracleDriver}
+    hikari:
+      schema: ${DEFAULTDS_SCHEMA}
   jpa:
     hibernate:
       ddl-auto: ${APP_DDL_AUTO:none}
     properties:
       hibernate:
         default_schema: ${DEFAULTDS_SCHEMA}
-    open-in-view: false
+        format_sql: true
+    show-sql: true
 
 springdoc:
   packages-to-scan: no.nav.infotrygd.foreldrepenger
