@@ -131,7 +131,40 @@ class GrunnlagConvertersKtTest {
             foedselsdatoBarn = foedselsdatoBarn
         )
 
-        val dto = periodeToForeldrepengerDetaljer(periode, vedtak)
+        val dto = periodeToDetaljer(periode, vedtak)
+
+        val expected = YtelseDetaljer(
+            opprinneligIdentdato = opprinneligIdentdato,
+            dekningsgrad = dekningsgrad,
+            gradering = gradering,
+            foedselsdatoBarn = foedselsdatoBarn
+        )
+
+        assertThat(dto).isEqualTo(expected)
+    }
+
+    @Test
+    fun periodeToSykepengerDetaljer() {
+        val stoenadstype = Stoenadstype.SYKEPENGER // ytelse = sykepenger
+        val opprinneligIdentdato = LocalDate.now()
+        val dekningsgrad = 75
+        val gradering = 50
+        val foedselsdatoBarn = LocalDate.now().minusYears(1)
+
+        val pf = TestData.PeriodeFactory()
+
+        val vedtak = pf.vedtakBarn().copy(
+            dekningsgrad = BigDecimal(gradering).add(BigDecimal("0.4"))
+        )
+
+        val periode = pf.periode().copy(
+            stoenadstype = stoenadstype,
+            arbufoerOpprinnelig = opprinneligIdentdato,
+            dekningsgrad = dekningsgrad,
+            foedselsdatoBarn = foedselsdatoBarn
+        )
+
+        val dto = periodeToDetaljer(periode, vedtak)
 
         val expected = YtelseDetaljer(
             opprinneligIdentdato = opprinneligIdentdato,

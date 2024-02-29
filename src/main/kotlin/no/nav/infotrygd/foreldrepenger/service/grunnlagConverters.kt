@@ -5,11 +5,11 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
 import java.math.RoundingMode
 
-fun periodeToForeldrepengerDetaljer(
+fun periodeToDetaljer(
     p: no.nav.infotrygd.foreldrepenger.model.Periode,
     vedtak: VedtakBarn?
 ): YtelseDetaljer {
-    check(p.tema == Tema.FORELDREPENGER) { "Forventet ytelse == FORELDREPENGER" }
+    check(p.tema == Tema.FORELDREPENGER || p.tema == Tema.SYKEPENGER) { "Forventet ytelse == FORELDREPENGER eller SYKEPENGER" }
 
     return YtelseDetaljer(
         opprinneligIdentdato = p.arbufoerOpprinnelig,

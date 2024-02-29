@@ -58,7 +58,7 @@ class InfotrygdController(
 
         @RequestParam(required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        @Parameter(description = "Finn saker til og med denne datoen.", example = "2019-01-01")
+        @Parameter(description = "Finn saker til og med denne datoen.", example = "2024-01-01")
         tom: LocalDate?
     ): List<YtelseGrunnlag> {
 

@@ -37,7 +37,7 @@ class GrunnlagService(
             }
             YtelseGrunnlag(
                 generelt = periodeToGrunnlag(periode),
-                ytelseDetaljer = periodeToForeldrepengerDetaljer(periode, vedtak)
+                ytelseDetaljer = periodeToDetaljer(periode, vedtak)
             )
         }
     }
