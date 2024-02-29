@@ -22,6 +22,16 @@
       "cluster": "prod-fss"
     },
     {
+      "app": "fprisk",
+      "namespace": "teamforeldrepenger",
+      "cluster": "prod-fss"
+    },
+    {
+      "app": "fpsak",
+      "namespace": "teamforeldrepenger",
+      "cluster": "prod-fss"
+    },
+    {
       "app": "k9-abakus",
       "namespace": "k9saksbehandling",
       "cluster": "prod-fss"
