@@ -42,11 +42,11 @@ spec:
         kvPath: {{oracleConfig}}
       - mountPath: /var/run/secrets/nais.io/defaultDS
         kvPath:  {{oracleSecret}}
-  {{if env}}
+  {{#if env}}
   env:
   {{#each env}}
       - name: {{@key}}
-  value: "{{this}}"
+        value: "{{this}}"
   {{/each}}
   {{/if}}
   azure:
