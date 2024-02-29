@@ -167,10 +167,10 @@ class GrunnlagConvertersKtTest {
         val dto = periodeToDetaljer(periode, vedtak)
 
         val expected = YtelseDetaljer(
-            opprinneligIdentdato = opprinneligIdentdato,
-            dekningsgrad = dekningsgrad,
-            gradering = gradering,
-            foedselsdatoBarn = foedselsdatoBarn
+            opprinneligIdentdato = null,
+            dekningsgrad = null,
+            gradering = null,
+            foedselsdatoBarn = null
         )
 
         assertThat(dto).isEqualTo(expected)

@@ -11,6 +11,10 @@ fun periodeToDetaljer(
 ): YtelseDetaljer {
     check(p.tema == Tema.FORELDREPENGER || p.tema == Tema.SYKEPENGER) { "Forventet ytelse == FORELDREPENGER eller SYKEPENGER" }
 
+    if (p.tema != Tema.FORELDREPENGER) {
+        return YtelseDetaljer(null, null, null, null)
+    }
+
     return YtelseDetaljer(
         opprinneligIdentdato = p.arbufoerOpprinnelig,
         dekningsgrad = p.dekningsgrad,
