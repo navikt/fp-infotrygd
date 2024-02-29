@@ -15,8 +15,6 @@ spring:
     properties:
       hibernate:
         default_schema: ${DEFAULTDS_SCHEMA}
-        format_sql: true
-    show-sql: true
 
 springdoc:
   packages-to-scan: no.nav.infotrygd.foreldrepenger

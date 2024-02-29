@@ -2,7 +2,6 @@
   "appName": "fp-infotrygd-sykepenger",
   "minReplicas": "1",
   "maxReplicas": "2",
-  "ingress": "https://fp-infotrygd-sykepenger.intern.dev.nav.no",
   "limits": {
     "cpu": "1",
     "mem": "1024Mi"
