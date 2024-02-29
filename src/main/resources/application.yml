@@ -15,6 +15,7 @@ spring:
     properties:
       hibernate:
         default_schema: ${DEFAULTDS_SCHEMA}
+    open-in-view: false
 
 springdoc:
   packages-to-scan: no.nav.infotrygd.foreldrepenger
