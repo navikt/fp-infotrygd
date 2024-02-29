@@ -8,8 +8,10 @@ metadata:
 spec:
   image:  {{image}}
   port: 8080
+  {{#if ingress}}
   ingresses:
     - "{{ingress}}"
+  {{/if}}
   liveness:
     path: /actuator/health
     initialDelay: 10
