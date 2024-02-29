@@ -2,16 +2,14 @@ package no.nav.infotrygd.foreldrepenger.rest.controller
 
 import io.swagger.v3.oas.annotations.Parameter
 import no.nav.commons.foedselsnummer.FoedselsNr
+import no.nav.infotrygd.foreldrepenger.rest.dto.PersonRequest
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakResult
 import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
 import no.nav.infotrygd.foreldrepenger.service.GrunnlagService
 import no.nav.infotrygd.foreldrepenger.service.SakService
 import no.nav.security.token.support.core.api.Protected
 import org.springframework.format.annotation.DateTimeFormat
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
@@ -62,5 +60,18 @@ class InfotrygdController(
     ): List<YtelseGrunnlag> {
 
         return grunnlagService.hentYtelse(FoedselsNr(fnr), fom, tom)
+    }
+
+    @PostMapping(path = [ "/grunnlag"])
+    fun postGrunnlag(@RequestBody request: PersonRequest): List<YtelseGrunnlag> {
+        val fnrList = request.fnr
+
+        return fnrList.map { fnr: String ->
+            grunnlagService.hentYtelse(
+                    FoedselsNr(fnr),
+                    request.fom,
+                    request.tom
+            )
+        }.flatMap { it.toList() }
     }
 }
