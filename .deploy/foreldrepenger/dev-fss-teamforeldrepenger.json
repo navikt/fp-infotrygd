@@ -2,7 +2,6 @@
   "appName": "fp-infotrygd-foreldrepenger",
   "minReplicas": "1",
   "maxReplicas": "2",
-  "ingress": "https://fp-infotrygd-foreldrepenger.intern.dev.nav.no",
   "limits": {
     "cpu": "1",
     "mem": "1024Mi"
