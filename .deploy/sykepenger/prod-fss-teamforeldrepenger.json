@@ -1,7 +1,7 @@
 {
   "appName": "fp-infotrygd-sykepenger",
-  "minReplicas": "1",
-  "maxReplicas": "2",
+  "minReplicas": "2",
+  "maxReplicas": "3",
   "limits": {
     "cpu": "2",
     "mem": "2048Mi"
