@@ -1,16 +1,13 @@
 package no.nav.infotrygd.foreldrepenger.model
 
+import jakarta.persistence.*
 import no.nav.commons.foedselsnummer.FoedselsNr
-import no.nav.infotrygd.foreldrepenger.model.converters.Char2Converter
 import no.nav.infotrygd.foreldrepenger.model.converters.NavReversedLocalDateConverter
 import no.nav.infotrygd.foreldrepenger.model.converters.ReversedFoedselNrConverter
-import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakStatus
-import org.hibernate.annotations.Cascade
-import org.hibernate.annotations.CascadeType
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.*
 import java.io.Serializable
-import java.time.LocalDate
-import jakarta.persistence.*
 import java.math.BigInteger
+import java.time.LocalDate
 
 @Entity
 @Table(name = "SA_SAK_10")
@@ -23,9 +20,6 @@ data class Sak(
     @Convert(converter = ReversedFoedselNrConverter::class)
     val fnr: FoedselsNr,
 
-    @Column(name = "S01_PERSONKEY", columnDefinition = "DECIMAL")
-    val personKey: BigInteger,
-
     @Column(name = "S05_SAKSBLOKK", columnDefinition = "CHAR")
     val saksblokk: String,
 
@@ -36,16 +30,19 @@ data class Sak(
     val kapittelNr: String,
 
     @Column(name = "S10_VALG", columnDefinition = "CHAR")
-    @Convert(converter = Char2Converter::class)
-    val valg: String,
+    val valg: SakValg,
+
+    @Column(name = "S10_UNDERVALG", columnDefinition = "CHAR")
+    val undervalg: SakUndervalg,
 
     @Column(name = "S10_TYPE", columnDefinition = "CHAR")
-    @Convert(converter = Char2Converter::class)
-    val type: String,
+    val type: SakType,
 
     @Column(name = "S10_RESULTAT", columnDefinition = "CHAR")
-    @Convert(converter = Char2Converter::class)
-    val resultat: String?,
+    val resultat: SakResultat,
+
+    @Column(name = "S10_NIVAA", columnDefinition = "CHAR")
+    val nivaa: SakNivaa,
 
     /** INFO: NavReversedLocalDateConverter lar seg ikke sortere i databasen! */
     @Column(name = "S10_VEDTAKSDATO", columnDefinition = "DECIMAL")
@@ -61,18 +58,10 @@ data class Sak(
     @Convert(converter = NavReversedLocalDateConverter::class)
     val registrert: LocalDate?,
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumns(value = [
-        JoinColumn(name = "S01_PERSONKEY", referencedColumnName = "S01_PERSONKEY"),
-        JoinColumn(name = "S05_SAKSBLOKK", referencedColumnName = "S05_SAKSBLOKK"),
-        JoinColumn(name = "S10_SAKSNR", referencedColumnName = "S10_SAKSNR")
-    ])
-    @Cascade(value = [CascadeType.ALL])
-    val statushistorikk: List<Status>
+    @Column(name = "S10_MOTTATTDATO", columnDefinition = "DECIMAL")
+    @Convert(converter = NavReversedLocalDateConverter::class)
+    val mottatt: LocalDate?
 ) : Serializable {
-    val status: SakStatus
-        get() = statushistorikk.minByOrNull { it.lopeNr }?.status ?: SakStatus.IKKE_BEHANDLET
-
     fun innenforPeriode(fom: LocalDate, tom: LocalDate?): Boolean {
         if(tom != null) {
             require(fom == tom || fom.isBefore(tom)) { "Tom-dato kan ikke være før fom-dato." }

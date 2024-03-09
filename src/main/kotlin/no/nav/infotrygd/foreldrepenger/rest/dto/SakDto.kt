@@ -8,21 +8,63 @@ data class SakResult(
     val info: String?,
 
     val saker: List<SakDto>,
-
-    @get:Schema(description = "Åpne saker med løpende utbetaling. Disse hentes fra Foreldrepenge-base, ytelse Svangerskapspenger.")
-    val apneSakerMedLopendeUtbetaling: List<ApenSakMedLopendeUtbetaling>,
-
-    @get:Schema(description = "Avsluttede saker. Disse hentes fra Foreldrepenge-base, ytelse Svangerskapspenger.")
-    val avsluttedeSaker: AvsluttedeSaker, // IS10_STONADS_TYPE='SV', IS10_FRISK='F', IS10_ARBUFOER >= i dag minus 1 år
-
-    @get:Schema(description = "Saker som ikke har startet enda.")
-    val ikkeStartet: List<IkkeStartet>
 )
 
-// Saker fra Saksregister, ytelse Svangerskapspenger
+// Saker fra Saksregister (kun hovedtabell). Alle kolonner er non-null
 
 data class SakDto(
-    val sakId: SakId?,
+    val sakId: SakId,
+
+    @get:Schema(description = """
+        Type valg.
+        
+        AE: Adopsjon engangsstønad
+        AP: Foreldrepenger adopsjon 
+        FE: Fødsel engangsstønad
+        FP: Foreldrepenger
+        FU: Foreldrepenger fødsel, utland
+        FØ: Foreldrepenger fødsel
+        SV: Svangerskapspenger
+        
+        Kolonne: S10_VALG
+    """,
+            allowableValues = ["AE", "AP", "FE", "FP", "FU", "FØ", "SV"])
+    val valg: SakKodeverdi?,
+
+    @get:Schema(description = """
+        Type undervalg.
+        
+        FG: fedrekvote gradering
+        FK: fedrekvote ordinær
+        FU: fedrekvote utsettelse
+        GA: gradering
+        NA: engangsstønad nasjonal
+        OS: ordinær
+        UA: utsettelse fulltidsarbeid
+        UF: utsettelse ferie
+        UL: engangsstønad utland
+        US: utsettelse sykdom
+        
+        Kolonne: S10_UNDERVALG
+    """)
+    val undervalg: SakKodeverdi,
+
+    @get:Schema(description = """
+        Type nivaa.
+        
+        AN: Ankenemda
+        FFU: Utlandskontoret
+        FTK: FTK
+        HTF: Helsetrygdforvaltning
+        KA: Klageinstansen
+        KI: Klageinstansen
+        RTV: Rikstrygdeverket
+        TK: Trygdekontor
+        TR: Trygderetten
+        
+        Kolonne: S10_NIVAA
+    """)
+    val nivaa: SakKodeverdi,
 
     @get:Schema(description = """
         Type sak.
@@ -31,33 +73,29 @@ data class SakDto(
         R: Revurdering
         K: Klage
         A: Anke
+        DF: Dispensasjon foreldelse
+        DI: Dokumentinnsyn
+        EG: Etterlyse girokort
+        FS: Forespørsel
+        I: Informasjonssak
+        J: Journalsak
+        JP: Journalsak fra privatperson
+        JT: Journalsak fra trygdekontor
+        JU: Journalsak fra utenl trm
+        KE: Klage ettergivelse
+        KS: Kontrollsak
+        KT: Klage tilbakebetaling
+        SE: Søknad om ettergivelse
+        SV: Strafferettslig vurdering
+        T: Tilbakebetalingssak
+        TE: Tilbakebetaling endring
+        TK: Tidskonto
+        TU: Tipsutredning
+        UA: Utbetalt til annen
         
         Kolonne: S10_TYPE
-    """,
-        allowableValues = ["S", "R", "K", "A"])
-
-    val type: String,
-
-    @get:Schema(description = """
-        IP: - Saksbehandlingen kan starte med Statuskode IP (Ikke påbegynt). Da er det kun registrert en sakslinje uten at vedtaksbehandling er startet.
-        UB: - Saksbehandling startet - når sak med status UB - Under Behandling - lagres, rapporteres hendelsen BehandlingOpprettet
-        SG: - Saksbehandler 1 har fullført og sendt til saksbehandler 2 for godkjenning
-        UK: - Underkjent av saksbehandler 2 med retur til saksbehandler 1
-        FB: - FerdigBehandlet
-        FI: - ferdig iverksatt
-        RF: - returnert feilsendt
-        RM: - returnert midlertidig
-        RT: - returnert til
-        ST: - sendt til
-        VD: - videresendt Direktoratet
-        VI: - venter på iverksetting
-        VT: - videresendt Trygderetten
-        
-        Kolonne: S15_STATUS.
-    """,
-        allowableValues = ["IP", "UB", "SG", "UK", "FB", "FI", "RF", "RM", "RT", "ST", "VD", "VI", "VT"]
-    )
-    val status: String,         // S15_STATUS
+    """)
+    val type: SakKodeverdi,
 
     @get:Schema(description = """
         Resultatkode for saken.
@@ -66,20 +104,25 @@ data class SakDto(
         
         ?: beslutningsstøtte Besl st
         A: Avslag
+        AG: ukjent
         AK: avvist klage
         AV: advarsel
+        DG: ukjent
         DI: delvis innvilget
         DT: delvis tilbakebetale
         FB: ferdigbehandlet
         FI: fortsatt innvilget
+        GK: ukjent
         H: henlagt / trukket tilbake
         HB: henlagt / bortfalt
         I: Innvilget
+        IB: ukjent
         IN: innvilget ny situasjon
         IS: ikke straffbart
         IT: ikke tilbakebetale
         MO: midlertidig opphørt
         MT: mottatt
+        NB: ukjent
         O: opphørt
         PA: politianmeldelse
         R: redusert
@@ -91,7 +134,7 @@ data class SakDto(
         
         Kolonne: S10_RESULTAT
     """)
-    val resultat: String?,       // S10_RESULTAT
+    val resultat: SakKodeverdi,
 
     @get:Schema(description = """
         Vedtaksdato.
@@ -112,7 +155,14 @@ data class SakDto(
         Kolonne: S10_REG_DATO
     """,
         example = "2019-01-01")
-    val registrert: LocalDate?
+    val registrert: LocalDate?,   // S10_REG_DATO
+
+    @get:Schema(description = """
+        Mottatt dato for sak.
+        Kolonne: S10_MOTTATTDATO
+    """,
+        example = "2019-01-01")   // S10_MOTTATTDATO
+    val mottatt: LocalDate?
 )
 
 data class SakId(
@@ -123,97 +173,4 @@ data class SakId(
     val nr: Int         // S10_SAKSNR
 )
 
-
-// Saker fra Foreldrepenge-base, ytelse Svangerskapspenger
-
-data class ApenSakMedLopendeUtbetaling(
-    @get:Schema(description = """
-        Iverksettelsesdato.
-        Kolonne: IS10_ARBUFOER
-    """,
-        example = "2019-01-01")
-    val iverksatt: LocalDate, // IS10_ARBUFOER
-
-    @get:Schema(description = """
-        Registreringsdato for sak.
-        Kolonne: IS10_REG_DATO
-    """,
-        example = "2019-01-01")
-    val registrert: LocalDate?,
-
-    val utbetalinger: List<UtbetalingDto>
-)
-
-data class AvsluttedeSaker(
-    @get:Schema(description = """
-        Listen 'saker' viser resultater fra og med denne datoen (tidsbegrenset søk).
-    """,
-        example = "2019-01-01")
-    val fraOgMed: LocalDate,
-
-    val saker: List<AvsluttetSak>
-)
-
-data class AvsluttetSak(
-    @get:Schema(description = """
-        Iverksettelsesdato.
-        Kolonne: IS10_ARBUFOER
-    """,
-        example = "2019-01-01")
-    val iverksatt: LocalDate,   // IS10_ARBUFOER
-
-    @get:Schema(description = """
-        Stoppdato.
-        
-        Dette feltet ble innført i 2016-HL4.
-        
-        Kolonne: IS10_STOPPDATO
-    """,
-        example = "2019-01-01")
-    val stoppdato: LocalDate?,    // IS10_STOPPDATO
-
-    @get:Schema(description = """
-        Registreringsdato for sak.
-        Kolonne: IS10_REG_DATO
-    """,
-        example = "2019-01-01")
-    val registrert: LocalDate?,
-
-    val utbetalinger: List<UtbetalingDto>
-)
-
-data class UtbetalingDto(
-    @get:Schema(description = """
-        Utbetalt fra og med.
-        Kolonne: IS15_UTBETFOM
-    """,
-        example = "2019-01-01")
-    val utbetaltFom: LocalDate,
-
-    @get:Schema(description = """
-        Utbetalt til og med.
-        Kolonne: IS15_UTBETTOM
-    """,
-        example = "2019-01-01")
-    val utbetaltTom: LocalDate,
-
-    @get:Schema(description = """
-        Gradering
-        Kolonne: IS15_GRAD
-    """)
-    val gradering: Int
-)
-
-data class IkkeStartet(
-    @get:Schema(description = """
-        Iverksettelsesdato.
-        Kolonne: IS10_ARBUFOER
-    """)
-    val iverksatt: LocalDate?,
-
-    @get:Schema(description = """
-        Registreringsdato for sak.
-        Kolonne: IS10_REG_DATO
-    """)
-    val registrert: LocalDate?
-)
+data class SakKodeverdi(val kode: String, val termnavn: String)
