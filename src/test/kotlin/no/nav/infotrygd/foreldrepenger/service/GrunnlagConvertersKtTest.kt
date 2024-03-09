@@ -60,6 +60,7 @@ class GrunnlagConvertersKtTest {
             frisk = frisk,
             brukerId = saksbehandlerId,
             arbufoer = utbetaltFom,
+            arbufoerOpprinnelig = utbetaltFom,
             stoppdato = opphoerFom,
             stoenadstype = stoenadstype,
             utbetaltFom = utbetaltFom,
@@ -105,7 +106,7 @@ class GrunnlagConvertersKtTest {
                     dagsats = BigDecimal.valueOf(1000)
                 )
             ),
-            opprinneligIdentdato = null,
+            opprinneligIdentdato = utbetaltFom,
             dekningsgrad = null,
             gradering = null,
             foedselsdatoBarn = null
@@ -227,6 +228,7 @@ class GrunnlagConvertersKtTest {
             frisk = frisk,
             brukerId = saksbehandlerId,
             arbufoer = utbetaltFom,
+            arbufoerOpprinnelig = utbetaltFom,
             stoppdato = opphoerFom,
             stoenadstype = stoenadstype,
             utbetaltFom = utbetaltFom,
@@ -272,7 +274,7 @@ class GrunnlagConvertersKtTest {
                     dagsats = BigDecimal.valueOf(1000)
                 )
             ),
-            opprinneligIdentdato = null,
+            opprinneligIdentdato = utbetaltFom,
             dekningsgrad = null,
             gradering = null,
             foedselsdatoBarn = null
