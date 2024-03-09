@@ -10,5 +10,5 @@ enum class SakNivaa(override val kode: String, override val tekst: String) : Kod
     RTV("RTV", "Rikstrygdeverket"),
     TK("TK", "Trygdekontor"),
     TR("TR", "Trygderetten"),
-    UKJENT("   ", "Ukjent")
+    UKJENT("   ", "Annet")
 }

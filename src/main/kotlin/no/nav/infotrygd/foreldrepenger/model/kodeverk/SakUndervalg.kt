@@ -11,5 +11,5 @@ enum class SakUndervalg(override val kode: String, override val tekst: String) :
     UF("UF", "utsettelse ferie"),
     UL("UL", "engangsstønad utland"),
     US("US", "utsettelse sykdom"),
-    UKJENT("  ", "")
+    UKJENT("  ", "annet")
 }
