@@ -20,8 +20,8 @@ class InfotrygdController(
     private val grunnlagService: GrunnlagService
 ) {
 
-    @PostMapping(path = [ "/sak"])
-    fun postSak(@RequestBody request: PersonRequest): List<YtelseGrunnlag> {
+    @PostMapping(path = [ "/grunnlag"])
+    fun postGrunnlag(@RequestBody request: PersonRequest): List<YtelseGrunnlag> {
         val fnrList = request.fnr
 
         return fnrList.map { fnr: String ->
@@ -33,8 +33,8 @@ class InfotrygdController(
         }.flatMap { it.toList() }
     }
 
-    @PostMapping(path = [ "/grunnlag"])
-    fun postGrunnlag(@RequestBody request: PersonRequest): List<SakDto> {
+    @PostMapping(path = [ "/sak"])
+    fun postSak(@RequestBody request: PersonRequest): List<SakDto> {
         val fnrList = request.fnr
 
         return fnrList.map { fnr: String ->

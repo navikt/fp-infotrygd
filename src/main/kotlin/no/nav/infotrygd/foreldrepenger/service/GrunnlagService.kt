@@ -1,14 +1,14 @@
 package no.nav.infotrygd.foreldrepenger.service
 
+import jakarta.transaction.Transactional
 import no.nav.commons.foedselsnummer.FoedselsNr
-import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
 import no.nav.infotrygd.foreldrepenger.repository.VedtakBarnRepository
+import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import jakarta.transaction.Transactional
-import org.slf4j.LoggerFactory
 
 @Service
 @Transactional
@@ -26,7 +26,7 @@ class GrunnlagService(
 
         LOG.debug("Funnet {} resultater etter periode filtrering.", result.size)
 
-        return result.map { periode ->
+        val resultat =  result.map { periode ->
             val vedtak = periode.barnPersonKey?.let { barnPersonKey ->
                 vedtakBarnRepository.findByPersonKeyAndArbufoerSeqAndKodeAndRegion(
                     personKey = barnPersonKey,
@@ -35,11 +35,9 @@ class GrunnlagService(
                     region = periode.region
                 )
             }
-            YtelseGrunnlag(
-                generelt = periodeToGrunnlag(periode),
-                ytelseDetaljer = periodeToDetaljer(periode, vedtak)
-            )
+            periodeToGrunnlag(periode, vedtak)
         }
+        return resultat
     }
 
     private fun getStønadstyper(): Set<Stoenadstype> {
@@ -49,4 +47,5 @@ class GrunnlagService(
             ApplicationUtil.Application.INFOTRYGD_SYKEPENGER -> PeriodeRepository.stønadstypeSp
         }
     }
+
 }

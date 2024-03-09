@@ -1,18 +1,51 @@
 package no.nav.infotrygd.foreldrepenger.testutil.rest
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.commons.foedselsnummer.FoedselsNr
+import no.nav.infotrygd.foreldrepenger.rest.dto.PersonRequest
+import no.nav.infotrygd.foreldrepenger.rest.dto.SakDto
 import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
-import no.nav.infotrygd.foreldrepenger.rest.dto.SakResult
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.getForObject
 import java.time.LocalDate
 
 class TestClient(private val restTemplate: RestTemplate) {
-    fun hentSaker(fnr: FoedselsNr): SakResult {
-        return restTemplate.getForObject("/saker?fnr=${fnr.asString}")
+
+    private val jacksonObjectMapper = jacksonObjectMapper()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .registerModules(JavaTimeModule())
+
+    fun hentSaker(fnr: FoedselsNr, fom: LocalDate): List<SakDto> {
+        val request = PersonRequest(fom, null, listOf( fnr.asString));
+        val requestJson = jacksonObjectMapper.writeValueAsString(request)
+        val entity = HttpEntity(requestJson, headers())
+
+        val respons = restTemplate.exchange("/sak", HttpMethod.POST, entity, String::class.java).body
+        val arr = jacksonObjectMapper.readValue(respons, Array<SakDto>::class.java)
+        return arr.toList()
     }
 
     fun hentGrunnlag(fnr: FoedselsNr, fom: LocalDate): List<YtelseGrunnlag> {
-        return restTemplate.getForObject("/grunnlag?fnr=${fnr.asString}&fom=${fom}")
+        val request = PersonRequest(fom, null, listOf( fnr.asString));
+        val requestJson = jacksonObjectMapper.writeValueAsString(request)
+        val entity = HttpEntity(requestJson, headers())
+
+        val respons =  restTemplate.exchange("/grunnlag", HttpMethod.POST, entity, String::class.java).body
+        val arr = jacksonObjectMapper.readValue(respons, Array<YtelseGrunnlag>::class.java)
+        return arr.toList()
+    }
+
+    fun headers(): org.springframework.http.HttpHeaders {
+        return org.springframework.http.HttpHeaders().apply {
+            contentType = MediaType.APPLICATION_JSON
+            accept = listOf(MediaType.APPLICATION_JSON)
+        }
+
     }
 }

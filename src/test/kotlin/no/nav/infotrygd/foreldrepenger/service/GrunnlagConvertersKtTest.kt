@@ -69,8 +69,8 @@ class GrunnlagConvertersKtTest {
             utbetalingshistorikk = listOf(utbetaling)
         )
 
-        val dto = periodeToGrunnlag(periode)
-        val forventet = GrunnlagGenerelt(
+        val dto = periodeToGrunnlag(periode, null)
+        val forventet = YtelseGrunnlag(
             tema = Kodeverdi(tema.kode, tema.tekst),
             registrert = registrert,
             status = Kodeverdi(status.kode, status.tekst),
@@ -104,7 +104,11 @@ class GrunnlagConvertersKtTest {
                     arbeidsgiverOrgnr = arbeidsgiverOrgnr,
                     dagsats = BigDecimal.valueOf(1000)
                 )
-            )
+            ),
+            opprinneligIdentdato = null,
+            dekningsgrad = null,
+            gradering = null,
+            foedselsdatoBarn = null
         )
 
         assertThat(dto).isEqualTo(forventet)
@@ -232,8 +236,8 @@ class GrunnlagConvertersKtTest {
             utbetalingshistorikk = listOf(utbetaling)
         )
 
-        val dto = periodeToGrunnlag(periode)
-        val forventet = GrunnlagGenerelt(
+        val dto = periodeToGrunnlag(periode, null)
+        val forventet = YtelseGrunnlag(
             tema = Kodeverdi(tema.kode, tema.tekst),
             registrert = registrert,
             status = Kodeverdi(status.kode, status.tekst),
@@ -267,7 +271,11 @@ class GrunnlagConvertersKtTest {
                     arbeidsgiverOrgnr = arbeidsgiverOrgnr,
                     dagsats = BigDecimal.valueOf(1000)
                 )
-            )
+            ),
+            opprinneligIdentdato = null,
+            dekningsgrad = null,
+            gradering = null,
+            foedselsdatoBarn = null
         )
 
         assertThat(dto).isEqualTo(forventet)
