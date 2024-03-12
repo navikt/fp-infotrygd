@@ -47,8 +47,8 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, ikkeFrisk, feilType))
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stønadstypeFp)
-        assertThat(result).isNotNull.hasSize(1) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+        val result = repository.findByFnrAndStoenadstype(fnr, PeriodeRepository.stønadstypeFp)
+        assertThat(result).isNotNull.hasSize(2) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
         assertThat(result.get(0).stoenadstype).isEqualTo(Stoenadstype.ADOPSJON)
     }
 
@@ -62,8 +62,8 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, ikkeFrisk, ikkeSv))
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stønadstypeSvp)
-        assertThat(result).isNotNull.hasSize(1) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+        val result = repository.findByFnrAndStoenadstype(fnr, PeriodeRepository.stønadstypeSvp)
+        assertThat(result).isNotNull.hasSize(2) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
         assertThat(result.get(0).stoenadstype).isEqualTo(Stoenadstype.RISIKOFYLT_ARBMILJOE)
     }
 
@@ -76,8 +76,8 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, feilType))
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.løpende, PeriodeRepository.stønadstypeFp)
-        assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+        val result = repository.findByFnrAndStoenadstype(fnr, PeriodeRepository.stønadstypeFp)
+        assertThat(listOf(relevant, frisk)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
     @Test
@@ -89,8 +89,8 @@ class PeriodeRepositoryTest {
 
         repository.saveAll(listOf(relevant, frisk, ikkeSv))
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.løpende, PeriodeRepository.stønadstypeSvp)
-        assertThat(listOf(relevant)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
+        val result = repository.findByFnrAndStoenadstype(fnr, PeriodeRepository.stønadstypeSvp)
+        assertThat(listOf(relevant, frisk)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
     @Test
@@ -115,7 +115,7 @@ class PeriodeRepositoryTest {
 
         repository.save(p)
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stønadstypeFp)
+        val result = repository.findByFnrAndStoenadstype(fnr, PeriodeRepository.stønadstypeFp)
         assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 
@@ -141,7 +141,7 @@ class PeriodeRepositoryTest {
 
         repository.save(p)
 
-        val result = repository.findByFnrAndFrisk(fnr, PeriodeRepository.avsluttede, PeriodeRepository.stønadstypeSvp)
+        val result = repository.findByFnrAndStoenadstype(fnr, PeriodeRepository.stønadstypeSvp)
         assertThat(listOf(p)).isEqualTo(result) // relevant hibernate bug: https://hibernate.atlassian.net/browse/HHH-5409
     }
 

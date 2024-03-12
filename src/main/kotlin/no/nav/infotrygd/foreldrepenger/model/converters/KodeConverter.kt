@@ -1,9 +1,9 @@
 package no.nav.infotrygd.foreldrepenger.model.converters
 
-import no.nav.infotrygd.foreldrepenger.exception.UkjentDatabaseverdiException
-import no.nav.infotrygd.foreldrepenger.model.kodeverk.*
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
+import no.nav.infotrygd.foreldrepenger.exception.UkjentDatabaseverdiException
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.*
 
 abstract class KodeConverter<T : Kode>(private val koder: List<T>, val fieldSize: Int = 0, val padChar: Char = ' ') : AttributeConverter<T?, String?> {
 
@@ -47,4 +47,16 @@ class ArbeidskategoriConverter : KodeConverter<Arbeidskategori>(Arbeidskategori.
 class InntektsperiodeConverter : KodeConverter<Inntektsperiode>(Inntektsperiode.values().toList(), fieldSize = 2)
 
 @Converter(autoApply = true)
-class SakStatusConverter : KodeConverter<SakStatus>(SakStatus.values().toList(), fieldSize = 2)
+class SakValgConverter : KodeConverter<SakValg>(SakValg.values().toList(), fieldSize = 2)
+
+@Converter(autoApply = true)
+class SakUndervalgConverter : KodeConverter<SakUndervalg>(SakUndervalg.values().toList(), fieldSize = 2)
+
+@Converter(autoApply = true)
+class SakTypeConverter : KodeConverter<SakType>(SakType.values().toList(), fieldSize = 2)
+
+@Converter(autoApply = true)
+class SakResultatConverter : KodeConverter<SakResultat>(SakResultat.values().toList(), fieldSize = 2)
+
+@Converter(autoApply = true)
+class SakNivaaConverter : KodeConverter<SakNivaa>(SakNivaa.values().toList(), fieldSize = 3)

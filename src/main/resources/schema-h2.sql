@@ -31,8 +31,7 @@ Create table INFOTRYGD_Q0.SA_SAK_10 (
     S10_MOTTATTDATO                NUMBER(8)           , -- NOT NULL,
     S10_KAPITTELNR                 CHAR(2)             , -- NOT NULL,
     S10_VALG                       CHAR(2)             , -- NOT NULL,
-    S10_UNDERVALG_1                CHAR(1)             , -- NOT NULL,
-    S10_UNDERVALG_2                CHAR(1)             , -- NOT NULL,
+    S10_UNDERVALG                  CHAR(1)             , -- NOT NULL,
     S10_DUBLETT_FEIL               CHAR(1)             , -- NOT NULL,
     S10_TYPE                       CHAR(2)             , -- NOT NULL,
     S10_INNSTILLING                CHAR(2)             , -- NOT NULL,
@@ -76,37 +75,6 @@ Create table INFOTRYGD_Q0.SA_SAK_10 (
     KILDE_IS                       VARCHAR2(12)        DEFAULT ' '  , -- NOT NULL,
     REGION                         CHAR(1)             DEFAULT ' '  , -- NOT NULL,
     ID_SAK                         NUMBER              DEFAULT NOT NULL -- endret fra NUMBER
-);
-
---------------------------------------------------
--- Create Table INFOTRYGD_Q0.SA_STATUS_15
---------------------------------------------------
-Create table INFOTRYGD_Q0.SA_STATUS_15 (
-    S01_PERSONKEY                  NUMBER(15)          , -- NOT NULL,
-    S05_SAKSBLOKK                  CHAR(1)             , -- NOT NULL,
-    S10_SAKSNR                     CHAR(2)             , -- NOT NULL,
-    S15_LOPENR                     CHAR(2)             , -- NOT NULL,
-    S15_BEH_ENHET_TYPE             CHAR(3)             , -- NOT NULL,
-    S15_BEH_ENHET_ENHET            CHAR(4)             , -- NOT NULL,
-    S15_STATUS                     CHAR(2)             , -- NOT NULL,
-    S15_STATUS_DATO                NUMBER(8)           , -- NOT NULL,
-    S15_BRUKERID                   CHAR(7)             , -- NOT NULL,
-    S15_STATUS_KLOKKE              CHAR(6)             , -- NOT NULL,
-    S15_STATUS_BRUKERID            CHAR(7)             , -- NOT NULL,
-    S15_ENDRINGS_KODE              CHAR(1)             , -- NOT NULL,
-    S15_TYPE_GML                   CHAR(2)             , -- NOT NULL,
-    S15_TYPE_NY                    CHAR(2)             , -- NOT NULL,
-    S15_LOVETSVAR_DATO             NUMBER(8)           , -- NOT NULL,
-    S15_ANT_LOFTER                 CHAR(2)             , -- NOT NULL,
-    S15_GRUPPE                     CHAR(2)             , -- NOT NULL,
-    S15_SPERR                      CHAR(1)             , -- NOT NULL,
-    TK_NR                          CHAR(4)             , -- NOT NULL,
-    F_NR                           CHAR(11)            , -- NOT NULL,
-    OPPRETTET                      TIMESTAMP(6)        DEFAULT current_timestamp  , -- NOT NULL,
-    ENDRET_I_KILDE                 TIMESTAMP(6)        DEFAULT current_timestamp  , -- NOT NULL,
-    KILDE_IS                       VARCHAR2(12)        DEFAULT ' '  , -- NOT NULL,
-    REGION                         CHAR(1)             DEFAULT ' '  , -- NOT NULL,
-    ID_STATUS                      NUMBER              DEFAULT NOT NULL -- endret fra NUMBER
 );
 
 --------------------------------------------------

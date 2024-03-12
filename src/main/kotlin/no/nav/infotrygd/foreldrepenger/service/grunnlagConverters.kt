@@ -4,6 +4,14 @@ import no.nav.infotrygd.foreldrepenger.model.VedtakBarn
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.rest.dto.*
 import java.math.RoundingMode
+import java.time.LocalDate
+
+data class YtelseDetaljer(
+        val opprinneligIdentdato: LocalDate?,
+        val dekningsgrad: Int?,
+        val gradering: Int?,
+        val foedselsdatoBarn: LocalDate?
+)
 
 fun periodeToDetaljer(
     p: no.nav.infotrygd.foreldrepenger.model.Periode,
@@ -23,7 +31,8 @@ fun periodeToDetaljer(
     )
 }
 
-fun periodeToGrunnlag(p: no.nav.infotrygd.foreldrepenger.model.Periode): GrunnlagGenerelt {
+fun periodeToGrunnlag(p: no.nav.infotrygd.foreldrepenger.model.Periode, v: VedtakBarn?): YtelseGrunnlag {
+    val y = periodeToDetaljer(p, v)
     val tema = p.tema
     val status = p.frisk.status?.let { Kodeverdi(it.kode, it.tekst) }
 
@@ -40,7 +49,7 @@ fun periodeToGrunnlag(p: no.nav.infotrygd.foreldrepenger.model.Periode): Grunnla
         Kodeverdi(kat.kode, kat.tekst)
     }
 
-    return GrunnlagGenerelt(
+    return YtelseGrunnlag(
         tema = Kodeverdi(tema.kode, tema.tekst),
         registrert = p.registrert,
         status = status,
@@ -74,6 +83,10 @@ fun periodeToGrunnlag(p: no.nav.infotrygd.foreldrepenger.model.Periode): Grunnla
                 erRefusjon = it.erRefusjon,
                 dagsats = it.dagsats
             )
-        }
+        },
+        opprinneligIdentdato = y.opprinneligIdentdato,
+        dekningsgrad = y.dekningsgrad,
+        gradering = y.gradering,
+        foedselsdatoBarn = y.foedselsdatoBarn
     )
 }

@@ -2,6 +2,7 @@ package no.nav.infotrygd.foreldrepenger.repository
 
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.Sak
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakValg
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -10,15 +11,16 @@ import org.springframework.stereotype.Repository
 interface SakRepository : JpaRepository<Sak, Long> {
 
     companion object {
-        val valgFp: Set<String> = setOf("AE", "AP", "FE", "FP", "FU", "FØ")
-        val valgSvp: Set<String> = setOf("SV")
-        val valgSp: Set<String> = setOf("RS", "RT", "SP", "SU")
+        val valgFp: Set<SakValg> = setOf(SakValg.ES_A, SakValg.ES_F, SakValg.FP, SakValg.FP_A, SakValg.FP_F, SakValg.FP_FU)
+        val valgSvp: Set<SakValg> = setOf(SakValg.SVP)
+        val valgSp: Set<SakValg> = setOf()
     }
     @Query("""
         SELECT s FROM Sak s 
             WHERE s.fnr = :fnr 
               AND s.kapittelNr = 'FA'
-              AND s.valg in :valg
-              AND s.type IN ('S', 'R', 'K', 'A')""")
-    fun findSakerByFnrAndValg(fnr: FoedselsNr, valg: Set<String>): List<Sak>
+              AND s.valg in :valg""")
+    fun findSakerByFnrAndValg(fnr: FoedselsNr, valg: Set<SakValg>): List<Sak>
+
+
 }

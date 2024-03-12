@@ -2,8 +2,7 @@ package no.nav.infotrygd.foreldrepenger.repository
 
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.Sak
-import no.nav.infotrygd.foreldrepenger.model.Status
-import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakStatus
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.*
 import no.nav.infotrygd.foreldrepenger.nextId
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.math.BigInteger
 import java.time.LocalDate
 
 @ExtendWith(SpringExtension::class)
@@ -24,15 +22,7 @@ class SakRepositoryTest {
     @Autowired
     lateinit var repository: SakRepository
 
-    @Autowired
-    lateinit var statusRepository: StatusRepository
-
     var sakNr = 1
-
-    private val alleValg: List<String>
-        get() {
-            return listOf("AE", "AP", "FE", "FP", "FU", "FØ")
-        }
 
     @BeforeEach
     fun setUp() {
@@ -42,21 +32,17 @@ class SakRepositoryTest {
     @Test
     fun findFpSakerByFnr() {
 
-        for(valg in alleValg) {
+        for(valg in SakValg.entries - listOf(SakValg.SVP)) {
             val fnr = TestData.foedselsNr()
-            val status = SakStatus.FB
             val s = lagSak(
-                fnr = fnr,
-                kapittelNr = "FA",
-                valg = valg,
-                type = "S",
-                sakStatus = status)
+                    fnr = fnr,
+                    kapittelNr = "FA",
+                    valg = valg,
+                    type = SakType.S)
 
 
             repository.findSakerByFnrAndValg(fnr, SakRepository.valgFp).also {
                 assertThat(it).hasSize(1)
-                assertThat(it[0].statushistorikk).hasSize(1)
-                assertThat(it[0].status).isEqualTo(status)
             }
 
             repository.findSakerByFnrAndValg(TestData.foedselsNr(), SakRepository.valgFp).also {
@@ -70,19 +56,15 @@ class SakRepositoryTest {
     @Test
     fun findSvpSakerByFnr() {
         val fnr = TestData.foedselsNr()
-        val status = SakStatus.IP
         lagSak(
-            fnr = fnr,
-            kapittelNr = "FA",
-            valg = "SV",
-            type = "S",
-            sakStatus = status)
+                fnr = fnr,
+                kapittelNr = "FA",
+                valg = SakValg.SVP,
+                type = SakType.S)
 
 
         repository.findSakerByFnrAndValg(fnr, SakRepository.valgSvp).also {
             assertThat(it).hasSize(1)
-            assertThat(it[0].statushistorikk).hasSize(1)
-            assertThat(it[0].statushistorikk[0].status).isEqualTo(status)
         }
 
         repository.findSakerByFnrAndValg(TestData.foedselsNr(), SakRepository.valgSvp).also {
@@ -94,15 +76,14 @@ class SakRepositoryTest {
     fun relevanteTyperFp() {
         val fnr = TestData.foedselsNr()
 
-        val relevanteTyper = setOf("S", "R", "K", "A")
-        val urelevanteTyper = setOf("X", "Y", "Z")
+        val relevanteTyper = setOf(SakType.S, SakType.R, SakType.K, SakType.A)
 
-        for(type in relevanteTyper + urelevanteTyper) {
+        for(type in relevanteTyper) {
             lagSak(
-                fnr = fnr,
-                kapittelNr = "FA",
-                valg = "AE",
-                type = type)
+                    fnr = fnr,
+                    kapittelNr = "FA",
+                    valg = SakValg.ES_A,
+                    type = type)
         }
 
         val res = repository.findSakerByFnrAndValg(fnr, SakRepository.valgFp)
@@ -113,50 +94,38 @@ class SakRepositoryTest {
     fun relevanteTyperSvp() {
         val fnr = TestData.foedselsNr()
 
-        val relevanteTyper = setOf("S", "R", "K", "A")
-        val urelevanteTyper = setOf("X", "Y", "Z")
+        val relevanteTyper = setOf(SakType.S, SakType.R, SakType.K, SakType.A)
 
-        for(type in relevanteTyper + urelevanteTyper) {
+        for(type in relevanteTyper) {
             lagSak(
-                fnr = fnr,
-                kapittelNr = "FA",
-                valg = "SV",
-                type = type)
+                    fnr = fnr,
+                    kapittelNr = "FA",
+                    valg = SakValg.SVP,
+                    type = type)
         }
 
         val res = repository.findSakerByFnrAndValg(fnr, SakRepository.valgSvp)
         assertThat(res.map { it.type }.toSet()).isEqualTo(relevanteTyper)
     }
 
-    private fun lagSak(fnr: FoedselsNr, kapittelNr: String, valg: String, type: String, resultat: String? = null, sakStatus: SakStatus = SakStatus.IP): Sak {
+    private fun lagSak(fnr: FoedselsNr, kapittelNr: String, valg: SakValg, type: SakType, resultat: SakResultat? = SakResultat.ÅPEN): Sak {
         val snr = sakNr++.toString()
-
-        val status = Status(
-            id = nextId(),
-            personKey = BigInteger.valueOf(123),
-            saksblokk = "x",
-            saksnummer = snr,
-            status = sakStatus,
-            lopeNr = BigInteger.ONE
-        )
-        statusRepository.save(status)
 
         val sak = Sak(
             id = nextId(),
             fnr = fnr,
-            personKey = BigInteger.valueOf(123),
             saksblokk = "x",
             saksnummer = snr,
             kapittelNr = kapittelNr,
             valg = valg,
+            undervalg = SakUndervalg.UKJENT,
+            nivaa = SakNivaa.TK,
             type = type,
-            resultat = resultat,
+            resultat = resultat?: SakResultat.ÅPEN,
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
-            statushistorikk = listOf(
-                status
-            ),
-            registrert = LocalDate.now()
+            registrert = LocalDate.now(),
+            mottatt = LocalDate.now()
         )
         return repository.save(sak)
     }

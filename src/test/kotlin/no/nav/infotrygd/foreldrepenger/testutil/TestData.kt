@@ -4,10 +4,7 @@ import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.commons.foedselsnummer.Kjoenn
 import no.nav.commons.foedselsnummer.testutils.FoedselsnummerGenerator
 import no.nav.infotrygd.foreldrepenger.model.*
-import no.nav.infotrygd.foreldrepenger.model.kodeverk.Frisk
-import no.nav.infotrygd.foreldrepenger.model.kodeverk.Inntektsperiode
-import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakStatus
-import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.*
 import no.nav.infotrygd.foreldrepenger.nextId
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -87,30 +84,21 @@ object TestData {
     fun sak(fnr: FoedselsNr = foedselsNr()): Sak {
         val saksblokk = "X"
         val saksnummer = "11"
-        val personKey = nextId()
         return Sak(
             id = nextId(),
             fnr = fnr,
-            personKey = personKey,
             saksblokk = saksblokk,
             saksnummer = saksnummer,
-            kapittelNr = "BS",
-            valg = "PN",
-            type = "A",
-            resultat = "A",
+            kapittelNr = "FA",
+            valg = SakValg.FP_A,
+            undervalg = SakUndervalg.UKJENT,
+            nivaa = SakNivaa.TK,
+            type = SakType.A,
+            resultat = SakResultat.A,
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
             registrert = LocalDate.now(),
-            statushistorikk = listOf(
-                Status(
-                    id = nextId(),
-                    personKey = personKey,
-                    saksblokk = saksblokk,
-                    saksnummer = saksnummer,
-                    lopeNr = nextId().mod(BigInteger.valueOf(99)),
-                    status = SakStatus.IKKE_BEHANDLET
-                )
-            )
+            mottatt = LocalDate.now()
         )
     }
 

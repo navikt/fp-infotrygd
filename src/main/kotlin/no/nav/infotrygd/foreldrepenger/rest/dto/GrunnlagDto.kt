@@ -81,6 +81,10 @@ interface Grunnlag {
     val arbeidskategori: Kodeverdi?
     val arbeidsforhold: List<Arbeidsforhold>
     val vedtak: List<Vedtak>
+    val opprinneligIdentdato: LocalDate?
+    val dekningsgrad: Int?
+    val gradering: Int?
+    val foedselsdatoBarn: LocalDate?
 }
 
 data class Vedtak(
@@ -116,7 +120,7 @@ data class Arbeidsforhold(
 
 data class Kodeverdi(val kode: String, val termnavn: String)
 
-data class GrunnlagGenerelt(
+data class YtelseGrunnlag(
     override val tema: Kodeverdi?,
     override val registrert: LocalDate?,
     override val status: Kodeverdi?,
@@ -128,31 +132,13 @@ data class GrunnlagGenerelt(
     override val periode: Periode?,
     override val arbeidskategori: Kodeverdi?,
     override val arbeidsforhold: List<Arbeidsforhold>,
-    override val vedtak: List<Vedtak>
-) : Grunnlag
-
-
-// ======================================== Ytelser ========================================
-
-
-// --- Foreldrepenger ---
-
-interface YtelseFelt {
-    val opprinneligIdentdato: LocalDate?
-    val dekningsgrad: Int?
-    val gradering: Int?
-    val foedselsdatoBarn: LocalDate?
-}
-
-data class YtelseDetaljer(
+    override val vedtak: List<Vedtak>,
     override val opprinneligIdentdato: LocalDate?,
     override val dekningsgrad: Int?,
     override val gradering: Int?,
     override val foedselsdatoBarn: LocalDate?
-) : YtelseFelt
+) : Grunnlag
 
-data class YtelseGrunnlag(
-    private val generelt: GrunnlagGenerelt,
-    private val ytelseDetaljer: YtelseDetaljer
-) : Grunnlag by generelt,
-    YtelseFelt by ytelseDetaljer
+
+
+
