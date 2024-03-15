@@ -5,7 +5,7 @@ enum class SakValg(override val kode: String, override val tekst: String) : Kode
     FP_A("AP", "Foreldrepenger adopsjon "),
     ES_F("FE", "Engangsstønad fødsel "),
     FP("FP", "Foreldrepenger"),
-    FP_FU("FU", "Foreldrepenger fødsel, utland"),
+    FP_FU("FU", "Foreldrepenger utland"),
     FP_F("FØ", "Foreldrepenger fødsel"),
     SVP("SV", "Svangerskapspenger")
 }

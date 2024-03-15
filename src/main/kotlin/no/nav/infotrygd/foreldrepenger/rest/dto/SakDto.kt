@@ -22,7 +22,7 @@ data class SakDto(
         AP: Foreldrepenger adopsjon 
         FE: Fødsel engangsstønad
         FP: Foreldrepenger
-        FU: Foreldrepenger fødsel, utland
+        FU: Foreldrepenger utland
         FØ: Foreldrepenger fødsel
         SV: Svangerskapspenger
         
