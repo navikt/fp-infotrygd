@@ -20,7 +20,7 @@ class KildesystemException(
             return HttpHeaders.EMPTY
         }
         val result = HttpHeaders()
-        headers.forEach { (headerName: String?, headerValues: List<String>) ->
+        headers.forEach { (headerName: String, headerValues: List<String>) ->
             result.addAll(
                 headerName, headerValues
             )
