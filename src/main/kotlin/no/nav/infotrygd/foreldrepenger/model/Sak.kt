@@ -60,7 +60,10 @@ data class Sak(
 
     @Column(name = "S10_MOTTATTDATO", columnDefinition = "DECIMAL")
     @Convert(converter = NavReversedLocalDateConverter::class)
-    val mottatt: LocalDate?
+    val mottatt: LocalDate?,
+
+    @Column(name = "S10_REELL_ENHET", columnDefinition = "CHAR")
+    val reellEnhet: String?
 ) : Serializable {
     fun innenforPeriode(fom: LocalDate, tom: LocalDate?): Boolean {
         if(tom != null) {

@@ -3,8 +3,10 @@ package no.nav.infotrygd.foreldrepenger.service
 import jakarta.transaction.Transactional
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.Sak
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakResultat
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakValg
 import no.nav.infotrygd.foreldrepenger.repository.SakRepository
+import no.nav.infotrygd.foreldrepenger.rest.dto.RestanseDto
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakDto
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakId
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakKodeverdi
@@ -28,6 +30,23 @@ class SakService(
         LOG.info("Hentet {} saker.", saker.size)
 
         return toDto(saker)
+    }
+
+    fun findRestanse(): List<RestanseDto> {
+        val restanse = sakRepository.findRestanse(setOf(SakResultat.SB, SakResultat.ÅPEN))
+
+        LOG.info("Hentet {} saker.", restanse.size)
+
+        return restanse.map {
+            RestanseDto(
+                    fnr = it.fnr.asString,
+                    valg = it.valg.kode,
+                    type = it.type.kode,
+                    registrert = it.registrert,
+                    mottatt = it.mottatt,
+                    reellEnhet = it.reellEnhet
+            )
+        }
     }
 
     private fun toDto(saker: List<Sak>): List<SakDto> {
