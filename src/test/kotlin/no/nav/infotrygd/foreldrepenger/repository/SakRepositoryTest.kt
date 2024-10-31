@@ -125,7 +125,8 @@ class SakRepositoryTest {
             vedtaksdato = LocalDate.now(),
             iverksattdato = LocalDate.now(),
             registrert = LocalDate.now(),
-            mottatt = LocalDate.now()
+            mottatt = LocalDate.now(),
+            reellEnhet = "4867"
         )
         return repository.save(sak)
     }
