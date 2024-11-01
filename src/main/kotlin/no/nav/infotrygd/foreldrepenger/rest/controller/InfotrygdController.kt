@@ -2,11 +2,13 @@ package no.nav.infotrygd.foreldrepenger.rest.controller
 
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.rest.dto.PersonRequest
+import no.nav.infotrygd.foreldrepenger.rest.dto.RestanseDto
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakDto
 import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
 import no.nav.infotrygd.foreldrepenger.service.GrunnlagService
 import no.nav.infotrygd.foreldrepenger.service.SakService
 import no.nav.security.token.support.core.api.Protected
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -44,5 +46,10 @@ class InfotrygdController(
                     request.tom
             )
         }.flatMap { it.toList() }
+    }
+
+    @GetMapping(path = [ "/restanse"])
+    fun getRestanse(): List<RestanseDto> {
+        return sakService.findRestanse()
     }
 }
