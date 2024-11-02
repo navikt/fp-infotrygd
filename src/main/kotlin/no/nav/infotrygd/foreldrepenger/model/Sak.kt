@@ -63,7 +63,10 @@ data class Sak(
     val mottatt: LocalDate?,
 
     @Column(name = "S10_REELL_ENHET", columnDefinition = "CHAR")
-    val reellEnhet: String?
+    val reellEnhet: String?,
+
+    @Column(name = "S10_BEHEN_ENHET", columnDefinition = "CHAR")
+    val behandlendeEnhet: String?
 ) : Serializable {
     fun innenforPeriode(fom: LocalDate, tom: LocalDate?): Boolean {
         if(tom != null) {

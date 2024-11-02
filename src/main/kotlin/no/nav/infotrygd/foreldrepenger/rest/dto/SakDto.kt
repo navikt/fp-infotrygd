@@ -3,13 +3,6 @@ package no.nav.infotrygd.foreldrepenger.rest.dto
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 
-data class SakResult(
-    @get:Schema(description = "Relevant tillegsinformasjon om resultatet.")
-    val info: String?,
-
-    val saker: List<SakDto>,
-)
-
 // Saker fra Saksregister (kun hovedtabell). Alle kolonner er non-null
 
 data class SakDto(

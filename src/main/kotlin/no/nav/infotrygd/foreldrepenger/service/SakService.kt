@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.Sak
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakResultat
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakType
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakValg
 import no.nav.infotrygd.foreldrepenger.repository.SakRepository
 import no.nav.infotrygd.foreldrepenger.rest.dto.RestanseDto
@@ -33,7 +34,8 @@ class SakService(
     }
 
     fun findRestanse(): List<RestanseDto> {
-        val restanse = sakRepository.findRestanse(setOf(SakResultat.SB, SakResultat.ÅPEN))
+        val restanse = sakRepository.findRestanse(setOf(SakResultat.SB, SakResultat.ÅPEN),
+                setOf(SakType.A, SakType.K, SakType.KE, SakType.KT))
 
         LOG.info("Hentet {} saker.", restanse.size)
 
@@ -44,7 +46,9 @@ class SakService(
                     type = it.type.kode,
                     registrert = it.registrert,
                     mottatt = it.mottatt,
-                    reellEnhet = it.reellEnhet
+                    vedtatt = it.vedtaksdato,
+                    reellEnhet = it.reellEnhet,
+                    behandlendeEnhet = it.behandlendeEnhet
             )
         }
     }

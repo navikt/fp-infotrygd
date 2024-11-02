@@ -3,6 +3,7 @@ package no.nav.infotrygd.foreldrepenger.repository
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.Sak
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakResultat
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakType
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakValg
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -26,8 +27,8 @@ interface SakRepository : JpaRepository<Sak, Long> {
     @Query("""
         SELECT s FROM Sak s 
             WHERE s.kapittelNr = 'FA'
-              AND s.resultat in :resultat""")
-    fun findRestanse(resultat: Set<SakResultat>): List<Sak>
+              AND (s.resultat in :resultat or (s.type in :klager and s.vedtaksdato = 0))""")
+    fun findRestanse(resultat: Set<SakResultat>, klager: Set<SakType>): List<Sak>
 
 
 }
