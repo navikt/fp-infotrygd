@@ -34,8 +34,7 @@ class SakService(
     }
 
     fun findRestanse(): List<RestanseDto> {
-        val restanse = sakRepository.findRestanse(setOf(SakResultat.SB, SakResultat.ÅPEN),
-                setOf(SakType.A, SakType.K, SakType.KE, SakType.KT))
+        val restanse = sakRepository.findRestanse(setOf(SakResultat.SB, SakResultat.ÅPEN))
 
         LOG.info("Hentet {} saker.", restanse.size)
 
