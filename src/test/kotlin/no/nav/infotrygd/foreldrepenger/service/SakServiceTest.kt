@@ -50,7 +50,8 @@ internal class SakServiceTest {
             iverksattdato = LocalDate.now(),
             registrert = LocalDate.now(),
             mottatt = LocalDate.now(),
-            reellEnhet = "4867"
+            reellEnhet = "4867",
+            behandlendeEnhet = "4867"
         )
 
         sakRepository.save(sak)

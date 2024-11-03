@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.model.Sak
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakResultat
+import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakType
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakValg
 import no.nav.infotrygd.foreldrepenger.repository.SakRepository
 import no.nav.infotrygd.foreldrepenger.rest.dto.RestanseDto
@@ -44,7 +45,9 @@ class SakService(
                     type = it.type.kode,
                     registrert = it.registrert,
                     mottatt = it.mottatt,
-                    reellEnhet = it.reellEnhet
+                    vedtatt = it.vedtaksdato,
+                    reellEnhet = it.reellEnhet,
+                    behandlendeEnhet = it.behandlendeEnhet
             )
         }
     }

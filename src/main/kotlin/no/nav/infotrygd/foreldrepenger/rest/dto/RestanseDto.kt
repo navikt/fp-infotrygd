@@ -69,5 +69,14 @@ data class RestanseDto(
         example = "2019-01-01")   // S10_MOTTATTDATO
     val mottatt: LocalDate?,
 
-    val reellEnhet: String?
+    @get:Schema(description = """
+        Mottatt dato for sak.
+        Kolonne: S10_VEDTAKSDATO
+    """,
+            example = "2019-01-01")   // S10_VEDTAKSDATO
+    val vedtatt: LocalDate?,
+
+    val reellEnhet: String?,
+
+    val behandlendeEnhet: String?
 )
