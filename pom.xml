@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.4.0</version>
 		<relativePath/>
 	</parent>
 
@@ -27,9 +27,10 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
 		<kotlin.version>2.0.21</kotlin.version>
-		<token-validation.version>5.0.8</token-validation.version>
+		<token-validation.version>5.0.11</token-validation.version>
+		<okhttp3.version>4.12.0</okhttp3.version> <!-- test fra token validation -->
 
-		<springdoc.version>2.6.0</springdoc.version>
+		<springdoc.version>2.7.0</springdoc.version>
 	</properties>
 
 	<dependencies>
@@ -81,7 +82,7 @@
 		<dependency>
 			<groupId>net.ttddyy</groupId>
 			<artifactId>datasource-proxy</artifactId>
-			<version>1.10</version>
+			<version>1.10.1</version>
 		</dependency>
 
 		<dependency>
@@ -142,13 +143,13 @@
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>mockwebserver</artifactId>
-			<version>${okhttp.version}</version>
+			<version>${okhttp3.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>${okhttp.version}</version>
+			<version>${okhttp3.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
