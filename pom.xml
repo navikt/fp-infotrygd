@@ -29,7 +29,7 @@
 		<kotlin.version>2.0.21</kotlin.version>
 		<token-validation.version>5.0.11</token-validation.version>
 
-		<springdoc.version>2.6.0</springdoc.version>
+		<springdoc.version>2.7.0</springdoc.version>
 	</properties>
 
 	<dependencies>
@@ -142,13 +142,13 @@
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>mockwebserver</artifactId>
-			<version>${okhttp.version}</version>
+			<version>${okhttp3.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>${okhttp.version}</version>
+			<version>${okhttp3.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
