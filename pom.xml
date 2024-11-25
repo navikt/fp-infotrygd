@@ -29,7 +29,7 @@
 		<kotlin.version>2.0.21</kotlin.version>
 		<token-validation.version>5.0.8</token-validation.version>
 
-		<springdoc.version>2.6.0</springdoc.version>
+		<springdoc.version>2.7.0</springdoc.version>
 	</properties>
 
 	<dependencies>
