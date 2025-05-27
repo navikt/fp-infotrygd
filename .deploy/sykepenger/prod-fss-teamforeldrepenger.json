@@ -8,7 +8,7 @@
   },
   "requests": {
     "cpu": "200m",
-    "mem": "1024Mi"
+    "mem": "512Mi"
   },
   "oracleConfig": "oracle/data/prod/config/infotrygd_spp",
   "oracleSecret": "oracle/data/prod/creds/sp_infotrygd_p-user",

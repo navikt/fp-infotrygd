@@ -6,8 +6,9 @@ metadata:
   labels:
     team: teamforeldrepenger
 spec:
-  image:  {{image}}
+  image: {{image}}
   port: 8080
+  webproxy: true
   {{#if ingress}}
   ingresses:
     - "{{ingress}}"
@@ -35,6 +36,17 @@ spec:
     requests:
       cpu: "{{requests.cpu}}"
       memory: "{{requests.mem}}"
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
+      destinations:
+        - id: "grafana-lgtm"
+        - id: "elastic-apm"
+    logging:
+      destinations:
+        - id: loki
+        - id: elastic
   vault:
     enabled: true
     paths:
@@ -55,7 +67,6 @@ spec:
       claims:
         extra:
           - "azp_name"
-  webproxy: true
   {{#if AZURE_IAC_RULES}}
   accessPolicy:
     inbound:

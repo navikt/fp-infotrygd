@@ -1,14 +1,14 @@
 {
   "appName": "fp-infotrygd-foreldrepenger",
-  "minReplicas": "1",
+  "minReplicas": "2",
   "maxReplicas": "2",
   "limits": {
     "cpu": "2",
     "mem": "2048Mi"
   },
   "requests": {
-    "cpu": "200m",
-    "mem": "1024Mi"
+    "cpu": "100m",
+    "mem": "512Mi"
   },
   "oracleConfig": "oracle/data/prod/config/infotrygd_fpp",
   "oracleSecret": "oracle/data/prod/creds/fp_infotrygd_p-user",
