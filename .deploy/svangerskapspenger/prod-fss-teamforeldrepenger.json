@@ -7,7 +7,7 @@
     "mem": "2048Mi"
   },
   "requests": {
-    "cpu": "100m",
+    "cpu": "200m",
     "mem": "512Mi"
   },
   "oracleConfig": "oracle/data/prod/config/infotrygd_svp",
