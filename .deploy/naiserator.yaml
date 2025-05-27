@@ -9,20 +9,18 @@ spec:
   image: {{image}}
   port: 8080
   webproxy: true
-  {{#if ingress}}
-  ingresses:
-    - "{{ingress}}"
-  {{/if}}
   liveness:
     path: /actuator/health
-    initialDelay: 10
-    timeout: 1
-    periodSeconds: 5
-    failureThreshold: 10
+    initialDelay: 15
+    periodSeconds: 10
+    failureThreshold: 20
+    timeout: 3
   readiness:
     path: /actuator/health
-    initialDelay: 10
-    timeout: 1
+    initialDelay: 15
+    periodSeconds: 10
+    failureThreshold: 20
+    timeout: 3
   replicas:
     min: {{minReplicas}}
     max: {{maxReplicas}}
