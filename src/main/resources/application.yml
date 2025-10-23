@@ -1,6 +1,8 @@
 server.port: 8080
 
 spring:
+  main:
+    banner-mode: "off"
   cloud.discovery.client.health-indicator.enabled: false
   application:
     name: ${NAIS_APP_NAME:fp-infotrygd-foreldrepenger}
