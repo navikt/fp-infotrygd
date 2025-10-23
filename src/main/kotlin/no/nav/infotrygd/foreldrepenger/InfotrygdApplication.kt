@@ -18,8 +18,8 @@ fun main(args: Array<String>) {
     SpringApplicationBuilder(InfotrygdApplication::class.java)
         .initializers(
             NaisFileIntoSystemPropertyInitializer("DEFAULTDS_URL", vaultMountPath + "defaultDSconfig/jdbc_url"),
-            NaisFileIntoSystemPropertyInitializer("DEFAULTDS_USERNAME", vaultMountPath + "defaultDS/password"),
-            NaisFileIntoSystemPropertyInitializer("DEFAULTDS_PASSWORD", vaultMountPath + "defaultDS/username")
+            NaisFileIntoSystemPropertyInitializer("DEFAULTDS_USERNAME", vaultMountPath + "defaultDS/username"),
+            NaisFileIntoSystemPropertyInitializer("DEFAULTDS_PASSWORD", vaultMountPath + "defaultDS/password")
         )
         .run(*args)
 }
