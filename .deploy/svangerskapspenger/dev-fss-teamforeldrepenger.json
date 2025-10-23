@@ -10,8 +10,13 @@
     "cpu": "100m",
     "mem": "512Mi"
   },
-  "oracleConfig": "oracle/data/dev/config/cdcq",
-  "oracleSecret": "oracle/data/dev/creds/cdcq-infotrygd_q1",
+  "vault": {
+    "mountPath": "/var/run/secrets/nais.io",
+    "db": {
+      "secretsPath": "oracle/data/dev/creds/cdcq-infotrygd_q1",
+      "configPath": "oracle/data/dev/config/cdcq"
+    }
+  },
   "env": {
     "DEFAULTDS_SCHEMA": "INFOTRYGD_Q1"
   },

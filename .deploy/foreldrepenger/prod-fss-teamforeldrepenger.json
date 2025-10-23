@@ -10,8 +10,13 @@
     "cpu": "200m",
     "mem": "512Mi"
   },
-  "oracleConfig": "oracle/data/prod/config/infotrygd_fpp",
-  "oracleSecret": "oracle/data/prod/creds/fp_infotrygd_p-user",
+  "vault": {
+    "mountPath": "/var/run/secrets/nais.io",
+    "db": {
+      "secretsPath": "oracle/data/prod/creds/fp_infotrygd_p-user",
+      "configPath": "oracle/data/prod/config/infotrygd_fpp"
+    }
+  },
   "env": {
     "DEFAULTDS_SCHEMA": "INFOTRYGD_FPP"
   },

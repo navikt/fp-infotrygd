@@ -10,8 +10,13 @@
     "cpu": "200m",
     "mem": "512Mi"
   },
-  "oracleConfig": "oracle/data/prod/config/infotrygd_svp",
-  "oracleSecret": "oracle/data/prod/creds/infotrygd_svp-user",
+  "vault": {
+    "mountPath": "/var/run/secrets/nais.io",
+    "db": {
+      "secretsPath": "oracle/data/prod/creds/infotrygd_svp-user",
+      "configPath": "oracle/data/prod/config/infotrygd_svp"
+    }
+  },
   "env": {
     "DEFAULTDS_SCHEMA": "INFOTRYGD_SVP"
   },
