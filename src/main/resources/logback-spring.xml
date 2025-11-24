@@ -13,4 +13,7 @@
         <include resource="org/springframework/boot/logging/logback/defaults.xml" />
         <root level="info" />
     </springProfile>
+
+    <logger name="jdbc.sql" level="${log.level.jdbc.sql:-ERROR}"/>
+    <logger name="org.hibernate" level="${log.level.org.hibernate:-WARN}"/>
 </configuration>
