@@ -55,8 +55,8 @@ spec:
   {{#if env}}
   env:
   {{#each env}}
-      - name: {{@key}}
-        value: "{{this}}"
+    - name: {{@key}}
+      value: "{{this}}"
   {{/each}}
   {{/if}}
   azure:
@@ -70,8 +70,8 @@ spec:
     inbound:
       rules:
       {{#each AZURE_IAC_RULES}}
-       - application: {{app}}
-         namespace: {{namespace}}
-         cluster: {{cluster}}
+        - application: {{app}}
+          namespace: {{namespace}}
+          cluster: {{cluster}}
       {{/each}}
   {{/if}}
