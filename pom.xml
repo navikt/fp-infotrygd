@@ -26,7 +26,7 @@
 		<sonar.organization>navikt</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
-		<kotlin.version>2.2.20</kotlin.version>
+		<kotlin.version>2.2.21</kotlin.version>
 		<token-validation.version>5.0.37</token-validation.version>
 
     <okhttp3.version>5.3.2</okhttp3.version> <!-- test fra token validation -->
