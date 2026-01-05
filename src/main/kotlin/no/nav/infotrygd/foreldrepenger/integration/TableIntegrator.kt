@@ -7,7 +7,7 @@ import org.hibernate.integrator.spi.Integrator
 import org.hibernate.jpa.boot.spi.IntegratorProvider
 import org.hibernate.mapping.Column
 import org.hibernate.service.spi.SessionFactoryServiceRegistry
-import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer
 import org.springframework.stereotype.Component
 
 
