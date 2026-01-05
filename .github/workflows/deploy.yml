@@ -27,7 +27,7 @@ jobs:
     environment: ${{ inputs.app }}:${{ inputs.cluster }}:${{ inputs.namespace }}
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@v6.0.1
 
       - name: Login GAR
         uses: nais/login@v0
