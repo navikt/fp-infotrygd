@@ -1,5 +1,9 @@
 package no.nav.infotrygd.foreldrepenger.testutil.rest
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.commons.foedselsnummer.FoedselsNr
 import no.nav.infotrygd.foreldrepenger.rest.dto.PersonRequest
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakDto
@@ -8,13 +12,14 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.web.client.RestTemplate
-import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.time.LocalDate
 
 class TestClient(private val restTemplate: RestTemplate) {
 
     private val jacksonObjectMapper = jacksonObjectMapper()
-
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .registerModules(JavaTimeModule())
 
     fun hentSaker(fnr: FoedselsNr, fom: LocalDate): List<SakDto> {
         val request = PersonRequest(fom, null, listOf( fnr.asString));

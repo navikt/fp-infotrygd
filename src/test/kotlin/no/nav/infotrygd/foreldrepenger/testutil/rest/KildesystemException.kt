@@ -14,7 +14,7 @@ class KildesystemException(
     cause: Throwable? = null,
     private val additionalResponseHeaders: Map<String, List<String>> = mapOf()
 ) : ResponseStatusException(status ?: HttpStatus.INTERNAL_SERVER_ERROR, genererMelding(reason, remoteMethod, remoteUrl), cause) {
-    override fun getHeaders(): HttpHeaders {
+    override fun getResponseHeaders(): HttpHeaders {
         val headers = additionalResponseHeaders
         if (headers.isEmpty()) {
             return HttpHeaders.EMPTY
