@@ -9,8 +9,6 @@ import no.nav.infotrygd.foreldrepenger.model.kodeverk.Frisk
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Tema
 import no.nav.infotrygd.foreldrepenger.utils.reversert
-import org.hibernate.annotations.Cascade
-import org.hibernate.annotations.CascadeType
 import java.io.Serializable
 import java.math.BigInteger
 import java.time.LocalDate
@@ -106,22 +104,20 @@ data class Periode(
     @Column(name = "TK_NR", columnDefinition = "CHAR")
     val tkNr: String,
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     @JoinColumns(value = [
         JoinColumn(name = "REGION", referencedColumnName = "REGION"),
         JoinColumn(name = "IS01_PERSONKEY", referencedColumnName = "IS01_PERSONKEY"),
         JoinColumn(name = "IS10_ARBUFOER_SEQ", referencedColumnName = "IS10_ARBUFOER_SEQ")
     ])
-    @Cascade(value = [CascadeType.ALL])
     val utbetalingshistorikk: List<Utbetaling>,
 
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     @JoinColumns(value = [
         JoinColumn(name = "REGION", referencedColumnName = "REGION"),
         JoinColumn(name = "IS01_PERSONKEY", referencedColumnName = "IS01_PERSONKEY"),
         JoinColumn(name = "IS10_ARBUFOER_SEQ", referencedColumnName = "IS10_ARBUFOER_SEQ")
     ])
-    @Cascade(value = [CascadeType.ALL])
     val inntekter: List<Inntekt>
 ) : Serializable {
     val utbetalinger: List<Utbetaling>

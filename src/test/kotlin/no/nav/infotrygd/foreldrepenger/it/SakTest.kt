@@ -55,7 +55,7 @@ class SakTest {
         val result = client().hentSaker(fnr, fom)
 
         Assertions.assertThat(result).hasSize(1)
-        Assertions.assertThat(result.get(0).type.kode?: "").isEqualTo(SakType.A.kode)
+        Assertions.assertThat(result.get(0).type.kode).isEqualTo(SakType.A.kode)
     }
 
 }
