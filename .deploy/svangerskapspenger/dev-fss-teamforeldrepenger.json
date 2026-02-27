@@ -13,12 +13,12 @@
   "vault": {
     "mountPath": "/var/run/secrets/nais.io",
     "db": {
-      "secretsPath": "oracle/data/dev/creds/cdcq-infotrygd_q1",
-      "configPath": "oracle/data/dev/config/cdcq"
+      "secretsPath": "oracle/data/dev/creds/sv_infotrygd_q1-user",
+      "configPath": "oracle/data/dev/config/infotrygd_svq"
     }
   },
   "env": {
-    "DEFAULTDS_SCHEMA": "INFOTRYGD_Q1"
+    "DEFAULTDS_SCHEMA": "INFOTRYGD_SVQ"
   },
   "AZURE_IAC_RULES": [
     {
