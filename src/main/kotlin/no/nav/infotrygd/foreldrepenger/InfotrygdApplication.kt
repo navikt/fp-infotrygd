@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 class InfotrygdApplication
 
 fun main(args: Array<String>) {
+    System.clearProperty("logback.configurationFile")
     System.setProperty("oracle.jdbc.fanEnabled", "false")
 
     val vaultMountPath = "/var/run/secrets/nais.io/"
