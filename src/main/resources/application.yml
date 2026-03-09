@@ -26,6 +26,8 @@ springdoc:
   swagger-ui:
     enabled: false
     disable-swagger-default-url: true
+  api-docs:
+      enabled: false
 
 management:
   endpoint:

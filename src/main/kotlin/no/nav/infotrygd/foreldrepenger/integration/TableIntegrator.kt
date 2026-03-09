@@ -40,7 +40,7 @@ class TableIntegrator : Integrator {
     }
 
     override fun disintegrate(p0: SessionFactoryImplementor, p1: SessionFactoryServiceRegistry) {
-        TODO("Not yet implemented")
+        // No-op: nothing to clean up on shutdown.
     }
 }
 
