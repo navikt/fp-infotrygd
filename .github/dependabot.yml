@@ -11,6 +11,8 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 10
   - package-ecosystem: maven
     directory: "/"
@@ -21,3 +23,7 @@ updates:
     open-pull-requests-limit: 20
     allow:
       - dependency-type: "all"
+    cooldown:
+      default-days: 7
+      exclude:
+        - "no.nav.*"
