@@ -21,14 +21,6 @@ spring:
           fetch_size: 50
     open-in-view: false
 
-springdoc:
-  packages-to-scan: no.nav.infotrygd.foreldrepenger
-  swagger-ui:
-    enabled: false
-    disable-swagger-default-url: true
-  api-docs:
-      enabled: false
-
 management:
   endpoint:
     health:
