@@ -12,7 +12,7 @@
   "vault": {
     "mountPath": "/var/run/secrets/nais.io",
     "db": {
-      "secretsPath": "oracle/data/prod/creds/infotrygd_svp-user",
+      "secretsPath": "oracle/data/prod/creds/sv_infotrygd_p-user",
       "configPath": "oracle/data/prod/config/infotrygd_svp"
     }
   },
