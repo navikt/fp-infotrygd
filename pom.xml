@@ -28,7 +28,7 @@
 
 		<argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
 
-		<kotlin.version>2.3.21</kotlin.version>
+		<kotlin.version>2.4.0</kotlin.version>
 		<token-validation.version>6.0.8</token-validation.version>
 
 		<netty.version>4.2.13.Final</netty.version> <!-- used by Spring Boot -->
