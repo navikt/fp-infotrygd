@@ -1,4 +1,21 @@
 name: "Deploy"
+# Repo-lokal, gjenbrukbar deploy-workflow for fp-infotrygd.
+#
+# Hvorfor finnes denne, i stedet for den delte navikt/fp-gha-workflows/.../deploy.yml?
+# fp-infotrygd deployer TRE apper fra ett repo (foreldrepenger, svangerskapspenger,
+# sykepenger). Hver app har sitt eget GitHub Environment på formen
+# `${app}:${cluster}:${namespace}` (f.eks. `foreldrepenger:prod-fss:teamforeldrepenger`),
+# og prod-miljøene har egne beskyttelsesregler (påkrevde reviewers). Den delte deploy.yml
+# hardkoder `environment: ${cluster}:${namespace}` uten app-ledd, og kan derfor ikke
+# uttrykke per-app-miljøene – å bruke den direkte ville kjøre prod-deploy mot et
+# ubeskyttet miljø og omgå påkrevd godkjenning.
+#
+# Konfig-stien (`.deploy/${app}/...`) kan derimot allerede løses med den delte via
+# `deploy_context`. Det eneste reelle hinderet er environment-navnet.
+#
+# TODO: Bør ses nærmere på. Hvis den delte deploy.yml får et valgfritt app-/environment-ledd
+# i `environment:`-navnet, kan denne lokale kopien fjernes og erstattes med et kall til
+# navikt/fp-gha-workflows/.github/workflows/deploy.yml (gar: true, deploy_context: /<app>).
 
 on:
   workflow_call:
@@ -33,8 +50,6 @@ jobs:
         uses: nais/login@40b72a35a18ddf2ad74b632461139ab838cc2a2f # ratchet:nais/login@v0
         id: login
         with:
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           team: teamforeldrepenger
 
       - name: Deploy av fp-infotrygd-${{ inputs.app }} til ${{ inputs.cluster }} fra GAR
