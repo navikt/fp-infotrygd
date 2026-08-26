@@ -21,7 +21,7 @@ jobs:
     name: Build
     permissions:
       contents: read
-      packages: write
+      packages: read
       id-token: write
     uses: navikt/fp-gha-workflows/.github/workflows/build-app-no-db.yml@main
     with:
@@ -43,8 +43,6 @@ jobs:
       image: ${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
       app: foreldrepenger
-    secrets:
-      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
   deploy-svp:
     strategy:
@@ -61,8 +59,6 @@ jobs:
       image: ${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
       app: svangerskapspenger
-    secrets:
-      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
   deploy-sp:
     strategy:
@@ -79,7 +75,5 @@ jobs:
       image: ${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
       app: sykepenger
-    secrets:
-      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
 
