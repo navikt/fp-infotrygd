@@ -27,7 +27,6 @@ jobs:
     with:
       build-image: ${{ github.ref_name == 'master' }}
       push-image: ${{ github.ref_name == 'master' }}
-    secrets: inherit
 
   deploy-fp:
     strategy:
@@ -44,7 +43,8 @@ jobs:
       image: ${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
       app: foreldrepenger
-    secrets: inherit
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
   deploy-svp:
     strategy:
@@ -61,7 +61,8 @@ jobs:
       image: ${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
       app: svangerskapspenger
-    secrets: inherit
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
   deploy-sp:
     strategy:
@@ -78,6 +79,7 @@ jobs:
       image: ${{ needs.build-app.outputs.build-version }}
       cluster: ${{ matrix.envs }}-fss
       app: sykepenger
-    secrets: inherit
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
 
