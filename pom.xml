@@ -29,12 +29,11 @@
 		<argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
 
 		<kotlin.version>2.4.20</kotlin.version>
-		<token-validation.version>6.0.12</token-validation.version>
 
 		<!-- Overstyrer Spring Boot 4.1.1 sin tomcat-embed-core 11.0.24 som har kjent sårbarhet. Fjern når parent oppgraderer. -->
 		<tomcat.version>11.0.25</tomcat.version>
 
-		<okhttp3.version>5.5.0</okhttp3.version> <!-- test fra token validation -->
+		<mock-oauth2-server.version>6.0.2</mock-oauth2-server.version>
 	</properties>
 
 	<dependencies>
@@ -56,7 +55,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>tools.jackson.module</groupId>
@@ -70,6 +69,8 @@
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib</artifactId>
 		</dependency>
+
+
 
 		<!-- To keep Schema-annotations on Dtos -->
 		<dependency>
@@ -117,43 +118,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>no.nav.security</groupId>
+			<artifactId>mock-oauth2-server</artifactId>
+			<version>${mock-oauth2-server.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- token-validation-test-support -->
-		<dependency>
-			<groupId>no.nav.security</groupId>
-			<artifactId>token-validation-spring</artifactId>
-			<version>${token-validation.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.security</groupId>
-			<artifactId>token-client-spring</artifactId>
-			<version>${token-validation.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>no.nav.security</groupId>
-			<artifactId>token-validation-spring-test</artifactId>
-			<version>${token-validation.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.squareup.okhttp3</groupId>
-					<artifactId>mockwebserver</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>mockwebserver</artifactId>
-			<version>${okhttp3.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-			<version>${okhttp3.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

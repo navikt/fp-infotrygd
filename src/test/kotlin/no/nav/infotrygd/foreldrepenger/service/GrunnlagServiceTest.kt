@@ -1,21 +1,22 @@
 package no.nav.infotrygd.foreldrepenger.service
 
+import no.nav.infotrygd.foreldrepenger.Profiler
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
 import no.nav.infotrygd.foreldrepenger.repository.VedtakBarnRepository
 import no.nav.infotrygd.foreldrepenger.testutil.TestData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.LocalDate
 
-@SpringBootTest
-@ExtendWith(SpringExtension::class)
-@ActiveProfiles("test")
+
+@DataJpaTest
+@ActiveProfiles(Profiler.TEST)
+@Import(GrunnlagService::class, ApplicationUtil::class)
 class GrunnlagServiceTest {
 
     @Autowired

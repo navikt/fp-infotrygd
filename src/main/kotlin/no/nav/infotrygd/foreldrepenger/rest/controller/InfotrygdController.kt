@@ -7,7 +7,6 @@ import no.nav.infotrygd.foreldrepenger.rest.dto.SakDto
 import no.nav.infotrygd.foreldrepenger.rest.dto.YtelseGrunnlag
 import no.nav.infotrygd.foreldrepenger.service.GrunnlagService
 import no.nav.infotrygd.foreldrepenger.service.SakService
-import no.nav.security.token.support.core.api.Protected
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping
-@Protected
 class InfotrygdController(
     private val sakService: SakService,
     private val grunnlagService: GrunnlagService

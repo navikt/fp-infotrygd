@@ -16,11 +16,9 @@ spring:
       mode: always
       platform: h2
       continue-on-error: true
-
-no.nav.security.jwt:
-  expirythreshold: 60 #threshold in minutes until token expires
-  issuer:
-    azure:
-      discoveryurl: http://localhost:${mock-oauth2-server.port}/issuer1/.well-known/openid-configuration
-      accepted_audience: aud-localhost
-      proxyurl: ~
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          audiences:
+            - aud-localhost

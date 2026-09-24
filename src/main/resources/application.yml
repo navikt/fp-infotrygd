@@ -5,21 +5,28 @@ spring:
     banner-mode: "off"
   cloud.discovery.client.health-indicator.enabled: false
   application:
-    name: ${NAIS_APP_NAME:fp-infotrygd-foreldrepenger}
+    name: ${nais.app.name:fp-infotrygd-foreldrepenger}
   datasource:
-    url: ${DEFAULTDS_URL}
-    username: ${DEFAULTDS_USERNAME}
-    password: ${DEFAULTDS_PASSWORD}
-    driver-class-name: ${DEFAULTDS_DRIVER:oracle.jdbc.OracleDriver}
+    url: ${defaultds.url}
+    username: ${defaultds.username}
+    password: ${defaultds.password}
+    driver-class-name: ${defaultds.driver:oracle.jdbc.OracleDriver}
   jpa:
     hibernate:
-      ddl-auto: ${APP_DDL_AUTO:none}
+      ddl-auto: ${app.ddl.auto:none}
     properties:
       hibernate:
-        default_schema: ${DEFAULTDS_SCHEMA}
+        default_schema: ${defaultds.schema}
         jdbc:
           fetch_size: 50
     open-in-view: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${azure.openid.config.issuer}
+          audiences:
+            - ${azure.app.client.id}
 
 management:
   endpoint:
@@ -35,13 +42,6 @@ management:
     diskspace:
       enabled: false
 
-#oidc...
-http.proxy.parametername: notused
-
-no.nav.security.jwt:
-  expirythreshold: 60 #threshold in minutes until token expires
-  issuer:
-    azure:
-      discoveryurl: ${AZURE_APP_WELL_KNOWN_URL}
-      accepted_audience: ${AZURE_APP_CLIENT_ID}
-      proxyurl: ${HTTPS_PROXY}
+# Brukes til entra discovery og jwks
+entra:
+  proxy: https://webproxy-nais.nav.no:8088
