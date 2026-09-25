@@ -1,6 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.rest.controller
 
 import no.nav.commons.foedselsnummer.FoedselsNr
+import no.nav.infotrygd.foreldrepenger.sikkerhet.EntraCCRequired
 import no.nav.infotrygd.foreldrepenger.rest.dto.PersonRequest
 import no.nav.infotrygd.foreldrepenger.rest.dto.RestanseDto
 import no.nav.infotrygd.foreldrepenger.rest.dto.SakDto
@@ -20,6 +21,7 @@ class InfotrygdController(
     private val grunnlagService: GrunnlagService
 ) {
 
+    @EntraCCRequired
     @PostMapping(path = [ "/grunnlag"])
     fun postGrunnlag(@RequestBody request: PersonRequest): List<YtelseGrunnlag> {
         val fnrList = request.fnr
@@ -33,6 +35,7 @@ class InfotrygdController(
         }.flatMap { it.toList() }
     }
 
+    @EntraCCRequired
     @PostMapping(path = [ "/sak"])
     fun postSak(@RequestBody request: PersonRequest): List<SakDto> {
         val fnrList = request.fnr
@@ -46,6 +49,7 @@ class InfotrygdController(
         }.flatMap { it.toList() }
     }
 
+    @EntraCCRequired
     @GetMapping(path = [ "/restanse"])
     fun getRestanse(): List<RestanseDto> {
         return sakService.findRestanse()

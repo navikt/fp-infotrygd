@@ -1,7 +1,6 @@
 package no.nav.infotrygd.foreldrepenger.it
 
 import no.nav.infotrygd.foreldrepenger.Profiler
-import no.nav.infotrygd.foreldrepenger.SecurityTestBase
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.SakType
 import no.nav.infotrygd.foreldrepenger.repository.SakRepository
 import no.nav.infotrygd.foreldrepenger.rest.dto.PersonRequest
@@ -24,7 +23,7 @@ import java.time.LocalDate
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles(Profiler.TEST)
-class SakTest : SecurityTestBase() {
+class SakTest {
 
     @Autowired
     private lateinit var sakRepository: SakRepository
@@ -42,7 +41,7 @@ class SakTest : SecurityTestBase() {
 
         val sakDto = mockMvc.perform(
             post("/sak")
-                .headers { it.setBearerAuth(validCCJwt()) }
+                .with(autentisertSystem())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jacksonObjectMapper().writeValueAsString(PersonRequest(fom, null, listOf(fnr.asString))))
         )
@@ -52,4 +51,5 @@ class SakTest : SecurityTestBase() {
 
         assertThat(sakDto.type.kode).isEqualTo(SakType.A.kode)
     }
+
 }

@@ -20,5 +20,6 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          issuer-uri: https://issuer.test
           audiences:
             - aud-localhost

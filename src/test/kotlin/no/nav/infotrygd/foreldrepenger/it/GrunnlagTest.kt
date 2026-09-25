@@ -1,7 +1,6 @@
 package no.nav.infotrygd.foreldrepenger.it
 
 import no.nav.infotrygd.foreldrepenger.Profiler
-import no.nav.infotrygd.foreldrepenger.SecurityTestBase
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Stoenadstype
 import no.nav.infotrygd.foreldrepenger.repository.PeriodeRepository
 import no.nav.infotrygd.foreldrepenger.rest.dto.PersonRequest
@@ -24,7 +23,7 @@ import java.time.LocalDate
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles(Profiler.TEST)
-class GrunnlagTest : SecurityTestBase() {
+class GrunnlagTest {
 
     @Autowired
     private lateinit var periodeRepository: PeriodeRepository
@@ -47,7 +46,7 @@ class GrunnlagTest : SecurityTestBase() {
 
         val grunnlag = mockMvc.perform(
             post("/grunnlag")
-                .headers { it.setBearerAuth(validCCJwt()) }
+                .with(autentisertSystem())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jacksonObjectMapper().writeValueAsString(PersonRequest(fom, null, listOf(fnr.asString))))
         )

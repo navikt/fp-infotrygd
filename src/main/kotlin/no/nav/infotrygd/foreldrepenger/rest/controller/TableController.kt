@@ -4,13 +4,15 @@ import no.nav.infotrygd.foreldrepenger.integration.TableIntegrator
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import jakarta.transaction.Transactional
-import no.nav.infotrygd.foreldrepenger.config.SecurityConfiguration.TABLES_DEFINITIONS_ENDPOINT
+import no.nav.infotrygd.foreldrepenger.sikkerhet.UnprotectedEndpoint
+import no.nav.infotrygd.foreldrepenger.sikkerhet.SecurityConfiguration.TABLES_INFO_ENDPOINT
 
 @RestController
 @Transactional
 class TableController(private val tableIntegrator: TableIntegrator) {
 
-    @GetMapping(path = [TABLES_DEFINITIONS_ENDPOINT])
+    @UnprotectedEndpoint
+    @GetMapping(path = [TABLES_INFO_ENDPOINT])
     fun get(): Map<String, List<String>> {
         return tableIntegrator.tables
     }
