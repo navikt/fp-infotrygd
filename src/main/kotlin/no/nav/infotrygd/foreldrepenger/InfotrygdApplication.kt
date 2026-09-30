@@ -16,9 +16,9 @@ fun main(args: Array<String>) {
     val vaultMountPath = "/var/run/secrets/nais.io/"
     SpringApplicationBuilder(InfotrygdApplication::class.java)
         .initializers(
-            NaisFileIntoSystemPropertyInitializer("DEFAULTDS_URL", vaultMountPath + "defaultDSconfig/jdbc_url"),
-            NaisFileIntoSystemPropertyInitializer("DEFAULTDS_USERNAME", vaultMountPath + "defaultDS/username"),
-            NaisFileIntoSystemPropertyInitializer("DEFAULTDS_PASSWORD", vaultMountPath + "defaultDS/password")
+            NaisFileIntoSystemPropertyInitializer("defaultds.url", vaultMountPath + "defaultDSconfig/jdbc_url"),
+            NaisFileIntoSystemPropertyInitializer("defaultds.username", vaultMountPath + "defaultDS/username"),
+            NaisFileIntoSystemPropertyInitializer("defaultds.password", vaultMountPath + "defaultDS/password")
         )
         .run(*args)
 }
