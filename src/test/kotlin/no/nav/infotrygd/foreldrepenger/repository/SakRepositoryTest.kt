@@ -1,6 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.repository
 
 import no.nav.commons.foedselsnummer.FoedselsNr
+import no.nav.infotrygd.foreldrepenger.Profiler
 import no.nav.infotrygd.foreldrepenger.model.Sak
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.*
 import no.nav.infotrygd.foreldrepenger.nextId
@@ -17,7 +18,7 @@ import java.time.LocalDate
 
 @ExtendWith(SpringExtension::class)
 @DataJpaTest
-@ActiveProfiles("test")
+@ActiveProfiles(Profiler.TEST)
 class SakRepositoryTest {
     @Autowired
     lateinit var repository: SakRepository

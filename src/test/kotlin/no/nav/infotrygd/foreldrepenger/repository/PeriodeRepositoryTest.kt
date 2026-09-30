@@ -1,6 +1,7 @@
 package no.nav.infotrygd.foreldrepenger.repository
 
 import jakarta.persistence.EntityManager
+import no.nav.infotrygd.foreldrepenger.Profiler
 import no.nav.infotrygd.foreldrepenger.model.Periode
 import no.nav.infotrygd.foreldrepenger.model.Utbetaling
 import no.nav.infotrygd.foreldrepenger.model.kodeverk.Frisk
@@ -21,7 +22,7 @@ import java.time.LocalDate
 
 @ExtendWith(SpringExtension::class)
 @DataJpaTest
-@ActiveProfiles("test")
+@ActiveProfiles(Profiler.TEST)
 class PeriodeRepositoryTest {
 
     @Autowired
