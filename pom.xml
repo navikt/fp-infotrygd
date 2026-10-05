@@ -33,6 +33,10 @@
 		<!-- Overstyrer Spring Boot 4.1.1 sin tomcat-embed-core 11.0.24 som har kjent sårbarhet. Fjern når parent oppgraderer. -->
 		<tomcat.version>11.0.25</tomcat.version>
 
+		<!-- sonar -->
+		<sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+		<sonar.projectName>fp-infotrygd</sonar.projectName>
+		<sonar.projectKey>navikt_fp-infotrygd</sonar.projectKey>
 	</properties>
 
 	<dependencies>
