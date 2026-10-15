@@ -28,7 +28,7 @@
 
 		<argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
 
-		<kotlin.version>2.4.20</kotlin.version>
+		<kotlin.version>2.4.21</kotlin.version>
 
 		<!-- Overstyrer Spring Boot 4.1.1 sin tomcat-embed-core 11.0.24 som har kjent sårbarhet. Fjern når parent oppgraderer. -->
 		<tomcat.version>11.0.25</tomcat.version>
